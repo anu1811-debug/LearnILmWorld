@@ -29,7 +29,7 @@ const teamMembers = [
   {
     id: 4,
     name: "Team Members",
-    role: "Building LearniLM World",
+    role: "BUILDING LearniLM🌍World",
     bio: "Dedicated to perfecting the student journey, ensuring every tool we build makes learning more seamless and engaging.",
     imageUrl: img4,
   },
@@ -57,7 +57,10 @@ const OurTeamMember = () => {
                 <img
                   src={member.imageUrl}
                   alt={member.role}
-                  className="w-full h-full object-cover object-top"
+                  className={`w-full h-full ${member.id === 4
+                    ? "object-contain bg-white p-2"
+                    : "object-cover object-top"
+                    }`}
                 />
               </div>
 
@@ -66,7 +69,8 @@ const OurTeamMember = () => {
                 <h3 className="text-2xl font-bold text-gray-900 mb-1">
                   {member.name}
                 </h3>
-                <p className="text-blue-500 font-bold text-sm uppercase tracking-wider mb-4">
+                <p className={`text-blue-500 font-bold text-sm ${member.id !== 4
+                  ? "uppercase" : ""} tracking-wider mb-4`}>
                   {member.role}
                 </p>
                 <p className="text-gray-500 text-sm leading-relaxed">

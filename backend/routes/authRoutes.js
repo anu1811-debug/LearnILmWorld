@@ -920,6 +920,20 @@ router.post('/google-login', async (req, res) => {
         });
       }
     }
+
+    if (
+      user.role === "student" &&
+      !user.profile?.emailVerification?.isVerified
+    ) {
+      return res.status(403).json({
+        code: "EMAIL_NOT_VERIFIED",
+        message: "Please verify your email using the OTP sent to your inbox.",
+        requiresEmailVerification: true,
+        email: user.email
+      });
+    }
+
+    // if verified -> token
     const token = jwt.sign(
       { userId: user._id, role: user.role },
       process.env.JWT_SECRET,
@@ -971,6 +985,18 @@ router.post('/facebook-login', async (req, res) => {
           message: 'Your account verification was rejected.'
         });
       }
+    }
+
+    if (
+      user.role === "student" &&
+      !user.profile?.emailVerification?.isVerified
+    ) {
+      return res.status(403).json({
+        code: "EMAIL_NOT_VERIFIED",
+        message: "Please verify your email using the OTP sent to your inbox.",
+        requiresEmailVerification: true,
+        email: user.email
+      });
     }
 
     const token = jwt.sign(

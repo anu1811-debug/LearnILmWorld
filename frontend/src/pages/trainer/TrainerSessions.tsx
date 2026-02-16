@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { Calendar, Video, Clock } from "lucide-react";
+import { Calendar, Video, Clock, User } from "lucide-react";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -75,13 +75,12 @@ const TrainerSessions = () => {
     <div className="space-y-6 max-w-[1200px] mx-auto px-3 sm:px-4 py-4 sm:py-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-5">
-    <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">My Sessions</h2>
+        <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">My Sessions</h2>
         <Link
           to="/trainer/students"
           className="inline-flex items-center justify-center
-      px-4 py-2 rounded-xl bg-[#3B3361]
-      text-[#CBE56A] font-medium text-sm
-      hover:bg-[#CBE56A] hover:text-[#2D274B]"
+      px-4 py-2 rounded-xl bg-blue-600 text-white font-medium text-sm
+    "
         >
           <Calendar className="h-4 w-4 mr-2" />
           Create New Session
@@ -99,24 +98,51 @@ const TrainerSessions = () => {
               >
                 <div className="flex flex-col sm:flex-row sm:justify-between gap-4">
                   <div className="flex gap-3">
-                    <div className="w-10 h-10 bg-[#CBE56A] rounded-lg flex items-center justify-center shrink-0">
-                      <Video className="h-5 w-5 text-[#3B3361]" />
-                    </div>
-
-                    <div>
-                      <h3 className="font-semibold text-sm sm:text-base">{session.title}</h3>
-                      <p className="text-xs text-gray-500">
-                        {new Date(session.scheduledDate).toLocaleString()}
+                    <div className="h-auto w-1.5 bg-[#5186CC] rounded-full"></div>
+                    <div className="grid grid-col-1 gap-2" >
+                      <h3 className="font-semibold flex gap-2 items-center text-sm sm:text-base">
+                        <p>
+                          <Video className="w-4 h-4 bg-gray-200 rounded-full text-gray-600" />
+                        </p>
+                        {session.title}</h3>
+                      {/* Calculating date */}
+                      <p className="flex items-center gap-2 text-sm">
+                        <Calendar className="w-4 h-4 text-gray-400" />
+                        <span>
+                          {new Date(session.scheduledDate).toLocaleDateString('en-US', {
+                            weekday: 'short',
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric'
+                          })}
+                        </span>
                       </p>
-                      <p className="text-xs text-gray-600">
-                        {session.students?.length || 0} student(s)
+                      {/* Calculating time */}
+                      <p className="flex items-center text-sm gap-2">
+                        <Clock className="w-4 h-4 text-gray-400" />
+                        <span>
+                          {new Date(session.scheduledDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          {' - '}
+
+                          {(() => {
+                            const date = new Date(session.scheduledDate);
+                            date.setMinutes(date.getMinutes() + session.duration);
+                            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                          })()}
+                        </span>
+                      </p>
+                      <p className="text-blue-500 gap-2 flex  items-center font-medium text-sm mt-1">
+                        <p>
+                          <User className="w-4 h-4" />
+                        </p>
+                        {session.students?.length || 0} students enrolled
                       </p>
                     </div>
                   </div>
 
                   {/* Status + Actions */}
-                  <div className="flex flex-row sm:flex-col sm:items-end gap-2 justify-between sm:justify-start">
-                  <span className="text-xs font-semibold px-3 py-1 rounded-full bg-gray-200 self-start sm:self-auto">
+                  <div className="flex flex-row sm:flex-col  gap-2 justify-center items-center ">
+                    <span className="text-xs font-semibold px-3 py-1 rounded-full bg-gray-200 self-start sm:self-auto">
                       {session.status.toUpperCase()}
                     </span>
 
@@ -124,7 +150,7 @@ const TrainerSessions = () => {
                       {session.status === "scheduled" && (
                         <button
                           onClick={() => handleStartSession(session._id)}
-                          className="px-3 py-2 bg-[#3B3361] text-[#CBE56A] rounded-lg text-xs sm:text-sm"
+                          className="px-3 py-2 bg-blue-100 text-blue-600 rounded-lg text-xs sm:text-sm"
                         >
                           Start
                         </button>
@@ -134,7 +160,7 @@ const TrainerSessions = () => {
                         <>
                           <button
                             onClick={() => handleJoinSession(session._id)}
-                            className="px-3 py-2 bg-[#3B3361] text-[#CBE56A] rounded-lg text-xs sm:text-sm flex items-center"
+                            className="px-3 py-2 bg-blue-100 text-blue-600 rounded-lg text-xs sm:text-sm flex items-center"
                           >
                             <Video className="h-4 w-4 mr-1" />
                             Join
@@ -150,11 +176,6 @@ const TrainerSessions = () => {
                       )}
                     </div>
                   </div>
-                </div>
-
-                <div className="flex items-center text-xs text-gray-500 mt-3 gap-3">
-                  <Clock className="h-4 w-4" />
-                  <span>Duration: {session.duration}m</span>
                 </div>
               </div>
             ))}

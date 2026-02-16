@@ -29,12 +29,12 @@ const app = express();
 
 
 const allowedOrigins = [
-  'http://localhost:5173',   // Vite default
-  'http://localhost:3000',
-  'https://learnilmworld.onrender.com',
-  'https://learnilmworld.onrender.com/api',
-  'https://www.learnilmworld.com',
-  'https://learn-ilm-world.vercel.app',
+  "http://localhost:5173",
+  "http://localhost:3000",
+  "https://learnilmworld.onrender.com",
+  "https://learnilmworld.onrender.com/api",
+  "https://www.learnilmworld.com",
+  "https://learn-ilm-world.vercel.app",
   process.env.FRONTEND_URL,  //  deployed frontend (e.g., https://learnosphere.vercel.app)
 ].filter(Boolean); // removes undefined
 

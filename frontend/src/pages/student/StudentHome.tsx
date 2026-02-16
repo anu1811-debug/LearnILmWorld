@@ -77,109 +77,136 @@ const StudentHome: React.FC = () => {
   }
 
   return (
-    <div className="max-w-[1200px] mx-auto p-6 space-y-8">
+    <div className="max-w-[1250px] mx-auto px-6 py-8 space-y-8 bg-[#F5F7FB] min-h-screen">
 
-      {/* DASHBOARD HEADER */}
-      <div className="flex flex-col gap-4">
-        <h1 className="text-4xl font-bold text-[#2D274B]">
-          Dashboard
+      {/* Welcome Header */}
+      <div className="space-y-1">
+        <h1 className="text-3xl font-semibold text-gray-800">
+          Welcome back, {user?.name || "Student"}! 👋
         </h1>
-
-      </div>
-
-      {/* Activity Card */}
-      <div className="lg:col-span-2 bg-white rounded-2xl p-6 shadow-md">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold text-[#2D274B]">
-            Activity
-          </h2>
-          <span className="text-sm text-gray-500">
-            Classes completed this week
-          </span>
-        </div>
-
-        {/* Placeholder graph */}
-        {/* <div className="h-48 rounded-xl bg-gradient-to-r from-[#9787F3]/30 to-[#f97316]/30 flex items-center justify-center text-gray-600 font-semibold">
-            Activity graph coming soon
-          </div> */}
-
-        <div className="h-[280px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={weeklyActivity}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="day" />
-              <YAxis allowDecimals={false} />
-              <Tooltip />
-              <Line
-                type="monotone"
-                dataKey="classes"
-                stroke="#9787F3"
-                strokeWidth={3}
-                dot={{ r: 4 }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-
+        <p className="text-gray-500">
+          You're making great progress. Keep up the learning momentum!
+        </p>
       </div>
 
 
-      {/* STATISTICS */}
-      <div className="bg-gradient-to-br from-[#F6EDFF] to-[#FFF1E6] rounded-[28px] p-8 shadow-md">
-        <div className="flex flex-col lg:flex-row items-center gap-10">
+      {/* ================= TOP STATS ================= */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
-          {/* LEFT TEXT  */}
-          <div className="w-full lg:flex-[0.35]">
-            <h2 className="text-2xl font-bold text-[#6B21A8] mb-2">
-              Statistics
+        {/* Total Sessions */}
+        <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+          <p className="text-sm text-gray-500">Total Sessions</p>
+          <p className="text-3xl font-semibold text-gray-900 mt-2">
+            {stats.totalSessions ?? 0}
+          </p>
+          <p className="text-xs text-blue-500 font-medium mt-1">
+            All booked sessions
+          </p>
+        </div>
+
+        {/* Completed Sessions */}
+        <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+          <p className="text-sm text-gray-500">Sessions Completed</p>
+          <p className="text-3xl font-semibold text-gray-900 mt-2">
+            {stats.completedSessions ?? 0}
+          </p>
+          <p className="text-xs text-green-600 font-medium mt-1">
+            Successfully attended
+          </p>
+        </div>
+
+        {/* Upcoming Sessions */}
+        <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+          <p className="text-sm text-gray-500">Upcoming Sessions</p>
+          <p className="text-3xl font-semibold text-gray-900 mt-2">
+            {stats.upcomingSessions ?? 0}
+          </p>
+          <p className="text-xs text-blue-500 font-medium mt-1">
+            Scheduled ahead
+          </p>
+        </div>
+
+        {/* Avg Progress */}
+        <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+          <p className="text-sm text-gray-500">Avg Progress</p>
+          <p className="text-3xl font-semibold text-gray-900 mt-2">
+            {stats.avgProgress ?? 0}%
+          </p>
+          <p className="text-xs text-purple-600 font-medium mt-1">
+            Learning progress
+          </p>
+        </div>
+
+      </div>
+
+
+
+      {/* ================= PROGRESS ANALYTICS ================= */}
+      <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+
+        <div className="flex justify-between items-center mb-2">
+          <div>
+            <h2 className="text-lg font-semibold text-gray-800">
+              Progress Analytics
             </h2>
-            <p className="text-sm text-gray-600 leading-relaxed">
-              Your performance statistics for{" "}
-              <span className="font-semibold text-[#6B21A8]">
-                1 week
-              </span>{" "}
-              period
+            <p className="text-sm text-gray-500">
+              Track your learning journey
             </p>
           </div>
 
-          {/* RIGHT STATS  */}
-          <div className="flex flex-[0.65] items-center  gap-8">
+          <span className="text-xs bg-blue-50 text-blue-600 px-3 py-1 rounded-full font-medium">
+            +5% this week
+          </span>
+        </div>
 
-            <StatPill
-              icon={<BookOpen className="text-[#7C3AED] w-5 h-5" />}
-              value={stats.totalSessions}
-              label={<>Total<br />Sessions</>}
-              iconBg="bg-[#E9D8FD]"
-            />
+        {/* Segmented Tabs (visual only) */}
+        <div className="flex bg-gray-100 rounded-full p-1 w-fit mx-auto my-6">
+          <button className="px-6 py-2 rounded-full text-sm text-gray-600">
+            Daily
+          </button>
+          <button className="px-6 py-2 rounded-full bg-blue-500 text-white text-sm font-medium shadow">
+            Weekly
+          </button>
+          <button className="px-6 py-2 rounded-full text-sm text-gray-600">
+            Monthly
+          </button>
+        </div>
 
-            <StatPill
-              icon={<Calendar className="text-green-600 w-5 h-5" />}
-              value={stats.upcomingSessions}
-              label={<>Upcoming<br />Sessions</>}
-              iconBg="bg-[#DCFCE7]"
-            />
-
-            <StatPill
-              icon={<Star className="text-orange-500 w-5 h-5" />}
-              value={stats.completedSessions}
-              label={<>Session<br />Completed</>}
-              iconBg="bg-[#FFEDD5]"
-            />
-
+        {/* Chart Container */}
+        <div className="mt-6 rounded-xl border border-gray-200 p-4">
+          <div className="h-[260px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={weeklyActivity}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="day" />
+                <YAxis allowDecimals={false} />
+                <Tooltip />
+                <Line
+                  type="monotone"
+                  dataKey="classes"
+                  stroke="#3B82F6"
+                  strokeWidth={3}
+                  dot={{ r: 4 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
           </div>
         </div>
+
       </div>
 
 
-      {/* RECENT SESSIONS */}
-      <div className="bg-white rounded-2xl p-6 shadow-md">
+      {/* ================= RECENT SESSIONS ================= */}
+      <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold text-[#2D274B]">
+          <h2 className="text-lg font-semibold text-gray-800">
             Recent Sessions
           </h2>
+
           <Link
             to="/student/sessions"
-            className="text-[#6B21A8] font-semibold hover:underline"
+            className="text-blue-600 font-semibold hover:underline"
           >
             View All →
           </Link>
@@ -187,15 +214,13 @@ const StudentHome: React.FC = () => {
 
         {recentSessions.length > 0 ? (
           <div className="space-y-3">
-            {recentSessions.map((session: AnyObj) => (
+            {recentSessions.map((session) => (
               <div
                 key={session._id || session.id}
-                className="flex justify-between items-center p-4 rounded-xl border hover:shadow-sm"
+                className="flex justify-between items-center p-4 rounded-xl border border-gray-200 hover:bg-gray-50 transition"
               >
                 <div>
-                  <p className="font-semibold">
-                    {session.title}
-                  </p>
+                  <p className="font-semibold">{session.title}</p>
                   <p className="text-sm text-gray-500">
                     with {session.trainer?.name}
                   </p>
@@ -217,10 +242,12 @@ const StudentHome: React.FC = () => {
             No sessions yet
           </p>
         )}
+
       </div>
 
     </div>
-  )
+  );
+
 
 }
 

@@ -14,19 +14,72 @@ export interface User {
 }
 // removed from above secondaryEmail?: string;
 
+type AuthSuccess = { success: true; user: User };
+
+type AuthError = {
+  success: false;
+  error?: string;
+  code?: string;
+};
+
+type RegisterSuccess = {
+  success: true;
+  email: string;
+  requiresVerification?: boolean;
+  message?: string;
+};
+
+type RegisterError = {
+  success: false;
+  error: string;
+  code?: string;
+};
+
 interface AuthContextType {
   user: User | null
   isAdmin: boolean
   loading: boolean
-  login: (email: string, password: string) => Promise<{ success: boolean; user?: User; error?: string; data?: any }>
-  register: (userData: any) => Promise<{ success: boolean; user?: User; error?: string; data?: any }>
-  googleLogin: (tokenId: string) => Promise<{ success: boolean; user?: User; error?: string; data?: any }>
-  facebookLogin: (accessToken: string, userID: string) => Promise<any>
+
+  login: (email: string, password: string) => Promise<AuthSuccess | AuthError>
+
+  register: (userData: any) => Promise<RegisterSuccess | RegisterError>
+
+  googleLogin: (tokenId: string) => Promise<AuthSuccess | AuthError>
+
+  facebookLogin: (accessToken: string, userID: string) => Promise<AuthSuccess | AuthError>
+
   logout: () => void
   updateProfile: (updates: any) => Promise<{ success: boolean; error?: string }>
   forgotPassword: (email: string) => Promise<void>
   resetPassword: (token: string, newPassword: string) => Promise<void>
 }
+
+
+// interface AuthContextType {
+//   user: User | null
+//   isAdmin: boolean
+//   loading: boolean
+//   login: (email: string, password: string) => Promise<{ success: boolean; user?: User; error?: string; data?: any }>
+//   register: (userData: any) => Promise<
+//   | {
+//       success: true;
+//       email: string;
+//       requiresVerification?: boolean;
+//       message?: string;
+//     }
+//   | {
+//       success: false;
+//       error: string;
+//       code?: string;
+//     }
+// >
+//   googleLogin: (tokenId: string) => Promise<{ success: boolean; user?: User; error?: string; data?: any }>
+//   facebookLogin: (accessToken: string, userID: string) => Promise<any>
+//   logout: () => void
+//   updateProfile: (updates: any) => Promise<{ success: boolean; error?: string }>
+//   forgotPassword: (email: string) => Promise<void>
+//   resetPassword: (token: string, newPassword: string) => Promise<void>
+// }
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -89,19 +142,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }
 
 
-  const login = async (email: string, password: string) => {
+  const login = async (email: string, password: string): Promise<AuthSuccess | AuthError> => {
     try {
       const response = await axios.post(`${API_BASE_URL}/api/auth/login`, { email, password })
-      const { token: jwtToken, user: userFromServer } = response.data
+      const { token: jwtToken, user: userFromServer, code } = response.data
 
-      // const loginAdmin = (email: string, password: string) => {
-      //   if (email === import.meta.env.VITE_ADMIN_EMAIL && password === import.meta.env.VITE_ADMIN_PASSWORD) {
-      //     setIsAdmin(true)
-      //     return { success: true }
-      //   }
-      //   return { success: false, error: 'Invalid admin credentials' }
-      // }
-
+      if (code === "EMAIL_NOT_VERIFIED") {
+        return { success: false, code: "EMAIL_NOT_VERIFIED" }
+      }
 
       if (jwtToken) {
         localStorage.setItem('token', jwtToken)
@@ -120,29 +168,38 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }
 
-  const register = async (userData: any) => {
+  const register = async (userData: any): Promise<RegisterSuccess | RegisterError> => {
     try {
       const response = await axios.post(`${API_BASE_URL}/api/auth/register`, userData)
-      const { token: jwtToken, user: userFromServer } = response.data
+      const { token: jwtToken, user: userFromServer, code, message } = response.data;
 
-      if (jwtToken) {
-        localStorage.setItem('token', jwtToken)
-        axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`
-        setToken(jwtToken)
-      }
+      // if (jwtToken) {
+      //   localStorage.setItem('token', jwtToken)
+      //   axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`
+      //   setToken(jwtToken)
+      // }
 
-      setUser(userFromServer)
+      // setUser(userFromServer)
 
-      return { success: true, user: userFromServer }
+      // Even if backend mistakenly sends token, DO NOT login after register
+      // Registration should only create account + send OTP
+
+      return {
+        success: true,
+        requiresVerification: true,
+        email: userFromServer?.email || userData?.email,
+        message: message || "Verification email sent"
+      };
     } catch (error: any) {
       return {
         success: false,
-        error: error.response?.data?.message || 'Registration failed'
-      }
+        code: error.response?.data?.code,
+        error: error.response?.data?.message || "Registration failed"
+      };
     }
   }
 
-  const googleLogin = async (tokenId: string) => {
+  const googleLogin = async (tokenId: string): Promise<AuthSuccess | AuthError> => {
     try {
       const response = await axios.post(`${API_BASE_URL}/api/auth/google-login`, { tokenId })
       const { token: jwtToken, user: userFromServer } = response.data
@@ -164,7 +221,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }
 
-  const facebookLogin = async (accessToken: string, userID: string) => {
+  const facebookLogin = async (accessToken: string, userID: string): Promise<AuthSuccess | AuthError> => {
     try {
       console.log("inside authcontext try block");
 

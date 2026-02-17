@@ -1,206 +1,160 @@
 // src/pages/StudentDashboard.tsx
-import React, { useState } from "react"
-import { Routes, Route, Link, useLocation } from "react-router-dom"
-import { motion } from "framer-motion"
-import { Home, Calendar, User, Menu, } from "lucide-react"
-// Removed from above logout,
-import { useAuth } from "../../contexts/AuthContext"
-import bg_img from "../../assets/bg_dashboard.jpeg"
-import logo from '../../assets/LearnilmworldLogo.jpg'
+import React, { useState } from "react";
+import { Routes, Route, Link, useLocation } from "react-router-dom";
+import { Home, Calendar, User, Menu, Bell } from "lucide-react";
+import { useAuth } from "../../contexts/AuthContext";
 
-import StudentHome from "./StudentHome"
-import StudentLanding from "./StudentLanding"
-import StudentSessions from "./StudentSessions"
-import StudentProfile from "./StudentProfile"
+import logo from "../../assets/logo2.png";
 
-type AnyObj = Record<string, any>
+import StudentHome from "./StudentHome";
+import StudentLanding from "./StudentLanding";
+import StudentSessions from "./StudentSessions";
+import StudentProfile from "./StudentProfile";
+
+type AnyObj = Record<string, any>;
 
 const StudentDashboard: React.FC = () => {
-  const { user, logout } = useAuth() as AnyObj
-  const location = useLocation()
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const { user, logout } = useAuth() as AnyObj;
+  const location = useLocation();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const navigation = [
     { name: "Dashboard", href: "/student", icon: Home },
     { name: "Home", href: "/student/home", icon: Home },
     { name: "My Sessions", href: "/student/sessions", icon: Calendar },
     { name: "Profile", href: "/student/profile", icon: User },
-  ]
+  ];
 
   const isActive = (path: string) => {
     if (path === "/student")
-      return location.pathname === "/student"
-    return location.pathname.startsWith(path)
-  }
+      return location.pathname === "/student" || location.pathname === "/student/";
+    return location.pathname.startsWith(path);
+  };
 
   return (
-    <div
-      className="min-h-screen bg-fixed"
-      style={{
-        backgroundImage: `url(${bg_img})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
-      {/* Overlay */}
+    <div className="min-h-screen bg-fixed overflow-x-hidden">
+
+      {/* Mobile Overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/40 z-40 lg:hidden"
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
-      {/* ================= HEADER ================= */}
-      <header className="sticky top-0 z-40 bg-[#FFF9F2] shadow-sm">
-        <div className="flex items-center justify-between px-8 py-6">
-
-          {/* Left */}
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => setSidebarOpen(true)}
-              className="lg:hidden text-[#6B21A8]"
-            >
-              <Menu />
-            </button>
-
-            <h1 className="text-3xl font-bold text-[#6B21A8]">
-              Dashboard
-            </h1>
-          </div>
-
-          {/* Right */}
-          <div className="text-sm text-gray-600">
-            Role:{" "}
-            <span className="font-semibold text-[#6B21A8]">
-              Student
-            </span>
-          </div>
-        </div>
-      </header>
-
       {/* ================= SIDEBAR ================= */}
       <div
-        className={`fixed inset-y-0 left-0 z-40 w-64
-  bg-gradient-to-b from-[#C9A7F7] to-[#9B6EF3]
-  px-6 py-8
-  transform transition-transform duration-300
-  flex flex-col no-scrollbar
-  ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
-  lg:translate-x-0`}
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#5186CC] p-6
+        transform transition-transform duration-300 flex flex-col no-scrollbar shadow-xl
+        ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}
       >
+        <div className="flex-1 overflow-y-auto overflow-x-hidden">
 
-        <div className="flex-1 overflow-y-auto overflow-x-hidden pr-1">
-        {/* Logo */}
-        <div className="w-96">
-
-        <Link
-          to="/"
-          className="flex items-center mb-10 hover:opacity-90 transition"
-        >
           {/* Logo */}
-          <img
-            src={logo}
-            alt="LearniLM"
-            className="w-10 h-10 rounded-full mr-3"
-          />
-
-          {/* Wordmark */}
-          <div className="flex items-center min-w-0">
-          <span className="font-bold text-gray-700 text-base truncate">
-            LearniLM
-          </span>
-
-          <span className="text-base shrink-0">
-            <motion.span
-            animate={{ rotate: 360 }}
-            transition={{ repeat: Infinity, duration: 12, ease: "linear" }}
-            className="inline-block text-xl"
+          <Link
+            to="/"
+            className="flex items-center mb-10 hover:opacity-90 transition gap-3"
           >
-            🌎
-          </motion.span>
-                        </span>
+            <img src={logo} alt="LearniLM" className="w-full" />
+          </Link>
 
-          <span className="font-bold text-gray-700 text-base truncate">
-            World
-          </span>
-          </div>
-        </Link>
-        </div>
-
-        {/* Student Info */}
-        <div className="flex items-center gap-3 mb-10">
-          <div className="w-10 h-10 rounded-full bg-white/30 flex items-center justify-center">
-          {user?.profile?.imageUrl ? 
-          (
-            <div className="rounded-full ">
-              <img src={user?.profile?.imageUrl} className="rounded-full w-10 h-10" alt="" />
-            </div>
-          )
-        :
-        (
-          <User className="text-white " />
-        )
-        }
-          </div>
-          <div>
-            <p className="font-semibold text-gray-700">
-              {user?.name || "Student"}
-            </p>
-            <p className="text-sm text-gray-800/70">
-              Student Dashboard
-            </p>
-          </div>
-        </div>
-
-        {/* Navigation */}
-        <nav className="space-y-3">
-          {navigation.map((item) => {
-            const active = isActive(item.href)
-            return (
-              <Link
-                key={item.name}
-                to={item.href}
-                onClick={() => setSidebarOpen(false)}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition
+          {/* Navigation */}
+          <nav className="space-y-3">
+            {navigation.map((item) => {
+              const active = isActive(item.href);
+              return (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  onClick={() => setSidebarOpen(false)}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition
                   ${active
-                    ? "bg-white text-[#6B21A8] font-semibold shadow-md"
-                    : "text-gray-700 hover:bg-white/30"
-                  }`}
-              >
-                <item.icon className="w-5 h-5" />
-                {item.name}
-              </Link>
-            )
-          })}
-        </nav>
+                      ? "bg-white/20 text-white font-bold shadow-sm"
+                      : "text-blue-100 hover:bg-white/10 hover:text-white"
+                    }`}
+                >
+                  <item.icon className="w-5 h-5" />
+                  {item.name}
+                </Link>
+              );
+            })}
+          </nav>
         </div>
 
         {/* Logout */}
         <div className="mt-6">
           <button
-    onClick={logout}
-    className="w-full bg-white text-[#6B21A8]
-    py-3 rounded-full font-semibold
-    shadow-md hover:scale-[1.02] transition"
-  >
+            onClick={logout}
+            className="w-full bg-white text-[#5186CC] py-3 rounded-full font-bold shadow-md hover:bg-gray-100 transition"
+          >
             Log Out →
           </button>
         </div>
       </div>
 
-      {/* ================= CONTENT ================= */}
-      <div className="pt-3 lg:pl-64">
-        <div className="p-6">
+      {/* ================= MAIN AREA ================= */}
+      <div className="flex-1 flex flex-col lg:ml-64 transition-all duration-300">
+
+        {/* HEADER */}
+        <header className="sticky top-0 z-30 bg-white border-b shadow-sm">
+          <div className="flex items-center justify-between px-4 lg:px-8 py-4">
+
+            {/* Left */}
+            <div className="flex items-center gap-4">
+              <button
+                className="lg:hidden p-2 rounded-lg bg-[#5186CC] text-white hover:bg-blue-700 transition"
+                onClick={() => setSidebarOpen(true)}
+              >
+                <Menu className="w-6 h-6" />
+              </button>
+
+              <h1 className="hidden lg:block text-2xl font-bold text-gray-800">
+                Student Dashboard
+              </h1>
+            </div>
+
+            {/* Right */}
+            <div className="flex items-center gap-4">
+              <button className="p-2 text-gray-500 hover:bg-gray-100 rounded-full">
+                <Bell className="w-6 h-6" />
+              </button>
+
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
+                  {user?.profile?.imageUrl ? (
+                    <img
+                      src={user.profile.imageUrl}
+                      className="w-full h-full object-cover"
+                      alt="User"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-blue-100 text-blue-600">
+                      <User className="w-6 h-6" />
+                    </div>
+                  )}
+                </div>
+
+                <span className="hidden sm:block text-gray-700 font-semibold">
+                  {user?.name || "Student"}
+                </span>
+              </div>
+            </div>
+
+          </div>
+        </header>
+
+        {/* CONTENT */}
+        <main className="p-6">
           <Routes>
             <Route index element={<StudentHome />} />
             <Route path="home" element={<StudentLanding />} />
             <Route path="sessions" element={<StudentSessions />} />
             <Route path="profile" element={<StudentProfile />} />
           </Routes>
-        </div>
+        </main>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default StudentDashboard
+export default StudentDashboard;

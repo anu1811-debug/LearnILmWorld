@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Mail, Lock, Eye, EyeOff, ArrowRight, Home } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 // , User - removed from above
@@ -23,6 +23,15 @@ const Login: React.FC = () => {
   const [error, setError] = useState("");
   const { facebookLogin } = useAuth()
   const { loginWithFacebook } = useFacebook()
+
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.trainerPending) {
+      setError("Registration successful. Please wait for admin approval before logging in.");
+    }
+  }, []);
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -69,28 +78,26 @@ const Login: React.FC = () => {
       console.log("Login result:", result);
 
       if (!result.success) {
-
-        // special case → email not verified
-        if ((result as any)?.code === "EMAIL_NOT_VERIFIED") {
+        if (result.code === "EMAIL_NOT_VERIFIED") {
           setError("Email not verified. Please verify your email.");
-          return;
+        } else {
+          setError(result.error ?? "Login failed. Please check credentials.");
         }
-        // show the exact message from backend
-        setError(result.error || "Login failed. Please check credentials.");
         return;
       }
 
-      // pull user object if needed
-      const userObj = result.user || result.data || result;
 
-      const role = (
-        userObj?.role ||
-        userObj?.roleName ||
-        (Array.isArray(userObj?.roles) && userObj.roles[0]) ||
-        ""
-      )
-        .toString()
-        .toLowerCase();
+      // pull user object if needed
+      const userObj = result.user;
+
+      const role = result.user.role;
+
+      // const role = (
+      //   userObj?.role ||
+      //   userObj?.roleName ||
+      //   (Array.isArray(userObj?.roles) && userObj.roles[0]) ||
+      //   ""
+      // ).toString().toLowerCase();
 
       //  After successful login
       const redirectPath = localStorage.getItem("redirectAfterLogin");
@@ -98,14 +105,24 @@ const Login: React.FC = () => {
       if (redirectPath) {
         localStorage.removeItem("redirectAfterLogin");
         navigate(redirectPath, { replace: true });
-      } else if (role.includes("student")) {
-        navigate("/student", { replace: true });
-      } else if (role.includes("trainer") || role.includes("educator")) {
-        navigate("/trainer", { replace: true });
-      } else if (role.includes("admin")) {
-        navigate("/admin", { replace: true });
-      } else {
-        navigate("/main", { replace: true });
+        return;
+      }
+
+      switch (role) {
+        case "student":
+          navigate("/student", { replace: true });
+          break;
+
+        case "trainer":
+          navigate("/trainer", { replace: true });
+          break;
+
+        case "admin":
+          navigate("/admin", { replace: true });
+          break;
+
+        default:
+          navigate("/main", { replace: true });
       }
     } catch (err: any) {
       console.error("Login error", err);
@@ -122,6 +139,11 @@ const Login: React.FC = () => {
       const result = await googleLogin(credentialResponse.credential);
 
       if (!result.success) {
+        if (result.code === "EMAIL_NOT_VERIFIED") {
+          setError("Email not verified. Please verify your email.");
+          return;
+        }
+
         setError(result.error || "Google Login Failed");
         return;
       }
@@ -150,11 +172,12 @@ const Login: React.FC = () => {
       console.log("Inside try in login.tsx", result)
 
       if (!result.success) {
-        setError(result.error || 'Facebook Login Failed');
+        setError(result.error ?? 'Facebook Login Failed');
         return;
       }
       console.log("inside try After result check in login.tsx")
-      const role = result.user?.role;
+      const role = result.user.role;
+
       console.log("navigate to role", role);
       if (role === 'student') navigate('/student', { replace: true });
       else if (role === 'trainer') navigate('/trainer', { replace: true });
@@ -362,7 +385,8 @@ const Login: React.FC = () => {
               theme="outline"
               width={320}
             />
-            <button
+            {/* facebook login commented out unless our bussiness is live */}
+            {/* <button
               type="button"
               onClick={handleFacebookClick}
               disabled={loading}
@@ -374,7 +398,7 @@ const Login: React.FC = () => {
                 className="w-5 h-5"
               />
               <span>Continue with Facebook</span>
-            </button>
+            </button> */}
           </div>
 
           <div className="mt-8 text-center">

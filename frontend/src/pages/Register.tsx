@@ -218,8 +218,29 @@ const Register: React.FC = () => {
 
 
       if (result?.success) {
-        navigate(formData.role === 'student' ? '/student' : '/login')
-      } else {
+
+        // STUDENT → must verify email
+        if (formData.role === "student") {
+          navigate("/verify-email", {
+            state: {
+              email: result.email || formData.email,
+              fromRegister: true
+            },
+            replace: true
+          });
+        }
+
+        // TRAINER → wait for approval, go to login
+        else if (formData.role === "trainer") {
+          navigate("/login", {
+            state: {
+              trainerPending: true
+            },
+            replace: true
+          });
+        }
+      }
+      else {
         setError(result?.error || 'Registration failed')
       }
     } catch (e: any) {

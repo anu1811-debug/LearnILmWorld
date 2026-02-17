@@ -8,6 +8,7 @@ import {
   Calendar,
   CheckCircle,
   User,
+  Clock,
 } from "lucide-react"
 
 import {
@@ -96,34 +97,73 @@ const TrainerHome = () => {
     )
   }
 
+  const statItems = [
+    {
+      label: "Total Students",
+      value: stats.students,
+      icon: Users,
+      colorClass: "text-blue-600 bg-blue-50"
+    },
+    {
+      label: "Average Rating",
+      value: stats.rating,
+      icon: Star,
+      colorClass: "text-blue-600 bg-blue-50"
+    },
+    {
+      label: "Total Earnings",
+      value: `$${stats.earnings}`,
+      icon: DollarSign,
+      colorClass: "text-blue-600 bg-blue-50"
+    },
+    {
+      label: "Total Sessions",
+      value: stats.totalSessions,
+      icon: Calendar,
+      colorClass: "text-blue-600 bg-blue-50"
+    },
+    {
+      label: "Upcoming Events",
+      value: stats.upcoming,
+      icon: Clock,
+      colorClass: "text-blue-600 bg-blue-50"
+    },
+    {
+      label: "Sessions Completed",
+      value: stats.completed,
+      icon: CheckCircle,
+      colorClass: "text-blue-600 bg-blue-50"
+    }
+  ];
+
   return (
     <div className="space-y-10 max-w-7xl mx-auto w-full">
 
       {/* 🔹 PAGE TITLE */}
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-[#6B21A8]">
-          Dashboard
+        <h1 className="text-3xl font-bold text-black">
+          Welcome Back, Professor {user?.name} 🥷
         </h1>
       </div>
 
 
       {/*  GRAPH */}
-      <div className="bg-[#F6EFFF] rounded-[32px] p-8 shadow-md">
-        <h3 className="text-xl font-semibold text-[#6B21A8] mb-6">
+      <div className="rounded-[32px] p-8 shadow-md">
+        <h3 className="text-xl font-semibold  mb-6">
           Activity
         </h3>
 
         <div className="h-[300px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={earningsData} margin={{ left: 10, right: 20, bottom: 30 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#E9D5FF" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#5381be" />
 
               <XAxis dataKey="label">
                 <Label
                   value="Months"
                   offset={-20}
                   position="insideBottom"
-                  fill="#6B21A8"
+                  fill="#5186CC"
                   fontSize={12}
                 />
               </XAxis>
@@ -133,7 +173,7 @@ const TrainerHome = () => {
                   value="Earnings ($)"
                   angle={-90}
                   position="insideLeft"
-                  fill="#6B21A8"
+                  fill="#5186CC"
                   fontSize={12}
                 />
               </YAxis>
@@ -143,7 +183,7 @@ const TrainerHome = () => {
               <Line
                 type="monotone"
                 dataKey="earnings"
-                stroke="#F59E0B"
+                stroke="#5186CC"
                 strokeWidth={3}
                 dot={{ r: 5 }}
               />
@@ -154,11 +194,12 @@ const TrainerHome = () => {
       </div>
 
       {/*  STATISTICS */}
-      <div className=" bg-gradient-to-br from-[#F7EFFF] via-[#FBEFFF] to-[#F3E8FF] rounded-[40px] p-10 shadow-md">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 items-center">
+      {/* bg-gradient-to-br from-[#F7EFFF] via-[#FBEFFF] to-[#F3E8FF] */}
+      {/* <div className="  rounded-[40px] p-10 shadow-md">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 items-center justify-center"> */}
 
-          {/* LEFT INFO */}
-          <div className="lg:col-span-1">
+      {/* LEFT INFO */}
+      {/* <div className="lg:col-span-1">
             <h3 className="text-2xl font-semibold text-[#6B21A8] mb-3">
               Statistics
             </h3>
@@ -168,17 +209,39 @@ const TrainerHome = () => {
             <p className="text-sm text-[#6B21A8] font-medium mt-2">
               Current period: <span className="font-semibold">Overall</span>
             </p>
-          </div>
+          </div> */}
 
-          {/* RIGHT STATS */}
-          <div className="lg:col-span-3 grid grid-cols-2 md:grid-cols-3 gap-6">
-            <StatPill icon={<Users />} label="Students" value={stats.students} />
-            <StatPill icon={<Star />} label="Ratings" value={stats.rating} />
-            <StatPill icon={<DollarSign />} label="Earnings" value={`$${stats.earnings}`} />
-            <StatPill icon={<Calendar />} label="Total Sessions" value={stats.totalSessions} />
-            <StatPill icon={<Calendar />} label="Upcoming Events" value={stats.upcoming} />
-            <StatPill icon={<CheckCircle />} label="Session Completed" value={stats.completed} />
-          </div>
+      {/* RIGHT STATS */}
+      {/* <div className="lg:col-span-3 grid grid-cols-2 md:grid-cols-3 gap-6 items-center justify-center"> */}
+
+      <div className="w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          {statItems.map((item, index) => {
+            const Icon = item.icon;
+
+            return (
+              <div
+                key={index}
+                className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-200 flex flex-col justify-between h-full"
+              >
+                <div className="flex justify-between items-start mb-4">
+                  <h3 className="text-gray-500 text-sm font-medium">
+                    {item.label}
+                  </h3>
+                  <div className={`p-3 rounded-xl ${item.colorClass}`}>
+                    <Icon className="w-5 h-5" />
+                  </div>
+                </div>
+
+                <div>
+                  <div className="text-3xl font-bold text-gray-800 mb-1">
+                    {item.value}
+                  </div>
+
+                </div>
+              </div>
+            );
+          })}
 
         </div>
       </div>
@@ -186,7 +249,7 @@ const TrainerHome = () => {
 
       {/* 🔹 RECENT BOOKINGS (STITCHED BACK) */}
       <div className="bg-white rounded-[32px] p-8 shadow-md border border-purple-100">
-        <h3 className="text-xl font-semibold text-[#6B21A8] mb-6">
+        <h3 className="text-xl font-semibold  mb-6">
           Recent Bookings
         </h3>
 
@@ -195,11 +258,11 @@ const TrainerHome = () => {
             {recentBookings.map((b) => (
               <div
                 key={b._id}
-                className="flex items-center justify-between p-4 rounded-2xl border border-purple-100 hover:shadow-sm transition"
+                className="flex items-center justify-between p-4 rounded-2xl border border-blue-50 hover:shadow-sm transition"
               >
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
-                    <User className="text-purple-600 w-5 h-5" />
+                  <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center">
+                    <User className="text-blue-600 w-5 h-5" />
                   </div>
                   <div>
                     <p className="font-medium text-[#2D274B]">
@@ -211,7 +274,7 @@ const TrainerHome = () => {
                   </div>
                 </div>
 
-                <span className="text-sm capitalize px-3 py-1 rounded-full bg-purple-100 text-purple-700">
+                <span className="text-sm capitalize px-3 py-1 rounded-full bg-blue-50 text-blue-600">
                   {b.status}
                 </span>
               </div>
@@ -263,5 +326,3 @@ const StatPill = ({ icon, label, value }: any) => (
     </p>
   </div>
 )
-
-

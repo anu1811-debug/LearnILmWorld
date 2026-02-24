@@ -1,9 +1,11 @@
 // FILE: src/components/TrainerCard.tsx
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Play, User, Star, Clock, MapPin, X, Heart } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import * as Flags from 'country-flag-icons/react/3x2'
 import Price from './Price'
+import axios from 'axios'
+import { useAuth } from '../contexts/AuthContext'
 
 const renderFlag = (code?: string) => {
   if (!code) return null
@@ -17,13 +19,17 @@ const renderFlag = (code?: string) => {
   )
 }
 
-interface Props { trainer: any; learningType: string }
+interface Props { trainer: any; learningType: string; sessionMode: string; }
 
-const TrainerCard: React.FC<Props> = ({ trainer, learningType }) => {
+const TrainerCard: React.FC<Props> = ({ trainer, learningType, sessionMode }) => {
+  type AnyObj = Record<string, any>;
   const [openVideo, setOpenVideo] = useState(false)
+  const { user } = useAuth() as AnyObj;
   const [fav, setFav] = useState(false)
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const navigate = useNavigate()
+  const [previewLink, setPreviewLink] = useState<string>("")
+ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const avatar = trainer.profile?.imageUrl || trainer.profile?.avatar || ''
   const rating = (trainer.stats?.rating ?? trainer.profile?.averageRating) || 0
@@ -35,6 +41,27 @@ const TrainerCard: React.FC<Props> = ({ trainer, learningType }) => {
       : Array.isArray(trainer.profile?.languages)
         ? trainer.profile!.languages!.slice(0, 3)
         : []
+
+  useEffect(() => {
+    const fetchProfileImage = async () => {
+      if (!avatar) {
+        setPreviewLink(""); 
+        return;
+      }
+      
+      try {
+        const { data } = await axios.post(`${API_BASE_URL}/api/upload/get-download-url`, {
+          fileKey: avatar 
+        });
+        setPreviewLink(data.signedUrl);
+      } catch (err) {
+        console.error("Failed to load profile image", err);
+      }
+    };
+
+    fetchProfileImage();
+  }, [avatar, API_BASE_URL]);
+
 
   return (
     <article
@@ -50,8 +77,8 @@ const TrainerCard: React.FC<Props> = ({ trainer, learningType }) => {
           {!openVideo ? (
             <>
               <div className="w-full h-44 flex items-center justify-center overflow-hidden">
-                {avatar
-                  ? <img src={avatar} alt={trainer.name || 'Trainer'} className="w-full h-full object-cover brightness-90" />
+                {previewLink
+                  ? <img src={previewLink} alt={trainer.name || 'Trainer'} className="w-full h-full object-cover brightness-90" />
                   : <div className="w-full h-full flex items-center justify-center text-gray-400">No Image</div>}
               </div>
 
@@ -82,8 +109,8 @@ const TrainerCard: React.FC<Props> = ({ trainer, learningType }) => {
         </div>
       ) : (
         <div className="mb-5 w-full h-44 bg-[#e9f1fb] rounded-2xl overflow-hidden flex items-center justify-center">
-          {avatar
-            ? <img src={avatar} alt={trainer.name || 'Trainer'} className="w-full h-full object-cover" />
+          {previewLink
+            ? <img src={previewLink} alt={trainer.name || 'Trainer'} className="w-full h-full object-cover" />
             : <User className="h-10 w-10 text-[#5186cd]" />}
         </div>
       )}
@@ -92,8 +119,8 @@ const TrainerCard: React.FC<Props> = ({ trainer, learningType }) => {
       <div className="flex items-start justify-between gap-4 mb-4">
         <div className="flex items-center gap-3 min-w-0">
           <div className="w-12 h-12 bg-[#e9f1fb] rounded-xl flex items-center justify-center overflow-hidden border border-[#5186cd]/20">
-            {avatar
-              ? <img src={avatar} alt={trainer.name || 'Trainer'} className="w-full h-full object-cover" />
+            {previewLink
+              ? <img src={previewLink} alt={trainer.name || 'Trainer'} className="w-full h-full object-cover" />
               : <User className="h-6 w-6 text-[#5186cd]" />}
           </div>
           <div className="min-w-0">
@@ -113,9 +140,9 @@ const TrainerCard: React.FC<Props> = ({ trainer, learningType }) => {
           </div>
         </div>
 
-        <div className="px-3 py-1 bg-[#5186cd] text-white rounded-full font-semibold text-sm">
+        {/* <div className="px-3 py-1 bg-[#5186cd] text-white rounded-full font-semibold text-sm">
           <Price amount={Number(trainer.profile?.hourlyRate || 25)} /> /hr
-        </div>
+        </div> */}
       </div>
 
       {/* Learning Type Tags */}
@@ -206,7 +233,13 @@ const TrainerCard: React.FC<Props> = ({ trainer, learningType }) => {
           </Link>
 
           <button
-            onClick={() => navigate(`/book/${trainer._id}`)}
+            onClick={() => {
+              if (sessionMode === 'group') {
+                navigate(`/book/group/${trainer._id}`)
+              } else {
+                navigate(`/book/private/${trainer._id}`)
+              }
+            }}
             className="px-4 py-2 bg-[#5186cd] text-white rounded-full font-semibold hover:bg-[#3f6fb0] text-center transition"
           >
             Book Now

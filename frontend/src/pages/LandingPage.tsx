@@ -6,7 +6,6 @@ import { motion } from "framer-motion";
 import { useAuth } from "../contexts/AuthContext";
 import {
   BookOpen,
-  ArrowRight,
   Play,
   Mic,
   Headphones,
@@ -17,9 +16,9 @@ import {
   Star,
   MessageSquare,
   ChevronDown,
-  ChevronRight,
+  User,
 } from "lucide-react";
-// Navbar,from above
+// Navbar, ChevronRight, ArrowRight,from above
 // import logo from "../assets/LearnilmworldLogo.jpg";
 // import russian_student from '../assets/russian_student.png'
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -74,9 +73,7 @@ export default function LandingPageAlt() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   // const [showOffcanvas, setShowOffcanvas] = useState(false)
 
-  const [activeCategory, setActiveCategory] = useState<
-    "popular" | "asian" | "euro" | "africa" | "more"
-  >("popular");
+  const [activeCategory, setActiveCategory] = useState<"popular" | "asian" | "euro" | "africa" | "more">("popular");
 
   const [showMore, setShowMore] = useState(false);
   const [showMoreLanguages, setShowMoreLanguages] = useState(false);
@@ -84,6 +81,59 @@ export default function LandingPageAlt() {
 
   const navigate = useNavigate();
   const { user } = useAuth();
+  
+  const PHRASES: string[] = [
+  "Welcome to LearniLMWorld",           // English
+  "LearniLMWorld में आपका स्वागत है",   // Hindi
+  "LearniLMWorld-এ স্বাগতম",           // Bengali
+  "Bienvenue à LearniLMWorld",          // French
+  "Willkommen bei LearniLMWorld",        // German
+  "LearnilmWorldへようこそ",            //Japanese
+];
+
+
+  const [currentText, setCurrentText] = useState<string>("");
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
+
+  useEffect(() => {
+    const typingSpeed = 100;
+    const deletingSpeed = 50;
+    const pauseBeforeDelete = 2000;
+    const pauseBeforeType = 500;
+
+    const handleTyping = () => {
+      const fullPhrase = PHRASES[currentIndex];
+
+      if (!isDeleting) {
+        setCurrentText(fullPhrase.substring(0, currentText.length + 1));
+
+        // If the word is completely typed, pause and then start deleting
+        if (currentText === fullPhrase) {
+          setTimeout(() => setIsDeleting(true), pauseBeforeDelete);
+          return;
+        }
+      } else {
+        // Deleting phase
+        setCurrentText(fullPhrase.substring(0, currentText.length - 1));
+
+        // If the word is completely deleted, move to the next language
+        if (currentText === "") {
+          setIsDeleting(false);
+          setCurrentIndex((prevIndex) => (prevIndex + 1) % PHRASES.length);
+          
+          // Pause slightly before typing the next phrase
+          return;
+        }
+      }
+    };
+
+    // Determine the current speed based on the action
+    const timerSpeed = isDeleting ? deletingSpeed : typingSpeed;
+    const timer = setTimeout(handleTyping, currentText === "" && !isDeleting ? pauseBeforeType : timerSpeed);
+
+    return () => clearTimeout(timer);
+  }, [currentText, isDeleting, currentIndex]);
 
   // languages
   const handleLanguageClick = async (language: any) => {
@@ -110,11 +160,11 @@ export default function LandingPageAlt() {
       // Save the clicked language temporarily for redirect after login
       localStorage.setItem(
         "redirectAfterLogin",
-        `/main?language=${encodeURIComponent(language)}`,
+        `/main?type=language&language=${encodeURIComponent(language)}`,
       );
       navigate("/login");
     } else {
-      navigate(`/main?language=${encodeURIComponent(language)}`);
+      navigate(`/main?type=language&language=${encodeURIComponent(language)}`);
     }
   };
 
@@ -142,11 +192,11 @@ export default function LandingPageAlt() {
     if (!user) {
       localStorage.setItem(
         "redirectAfterLogin",
-        `/main?language=${encodeURIComponent(languageName)}`,
+        `/main?type=language&language=${encodeURIComponent(languageName)}`,
       );
       navigate("/login");
     } else {
-      navigate(`/main?language=${encodeURIComponent(languageName)}`);
+      navigate(`/main?type=language&language=${encodeURIComponent(languageName)}`);
     }
 
     setShowMoreLanguages(false);
@@ -178,11 +228,11 @@ export default function LandingPageAlt() {
     if (!user) {
       localStorage.setItem(
         "redirectAfterLogin",
-        `/main?hobby=${encodeURIComponent(hobby.name)}`,
+        `/main?type=hobby&hobby=${encodeURIComponent(hobby.name)}`,
       );
       navigate("/login");
     } else {
-      navigate(`/main?hobby=${encodeURIComponent(hobby.name)}`);
+      navigate(`/main?type=hobby&hobby=${encodeURIComponent(hobby.name)}`);
     }
   };
 
@@ -207,11 +257,11 @@ export default function LandingPageAlt() {
     if (!user) {
       localStorage.setItem(
         "redirectAfterLogin",
-        `/main?hobby=${encodeURIComponent(hobbyName)}`,
+        `/main?type=hobby&hobby=${encodeURIComponent(hobbyName)}`,
       );
       navigate("/login");
     } else {
-      navigate(`/main?hobby=${encodeURIComponent(hobbyName)}`);
+      navigate(`/main?type=hobby&hobby=${encodeURIComponent(hobbyName)}`);
     }
 
     setShowMoreHobbies(false);
@@ -253,11 +303,11 @@ export default function LandingPageAlt() {
       // Store redirect path for after login
       localStorage.setItem(
         "redirectAfterLogin",
-        `/main?subject=${encodeURIComponent(subject.name)}`,
+        `/main?type=subject&subject=${encodeURIComponent(subject.name)}`,
       );
       navigate("/login");
     } else {
-      navigate(`/main?subject=${encodeURIComponent(subject.name)}`);
+      navigate(`/main?type=subject&subject=${encodeURIComponent(subject.name)}`);
     }
   };
 
@@ -285,11 +335,11 @@ export default function LandingPageAlt() {
     if (!user) {
       localStorage.setItem(
         "redirectAfterLogin",
-        `/main?subject=${encodeURIComponent(subjectName)}`,
+        `/main?type=subject&subject=${encodeURIComponent(subjectName)}`,
       );
       navigate("/login");
     } else {
-      navigate(`/main?subject=${encodeURIComponent(subjectName)}`);
+      navigate(`/main?type=subject&subject=${encodeURIComponent(subjectName)}`)
     }
 
     setShowMore(false);
@@ -578,8 +628,9 @@ export default function LandingPageAlt() {
   ];
 
   return (
+    // bg-[linear-gradient(145deg,#E6EEF9_0%,#FEF5E4_30%,#f7f1e6_70%,#E6EEF9_100%)]
     <div
-      className="min-h-screen font-inter text-[#2D274B] transition-colors duration-500 bg-[linear-gradient(145deg,#E6EEF9_0%,#FEF5E4_30%,#f7f1e6_70%,#E6EEF9_100%)]"
+      className="min-h-screen font-inter text-[#2D274B] transition-colors duration-500 "
     // #fef5e4
     >
       {/* 2D274B  text- #dc8d33*/}
@@ -589,7 +640,7 @@ export default function LandingPageAlt() {
       <main className="pt-14">
         {/* HERO SECTION */}
         <div className="max-w-[1520px] mx-auto px-4">
-          <div className="relative rounded-[40px] bg-[#6f9bd3] px-8 lg:px-16 pt-12 overflow-hidden">
+          <div className="relative rounded-[40px] bg-[#6f9bd3] px-8  lg:px-16 pt-12 overflow-hidden">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
               <motion.div
                 initial={{ opacity: 0, x: -30 }}
@@ -607,14 +658,15 @@ export default function LandingPageAlt() {
                   </span>
                 </h1>
 
-                <div className="mt-4">
-                  <div className="inline-block rounded-xl border-2 border-white px-4 py-2">
-                    <p className="text-xl lg:text-2xl font-semibold text-white">
-                      Clarity comes with the{" "}
-                      <span className="text-[#2D274B]">Right Mentors</span>
+                 <div className="mt-4">
+                   <div className="inline-block rounded-xl border-2 border-[#0A1172] px-4  py-2"> 
+                    <p className="text-xl lg:text-3xl font-semibold text-white  min-h-[40px] flex items-center">
+                      <span>{currentText}</span>
+                      {/* Clarity comes with the{" "}
+                      <span className="text-[#2D274B]">Right Mentors</span> */}
                     </p>
                   </div>
-                </div>
+                </div> 
 
                 <p className="text-xl lg:text-2xl font-bold text-white">
                   Learn from natives.{" "}
@@ -631,11 +683,10 @@ export default function LandingPageAlt() {
                   </Link>
 
                   <Link
-                    to="/demo"
+                    to="/become-trainer"
                     className="inline-flex items-center gap-3 px-8 py-3 bg-white text-[#024AAC] font-bold rounded-2xl border-2 border-[#024AAC] shadow-md hover:bg-gray-50 transition-colors"
                   >
-                    <Play className="w-5 h-5 fill-current" />
-                    Book a FREE Demo
+                    <User className="w-5 h-5 fill-current stroke-0" />Become a Trainer
                   </Link>
                 </div>
               </motion.div>
@@ -663,41 +714,47 @@ export default function LandingPageAlt() {
         </div>
 
         {/* Bottom features after grid*/}
-        <div className="py-10 mt-10">
-          <div className="max-w-5xl mx-auto flex flex-wrap justify-center gap-10">
-            <div className="flex items-center gap-3">
-              <div className="p-3 bg-white rounded-full text-[#4f88f2] shadow">
-                <Mic className="w-7 h-7" />
-              </div>
-              <div>
-                <p className="font-bold text-3xl">Native</p>
-                <p className="text-base text-gray-500">Mentor + real accent</p>
-              </div>
-            </div>
+        <div className="py-10 mt-10 px-6">
 
-            <div className="flex items-center gap-3">
-              <div className="p-3 bg-white rounded-full text-[#4f88f2] shadow">
-                <Headphones className="w-7 h-7" />
-              </div>
-              <div>
-                <p className="font-bold text-3xl">Speaking</p>
-                <p className="text-base text-gray-500">Focused practice</p>
-              </div>
-            </div>
+  <div className="max-w-md mx-auto grid grid-cols-1 md:grid-cols-3 md:max-w-5xl gap-y-8  justify-center">
+    
+    {/* Item 1 */}
+    <div className="flex items-center gap-5 w-full max-w-[280px] mx-auto md:mx-0">
+      <div className="flex-shrink-0 p-3 bg-white rounded-full text-[#4f88f2] shadow-lg">
+        <Mic className="w-7 h-7" />
+      </div>
+      <div className="flex flex-col">
+        <p className="font-bold text-2xl text-[#2D274B]">Native</p>
+        <p className="text-base text-gray-500 ">Mentor + real accent</p>
+      </div>
+    </div>
 
-            <div className="flex items-center gap-3">
-              <div className="p-3 bg-white rounded-full text-[#4f88f2] shadow">
-                <Calendar className="w-7 h-7" />
-              </div>
-              <div>
-                <p className="font-bold text-3xl">Flexible</p>
-                <p className="text-base text-gray-500">
-                  Weekday / weekend batches
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+    {/* Item 2 */}
+    <div className="flex items-center md:gap-0 gap-5 w-full max-w-[280px] mx-auto md:mx-0">
+      <div className="flex-shrink-0 p-3 bg-white rounded-full text-[#4f88f2] shadow-lg">
+        <Headphones className="w-7 h-7" />
+      </div>
+      <div className="flex flex-col">
+        <p className="font-bold text-2xl text-[#2D274B]">Speaking</p>
+        <p className="text-base text-gray-500 whitespace-nowrap">Focused practice</p>
+      </div>
+    </div>
+
+    {/* Item 3 */}
+    <div className="flex items-center md:gap-0 gap-5 w-full max-w-[280px] mx-auto md:mx-0">
+      <div className="flex-shrink-0 p-3 bg-white rounded-full text-[#4f88f2] shadow-lg">
+        <Calendar className="w-7 h-7" />
+      </div>
+      <div className="flex flex-col">
+        <p className="font-bold text-2xl text-[#2D274B]">Flexible</p>
+        <p className="text-base text-gray-500 ">
+          Weekday / weekend batches
+        </p>
+      </div>
+    </div>
+
+  </div>
+</div>
       </main>
 
       {/* Language Levels Explanation */}
@@ -959,8 +1016,8 @@ export default function LandingPageAlt() {
                 {/* Subject Name */}
                 <div
                   className={`absolute top-3 left-3 ${subject.isMore
-                      ? "bg-[#5186cd] text-white"
-                      : "bg-white/90 text-[#2D274B]"
+                    ? "bg-[#5186cd] text-white"
+                    : "bg-white/90 text-[#2D274B]"
                     } px-3 py-1 rounded-md font-bold text-lg shadow`}
                 >
                   {subject.name}
@@ -1125,8 +1182,8 @@ export default function LandingPageAlt() {
                 {/* Hobby Name */}
                 <div
                   className={`absolute top-3 left-3 ${hobby.isMore
-                      ? "bg-[#5186cd] text-white"
-                      : "bg-white/90 text-[#2D274B]"
+                    ? "bg-[#5186cd] text-white"
+                    : "bg-white/90 text-[#2D274B]"
                     } px-3 py-1 rounded-md font-bold text-lg shadow`}
                 >
                   {hobby.name}

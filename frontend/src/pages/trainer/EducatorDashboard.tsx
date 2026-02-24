@@ -1,5 +1,5 @@
 // src/pages/EducatorDashboard.jsx
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Routes, Route, Link, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import {
@@ -17,6 +17,7 @@ import TrainerSessions from './TrainerSessions'
 import TrainerStudents from './TrainerStudents'
 import TrainerReviews from './TrainerReviews'
 import TrainerProfile from './TrainerProfile'
+import axios from 'axios'
 
 
 
@@ -38,6 +39,8 @@ const EducatorDashboard: React.FC = () => {
   const { user, logout } = useAuth();
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [previewLink, setPreviewLink] = useState<string>("") //for preview of the image
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const navigation = [
     { name: "Dashboard", href: "/trainer", icon: Home },
@@ -52,6 +55,27 @@ const EducatorDashboard: React.FC = () => {
       return location.pathname === "/trainer" || location.pathname === "/trainer/";
     return location.pathname.startsWith(path);
   };
+
+  useEffect(() => {
+    const fetchProfileImage = async () => {
+      
+      if (!user?.profile?.imageUrl) {
+        setPreviewLink(""); 
+        return;
+      }
+      try {
+        const { data } = await axios.post(`${API_BASE_URL}/api/upload/get-download-url`, {
+          fileKey: user.profile.imageUrl
+        });
+        setPreviewLink(data.signedUrl);
+      } catch (err) {
+        console.error("Failed to load profile image", err);
+      }
+    };
+
+    fetchProfileImage();
+  }, [user]);
+
 
   return (
     <div className="min-h-screen bg-fixed overflow-x-hidden ">
@@ -143,8 +167,12 @@ const EducatorDashboard: React.FC = () => {
 
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
-                  {user?.profile?.imageUrl ? (
-                    <img src={user.profile.imageUrl} className="w-full h-full object-cover" alt="User" />
+                  {previewLink ? (
+                <img
+                  src={previewLink} 
+                  alt="Profile preview"
+                  className="w-full h-full object-cover"
+                />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-blue-100 text-blue-600">
                       <User className="w-6 h-6" />

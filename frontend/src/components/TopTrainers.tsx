@@ -8,6 +8,7 @@ import german from "../assets/German_Trainer.jpeg";
 import english from "../assets/English_Trainer.png";
 
 import TrainerBackCard, { Trainer } from "../components/TrainerBackCard";
+import { Play, Users } from "lucide-react";
 
 
 // const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
@@ -256,21 +257,28 @@ export default function TopTrainers(): JSX.Element {
         </div>
 
         {/* CTA */}
-        <div className="flex flex-wrap justify-center gap-6 mt-14">
+        <div className="flex justify-center gap-6 mt-14 w-full max-w-xl mx-auto">
+
+          {/* Book Demo */}
+          <Link
+            to="/demo"
+            className="flex-1 flex items-center justify-center gap-2 h-[57px] bg-[#276dc9] text-white font-semibold rounded-xl shadow-md border border-white hover:bg-[#205eb0] transition text-lg"
+          >
+            <Play className="w-5 h-5 fill-current" />
+            Book a FREE Demo
+          </Link>
+
+          {/* More Trainers */}
           <Link
             to="/main"
-            className="px-16 py-3 bg-[#276dc9] text-white font-semibold rounded-xl shadow-md hover:bg-[#205eb0] transition text-lg"
+            className="flex-1 flex items-center justify-center gap-2 px-0.5 h-14 bg-[#276dc9] text-white font-semibold rounded-xl shadow-md border-white border hover:bg-[#205eb0] transition text-lg"
           >
+            <Users className="w-5 h-5" />
             More Trainers
           </Link>
 
-          <Link
-            to="/become-trainer"
-            className="px-12 py-3 bg-[#276dc9] text-[white] font-semibold rounded-xl shadow-md border border-[white] hover:bg-[#205eb0] transition text-lg"
-          >
-            Become a Trainer
-          </Link>
         </div>
+
       </div>
 
       {/* MODAL */}

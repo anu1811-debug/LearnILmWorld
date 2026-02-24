@@ -77,6 +77,29 @@ const TrainerProfile: React.FC = () => {
   const [reviews, setReviews] = useState<Review[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [previewLink, setPreviewLink] = useState<string>("")
+  // prefer uploaded imageUrl, then avatar, then show icon
+  const avatar = trainer?.profile?.imageUrl || trainer?.profile?.avatar || ''
+  
+  useEffect(() => {
+    const fetchProfileImage = async () => {
+      if (!avatar) {
+        setPreviewLink(""); 
+        return;
+      }
+      
+      try {
+        const { data } = await axios.post(`${API_BASE_URL}/api/upload/get-download-url`, {
+          fileKey: avatar 
+        });
+        setPreviewLink(data.signedUrl);
+      } catch (err) {
+        console.error("Failed to load profile image", err);
+      }
+    };
+
+    fetchProfileImage();
+  }, [avatar, API_BASE_URL]);
 
   useEffect(() => {
     if (trainerId) {
@@ -152,8 +175,10 @@ const TrainerProfile: React.FC = () => {
     )
   }
 
-  // prefer uploaded imageUrl, then avatar, then show icon
-  const avatarSrc = trainer?.profile?.imageUrl || trainer?.profile?.avatar || ''
+  
+  // type AnyObj = Record<string, any>;
+  // const { user } = useAuth() as AnyObj;
+  
 
   return (
     <div
@@ -200,9 +225,9 @@ const TrainerProfile: React.FC = () => {
               <div className="flex items-center gap-6">
                 <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-[#9787F3] to-[#7C6CF2] overflow-hidden flex items-center justify-center shadow-md">
 
-                  {avatarSrc ? (
+                  {previewLink ? (
                     <img
-                      src={avatarSrc}
+                      src={previewLink}
                       alt={trainer.name}
                       className="w-full h-full object-cover"
                     />

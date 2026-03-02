@@ -5,7 +5,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import CareerApplicationForm from "../components/CareerApplicationForm";
 import JobDetailsModal from "../components/JobDetailsModal";
-import careers_img from "../assets/careers_img.jpeg";
+import careers_img from "../assets/our_career.png";
 
 export default function Careers() {
     const [activeTab, setActiveTab] = useState("All Jobs");
@@ -28,7 +28,7 @@ export default function Careers() {
         },
         {
             id: 2,
-            title: "Q/A Intern",
+            title: "QA Intern",
             roleKey: "QA",
             category: "Engineering",
             department: "Engineering",
@@ -379,7 +379,7 @@ export default function Careers() {
                     <div className="bg-[#4A85D9] mt-16 rounded-[30px] p-10 text-center text-white relative overflow-hidden shadow-lg">
                         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-[#4A85D9] to-[#3b75c9] opacity-50 z-0"></div>
                         <div className="relative z-10">
-                            <h3 className="text-3xl font-bold mb-4">Can’t Find a suitable role?</h3>
+                            <h3 className="text-3xl font-bold mb-4">Can’t find a suitable role?</h3>
                             <p className="text-blue-100 max-w-2xl mx-auto mb-8 text-lg">
                                 We’re always looking for talented individuals who share our passion for education.
                                 Send us your CV and we’ll keep you in mind for future openings.

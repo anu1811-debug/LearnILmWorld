@@ -22,6 +22,8 @@ const TrainersGrid: React.FC<Props> = ({ searchTerm, filters, learningType, setN
     const [page, setPage] = useState(1)
     const [hasMore, setHasMore] = useState(true)
     const [allNationalities, setAllNationalities] = useState<string[]>([])
+    const rawFilter = filters.bookSession || filters.sessionType || '';
+    const sessionMode = String(rawFilter).toLowerCase().includes('group') ? 'group' : 'private';
 
     useEffect(() => {
         setPage(1)
@@ -36,7 +38,8 @@ const TrainersGrid: React.FC<Props> = ({ searchTerm, filters, learningType, setN
         experience: filters.experience || '0',
         rating: filters.rating || '',
         sortBy: filters.sortBy || 'rating',
-        nationality: filters.nationality || ''
+        nationality: filters.nationality || '',
+        bookSession: filters.bookSession || ''
     }), searchTerm, learningType])
 
     const buildQueryParams = useCallback(() => {
@@ -50,6 +53,9 @@ const TrainersGrid: React.FC<Props> = ({ searchTerm, filters, learningType, setN
         if (filters.rating?.trim()) params.rating = filters.rating
         if (filters.sortBy && filters.sortBy !== 'rating') params.sortBy = filters.sortBy
         if (searchTerm?.trim()) params.search = searchTerm
+        if (filters.sessionType && filters.sessionType !== 'any') {
+            params.sessionType = filters.sessionType;
+        }
         return params
     }, [filters, searchTerm, page])
 
@@ -169,9 +175,9 @@ const TrainersGrid: React.FC<Props> = ({ searchTerm, filters, learningType, setN
 
 
             {/* Trainers Grid */}
-            <div className="grid gap-8 md:gap-10 grid-cols-[repeat(auto-fit,minmax(280px,1fr))]">
+            <div className="grid gap-8 md:gap-10 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                 {trainers.map((t, idx) => (
-                    <TrainerCard key={t._id || idx} trainer={t} learningType={learningType} />
+                    <TrainerCard key={t._id || idx} trainer={t} learningType={learningType} sessionMode={sessionMode} />
                 ))}
             </div>
 

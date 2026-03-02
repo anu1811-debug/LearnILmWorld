@@ -1,6 +1,7 @@
 // src/pages/student/StudentProfile.tsx
 import React, { useEffect, useState, ChangeEvent, FormEvent } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
+import axios from 'axios'
 
 /* ---------- Types ---------- */
 type AnyObj = Record<string, any>
@@ -8,6 +9,7 @@ type AnyObj = Record<string, any>
 /* ---------------- StudentProfile ---------------- */
 const StudentProfile: React.FC = () => {
   const { user, updateProfile } = useAuth() as AnyObj
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
   const [formData, setFormData] = useState({
     name: '',
@@ -28,13 +30,19 @@ const StudentProfile: React.FC = () => {
   const [success, setSuccess] = useState('')
   const [error, setError] = useState('')
 
+  const [previewLink, setPreviewLink] = useState<string>("")
+  const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null)
+  const [originalImageKey, setOriginalImageKey] = useState<string>("")
+
   useEffect(() => {
     if (!user) return
-    setFormData({
-      name: user.name || '',
-      email: user.email || '',
-      // secondaryEmail: user.secondaryEmail || '',
+
+    setFormData(prev => ({
+      ...prev,
+      name: user.name || prev.name || '',
+      email: user.email || prev.email || '',
       profile: {
+        ...prev.profile,
         bio: user?.profile?.bio || '',
         languages: user?.profile?.languages || [],
         phone: user?.profile?.phone || '',
@@ -43,11 +51,51 @@ const StudentProfile: React.FC = () => {
         highestQualification: user?.profile?.highestQualification || '',
         collegeName: user?.profile?.collegeName || ''
       }
-    })
+    }))
+
+    // Capture Original Image Key (for deletion logic)
+    const dbImage = user?.profile?.imageUrl;
+    if (dbImage && !dbImage.startsWith("blob:") && !dbImage.startsWith("data:")) {
+      console.log("INITIAL LOAD - Found existing image:", dbImage);
+      setOriginalImageKey(dbImage);
+    }
   }, [user])
+
+  //MANAGE PREVIEW LINK (Secure R2 Access)
+  useEffect(() => {
+    const getPreview = async () => {
+      const currentImage = formData.profile.imageUrl;
+
+      if (!currentImage) {
+        setPreviewLink("");
+        return;
+      }
+      if (currentImage.startsWith('blob:') || currentImage.startsWith('data:')) {
+        setPreviewLink(currentImage);
+        return;
+      }
+      if (currentImage.startsWith('http')) {
+        setPreviewLink(currentImage);
+        return;
+      }
+      try {
+        const { data } = await axios.post(`${API_BASE_URL}/api/upload/get-download-url`, {
+          fileKey: currentImage
+        });
+        setPreviewLink(data.signedUrl);
+      } catch (err) {
+        console.error("Preview failed", err);
+      }
+    };
+
+    getPreview();
+  }, [formData.profile.imageUrl, API_BASE_URL]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
+    if (name === 'profile.imageUrl') {
+      setSelectedImageFile(null);
+    }
     if (name.startsWith('profile.')) {
       const profileField = name.split('.')[1]
       setFormData(prev => ({
@@ -65,21 +113,22 @@ const StudentProfile: React.FC = () => {
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
     if (!file) return
-    const reader = new FileReader()
-    reader.onload = () => {
-      const dataUrl = reader.result as string
-      setFormData(prev => ({
-        ...prev,
-        profile: {
-          ...prev.profile,
-          imageUrl: dataUrl
-        }
-      }))
-    }
-    reader.readAsDataURL(file)
+
+    setSelectedImageFile(file)
+    const localPreviewUrl = URL.createObjectURL(file)
+
+    setFormData(prev => ({
+      ...prev,
+      profile: {
+        ...prev.profile,
+        imageUrl: localPreviewUrl
+      }
+    }))
   }
 
+
   const handleRemoveImage = () => {
+    setSelectedImageFile(null)
     setFormData(prev => ({
       ...prev,
       profile: {
@@ -87,6 +136,7 @@ const StudentProfile: React.FC = () => {
         imageUrl: ''
       }
     }))
+    setPreviewLink("")
   }
 
   const handleSubmit = async (e: FormEvent) => {
@@ -112,6 +162,70 @@ const StudentProfile: React.FC = () => {
 
 
     try {
+      let finalImageKey = formData.profile.imageUrl;
+
+      // handle url image
+      if (finalImageKey.startsWith("data:")) {
+        try {
+          console.log("Detecting Base64 image, converting...");
+          const res = await fetch(finalImageKey);
+          const blob = await res.blob();
+          const fileType = blob.type || "image/jpeg";
+          const fileName = `student-pasted-${Date.now()}.jpg`;
+
+          // Get Upload URL
+          const { data } = await axios.post(`${API_BASE_URL}/api/upload/get-upload-url`, {
+            fileName,
+            fileType,
+            folderMain: 'students'
+          });
+
+          // Upload to R2
+          await fetch(data.uploadUrl, {
+            method: 'PUT',
+            body: blob,
+            headers: { 'Content-Type': fileType },
+          });
+
+          finalImageKey = data.key;
+
+        } catch (err) {
+          console.error("Failed to process pasted image", err);
+          setError("Failed to upload the pasted image.");
+          setLoading(false);
+          return;
+        }
+      }
+      //STANDARD FILE UPLOAD
+      else if (selectedImageFile) {
+        try {
+          const { data } = await axios.post(`${API_BASE_URL}/api/upload/get-upload-url`, {
+            fileName: selectedImageFile.name,
+            fileType: selectedImageFile.type,
+            folderMain: 'students'
+          });
+
+          await fetch(data.uploadUrl, {
+            method: 'PUT',
+            body: selectedImageFile,
+            headers: { 'Content-Type': selectedImageFile.type },
+          });
+
+          finalImageKey = data.key;
+        } catch (uploadErr) {
+          console.error("Upload failed", uploadErr);
+          setError("Failed to upload image.");
+          setLoading(false);
+          return;
+        }
+      }
+
+      // Safety: Prevent saving "blob:" URLs to database
+      if (finalImageKey.startsWith("blob:")) {
+        setError("Image upload failed. Please try again.");
+        setLoading(false);
+        return;
+      }
       const payload = {
         name: formData.name,
         // secondaryEmail: formData.secondaryEmail,
@@ -120,7 +234,7 @@ const StudentProfile: React.FC = () => {
           languages: formData.profile.languages,
           phone: formData.profile.phone,
           location: formData.profile.location,
-          imageUrl: formData.profile.imageUrl,
+          imageUrl: finalImageKey,
           highestQualification: formData.profile.highestQualification,
           collegeName: formData.profile.collegeName
         }
@@ -128,8 +242,25 @@ const StudentProfile: React.FC = () => {
 
       const result = await updateProfile?.(payload)
 
+      // DELETE OLD IMAGE
       if (result?.success) {
         setSuccess('Profile updated successfully!')
+
+        if (originalImageKey && originalImageKey !== finalImageKey) {
+          const isR2File = !originalImageKey.startsWith("http") && !originalImageKey.startsWith("https") && !originalImageKey.startsWith("data:");
+
+          if (isR2File) {
+            console.log("Deleting old R2 file:", originalImageKey);
+            try {
+              await axios.post(`${API_BASE_URL}/api/upload/delete-file`, {
+                fileKey: originalImageKey
+              });
+            } catch (delErr) { console.error("Delete failed", delErr); }
+          }
+        }
+        setOriginalImageKey(finalImageKey);
+        setSelectedImageFile(null);
+
       } else {
         setError(result?.error || 'Failed to update profile')
       }
@@ -140,6 +271,7 @@ const StudentProfile: React.FC = () => {
       setLoading(false)
     }
   }
+
 
   return (
     <div className="space-y-6 max-w-[900px] mx-auto">
@@ -168,9 +300,9 @@ const StudentProfile: React.FC = () => {
 
             <div className="flex items-start gap-4">
               <div className="w-28 h-28 bg-gray-100 rounded-xl flex items-center justify-center overflow-hidden border border-gray-200">
-                {formData.profile.imageUrl ? (
+                {previewLink ? (
                   <img
-                    src={formData.profile.imageUrl}
+                    src={previewLink}
                     alt="Profile"
                     className="w-full h-full object-cover"
                   />
@@ -249,19 +381,6 @@ const StudentProfile: React.FC = () => {
             </div>
 
             {/* secondary email Removed */}
-            {/* <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Secondary Email (Optional)
-              </label>
-              <input
-                type="email"
-                name="secondaryEmail"
-                value={formData.secondaryEmail}
-                onChange={handleChange}
-                placeholder="Enter a secondary email for account recovery"
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#9787F3] transition-all text-sm font-medium"
-              />
-            </div> */}
 
           </div>
 

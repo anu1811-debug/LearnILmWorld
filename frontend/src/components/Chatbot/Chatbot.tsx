@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 import { useLocation } from "react-router-dom";
 import "./Chatbot.css";
 import { chatTranslations, type ChatTranslation } from "./chatTranslations";
-import iLm from '../../assets/Ask_iLM2.jpeg'
+import iLm from '../../assets/Ask_iLM2.png'
 
 // Define TypeScript interfaces
 interface Message {

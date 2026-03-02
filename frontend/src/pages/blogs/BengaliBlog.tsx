@@ -17,10 +17,6 @@ const BengaliBlog: React.FC = () => {
       <Navbar />
 
       <article
-        style={{
-          backgroundColor: "#fef5e4", // beige background
-          padding: "4rem 1.5rem",
-        }}
       >
         <div
           style={{
@@ -180,6 +176,7 @@ const BengaliBlog: React.FC = () => {
 
 
           {/* SUMMARY */}
+          <div className="pb-20">
           <motion.section
             variants={fadeUp}
             initial="hidden"
@@ -189,10 +186,11 @@ const BengaliBlog: React.FC = () => {
             style={{
               marginTop: "3.5rem",
               padding: "2rem",
-              background: "#ede6d8",
+              background: "#c9d3e1",
               borderRadius: "20px",
             }}
           >
+
             <h3 style={{ fontSize: "1.6rem", fontWeight: 700 }}>Summary</h3>
             <p style={{ marginTop: "1rem" }}>
               Learning Bengali is a human journey, not a race. With curiosity,
@@ -200,6 +198,7 @@ const BengaliBlog: React.FC = () => {
               confident communication and experience the soul of the language.
             </p>
           </motion.section>
+          </div>
         </div>
       </article>
 

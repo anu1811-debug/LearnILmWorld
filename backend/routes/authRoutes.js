@@ -11,14 +11,14 @@ function generateOtp() {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
-const isValidLink = async (url) => {
-  try {
-    const res = await axios.head(url, { timeout: 5000 });
-    return res.status >= 200 && res.status < 400;
-  } catch (err) {
-    return false;
-  }
-};
+// const isValidLink = async (url) => {
+//   try {
+//     const res = await axios.head(url, { timeout: 5000 });
+//     return res.status >= 200 && res.status < 400;
+//   } catch (err) {
+//     return false;
+//   }
+// };
 
 
 const router = express.Router();
@@ -300,6 +300,11 @@ router.post('/register', async (req, res) => {
         existingUser.profile.verificationStatus = 'pending';
         existingUser.profile.rejectionDate = null;
 
+        // update resume if provided
+        if (resume) {
+          existingUser.profile.resume = resume;
+        }
+
         await existingUser.save();
 
         // Send verification email (attach resume if provided) — still pass resume string to email helper
@@ -339,8 +344,8 @@ router.post('/register', async (req, res) => {
       profilePayload.languages = languages;
       profilePayload.specializations = subjects;
       profilePayload.standards = standards;
+      profilePayload.resume = resume;
 
-      // Note: we DO NOT save resume to DB (we only pass it to email for verification)
     } else if (role === 'student') {
       profilePayload.phone = phone || '';
       profilePayload.learningType = incomingProfile.learningType || '';

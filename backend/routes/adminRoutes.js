@@ -51,7 +51,17 @@ router.get('/dashboard-stats', async (req, res) => {
 router.get('/users', authenticate, authorize(['admin']), async (req, res) => {
     try {
         const users = await User.find().select('-password').sort({ createdAt: -1 })
-        res.json(users)
+        const normalizedUsers = users.map(u => {
+            const obj = u.toObject();
+
+            if (!obj.profile) obj.profile = {};
+            if (!obj.profile.resume) obj.profile.resume = "";
+
+            return obj;
+        });
+
+        res.json(normalizedUsers);
+
     } catch (error) {
         console.error('Admin fetch users error:', error)
         res.status(500).json({ message: 'Server error while fetching users.' })
@@ -110,7 +120,13 @@ router.put('/users/:id', async (req, res) => {
         if (name) user.name = name;
         if (email) user.email = email;
         if (role) user.role = role;
-        if (profile) user.profile = { ...user.profile.toObject(), ...profile };
+        if (profile) {
+            for (const key in profile) {
+                user.set(`profile.${key}`, profile[key]);
+            }
+        }
+
+
 
         // Approve/reject trainer without sending email
         if (verificationStatus && user.role === 'trainer') {
@@ -138,6 +154,7 @@ router.put('/users/:id', async (req, res) => {
         }
 
         await user.save();
+        await user.populate();
 
         if (password) {
             try {
@@ -414,7 +431,6 @@ router.delete('/reviews/:id', async (req, res) => {
         res.status(500).json({ message: 'Server error while deleting review.' });
     }
 });
-
 
 
 export default router;

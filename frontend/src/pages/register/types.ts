@@ -1,11 +1,11 @@
 // src/pages/register/types.ts
-export interface Certificate {
+export type Certificate = {
   name: string
   issuer?: string
   issueYear?: number | null
   certificateLink?: string
-  issuedDate?: string | null  // frontend will send ISO string
-  certificateImage?: string   // base64 string
+  issuedDate?: Date | null
+  certificateImage?: File | string | null // after R2 its not base 64 now
 }
 
 export interface RegisterFormData {
@@ -21,7 +21,7 @@ export interface RegisterFormData {
   certificates: Certificate[]
   dob: string
   bio: string
-  resume: File | string | null // File during upload, string for base64
+  resume: File | string | null // File during upload and R2, string for base64 before R2
 
   // shared
   phone: string

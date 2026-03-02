@@ -14,6 +14,7 @@ import type { RegisterFormData } from './register/types'
 import StepTrainerTeach from './register/Steps/StepTrainerTeach'
 import StepTrainerDocuments from './register/Steps/StepTrainerDocuments'
 import { Home } from 'lucide-react'
+import axios from 'axios'
 
 const initialData: RegisterFormData = {
   name: '',
@@ -38,6 +39,8 @@ const initialData: RegisterFormData = {
   standards: [],
   customStandardRange: '',
 }
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Register: React.FC = () => {
   const navigate = useNavigate()
@@ -93,6 +96,38 @@ const Register: React.FC = () => {
     setStepIndex(i => Math.max(i - 1, 0));
   };
 
+  // Resume
+  async function uploadResumeToR2(file: File): Promise<string> {
+    // 1) get signed url
+    const { data } = await axios.post(`${API_BASE_URL}/api/upload/get-upload-url`, {
+      fileName: file.name,
+      fileType: file.type,
+    });
+
+    // 2) upload file to R2
+    await axios.put(data.uploadUrl, file, {
+      headers: { "Content-Type": file.type },
+    });
+
+    // 3) return key to store in DB
+    return data.key;
+  }
+  // certificates
+  async function uploadCertificateToR2(file: File): Promise<string> {
+    const { data } = await axios.post(`${API_BASE_URL}/api/upload/get-upload-url`, {
+      fileName: file.name,
+      fileType: file.type,
+      folderMain: "trainers",
+      folderSub: "certificates"
+    });
+
+    await axios.put(data.uploadUrl, file, {
+      headers: { "Content-Type": file.type },
+    });
+
+    return data.key;
+  }
+
   const onSubmit = async () => {
     setError('')
     setLoading(true)
@@ -125,11 +160,19 @@ const Register: React.FC = () => {
         profilePayload.dob = new Date(formData.dob)
       }
 
-      // Resume handling: if file -> handle upload elsewhere (keep string placeholder)
-      if (typeof formData.resume === 'string') {
-        profilePayload.resume = formData.resume
-      } else if (formData.resume instanceof File) {
-        profilePayload.resume = '' // uploads first, then set real URL
+      // Upload resume BEFORE register API call
+
+      if (formData.resume instanceof File) {
+        try {
+          const key = await uploadResumeToR2(formData.resume);
+          profilePayload.resume = key;
+        } catch (err) {
+          setError("Resume upload failed. Please try again.");
+          setLoading(false);
+          return;
+        }
+      } else if (typeof formData.resume === "string") {
+        profilePayload.resume = formData.resume;
       }
 
       // Trainer-specific mapping
@@ -157,15 +200,28 @@ const Register: React.FC = () => {
         // certifications: ensure objects that match schema
         // UI should supply formData.certificates as array of Certificate objects (name, issuer, year, certificateLink, issuedDate, certificateImage)
         if (Array.isArray(formData.certificates) && formData.certificates.length > 0) {
-          // sanitize/cast values minimally:
-          profilePayload.certifications = formData.certificates.map((c: any) => ({
-            name: String(c.name || ''),
-            issuer: String(c.issuer || ''),
-            year: c.year ? Number(c.year) : null,
-            certificateLink: c.certificateLink || '',
-            issuedDate: c.issuedDate ? new Date(c.issuedDate) : null,
-            certificateImage: c.certificateImage || '',
-          }))
+          // For R2 uploads
+          profilePayload.certifications = [];
+
+          for (const c of formData.certificates) {
+            let imageKey = "";
+
+            if (c.certificateImage instanceof File) {
+              imageKey = await uploadCertificateToR2(c.certificateImage);
+            } else if (typeof c.certificateImage === "string") {
+              imageKey = c.certificateImage;
+            }
+
+            profilePayload.certifications.push({
+              name: String(c.name || ''),
+              issuer: String(c.issuer || ''),
+              year: c.issueYear ? Number(c.issueYear) : null,
+              certificateLink: c.certificateLink || '',
+              issuedDate: c.issuedDate ? new Date(c.issuedDate) : null,
+              certificateImage: imageKey,
+            });
+          }
+
         } else {
           profilePayload.certifications = []
         }

@@ -168,12 +168,12 @@ export default function AboutPage() {
 
 
   return (
-    <div className="min-h-screen font-inter bg-[#fef5e4] text-black ">
+    <div className="min-h-screen font-inter  text-black ">
       <Navbar />
 
       {/* ABOUT -> Career SECTION */}
       {/* bg-[#dc8d33]  bg-[linear-gradient(185deg,#E6EEF9_0%,#FEF5E4_30%,#f7f1e6_70%,#e9f1fb_100%)]*/}
-      <div className="bg-[linear-gradient(185deg,#E6EEF9_0%,#FEF5E4_30%,#f7f1e6_70%,#e9f1fb_100%)]">
+      <div className="">
         <section
           id="about"
           className="relative mb-12 pt-4 flex items-center justify-center"

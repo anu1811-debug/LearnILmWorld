@@ -1,5 +1,5 @@
 // FILE: src/pages/MainPage.tsx
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 // import { Link } from 'react-router-dom'
 // import { motion } from 'framer-motion'
 import Footer from '../components/Footer'
@@ -13,15 +13,51 @@ import { useAuth } from '../contexts/AuthContext'
 // import CurrencySelector from '../components/CurrencySelector'
 // import { Button, Offcanvas, Nav } from 'react-bootstrap'
 import Navbar from '../components/Navbar'
+import { useSearchParams } from 'react-router-dom'
 
 
 const MainPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [learningType, setLearningType] = useState<'language' | 'subject' | 'hobby'>('language')
   const [languageMode, setLanguageMode] = useState<string>('subject')
+  const [searchParams] = useSearchParams();
 
   // const [showOffcanvas, setShowOffcanvas] = useState(false);
 
+  useEffect(() => {
+    const typeParam = searchParams.get('type');
+    const subjectParam = searchParams.get('subject');
+    const languageParam = searchParams.get('language');
+    const hobbyParam = searchParams.get('hobby');
+
+    if (typeParam === 'subject' && subjectParam) {
+      setLearningType('subject');
+      setFilters((prev: any) => ({
+        ...prev,
+        specialization: subjectParam,
+        language: '', 
+        hobby: ''
+      }));
+    } 
+    else if (typeParam === 'language' && languageParam) {
+      setLearningType('language');
+      setFilters((prev: any) => ({
+        ...prev,
+        language: languageParam,
+        specialization: '',
+        hobby: ''
+      }));
+    } 
+    else if (typeParam === 'hobby' && hobbyParam) {
+      setLearningType('hobby');
+      setFilters((prev: any) => ({
+        ...prev,
+        hobby: hobbyParam,
+        language: '',
+        specialization: ''
+      }));
+    }
+  }, [searchParams]);
 
   const { user, loading } = useAuth();
 
@@ -50,6 +86,7 @@ const MainPage: React.FC = () => {
     rating: '',
     sortBy: 'rating',
     nationality: '',
+    sessionType: '',
     openDropdown: null
   })
 
@@ -73,7 +110,7 @@ const MainPage: React.FC = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-fixed bg-[#fef5e4] text-[#2D274B]">
+      <div className="min-h-screen bg-fixed  text-[#2D274B]">
 
 
         {/* Floating decorative orbs */}

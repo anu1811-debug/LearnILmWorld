@@ -6,15 +6,15 @@ export const sendEmail = async (options) => {
         const resend = new Resend(process.env.RESEND_API_KEY);
 
         // convert env string → array
-        const ccEmails = process.env.CAREER_CC_EMAILS
-            ? process.env.CAREER_CC_EMAILS.split(',').map(e => e.trim())
-            : [];
+        // const ccEmails = process.env.CAREER_CC_EMAILS
+        //     ? process.env.CAREER_CC_EMAILS.split(',').map(e => e.trim())
+        //     : [];
 
         await resend.emails.send({
             from: process.env.FROM_EMAIL,
             // no-reply@learnilmworld.com
             to: options.to,
-            cc: options.cc || ccEmails,
+            cc: options.cc || undefined,
             subject: options.subject,
             html: options.html,
             attachments: options.attachments?.map(file => ({

@@ -44,7 +44,7 @@ const BlogSection = ({ variant = "default" }: BlogSectionProps) => {
         <div>
             <section
                 id={!isMore ? "blog" : undefined}
-                className={!isMore ? "py-28 px-6 bg-gradient-to-r from-[#f7f3ea] via-[#eef2f6] to-[#cfdbe6]" : ""}
+                className={!isMore ? "py-28 px-6 " : ""}
             >
                 <div className="max-w-7xl mx-auto text-center">
 

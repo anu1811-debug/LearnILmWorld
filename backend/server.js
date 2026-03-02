@@ -12,7 +12,9 @@ import feedbackRoutes from "./routes/feedbackRoutes.js";
 import chatbotRoutes from './routes/chatbotRoutes.js';
 import careerRoutes from './routes/careerRoutes.js';
 import courseRoutes from './routes/courseRoutes.js';
+import uploadRoutes from './routes/uploadRoutes.js';
 import dotenv from 'dotenv';
+import ClassScheduleRoutes from './routes/classScheduleRoutes.js';
 
 dotenv.config();
 
@@ -71,6 +73,8 @@ app.use("/api/feedback", feedbackRoutes);
 app.use('/api/chatbot', chatbotRoutes);
 app.use('/api/careers', careerRoutes);
 app.use('/api/courses', courseRoutes);
+app.use('/api/upload', uploadRoutes);
+app.use('/api/class-schedule', ClassScheduleRoutes);
 
 
 // Test route

@@ -33,6 +33,8 @@ import VerifyEmail from './pages/VerifyEmail';
 import ScrollRestoration from './components/ScrollRestoration';
 import BlogPage from './pages/BlogPage';
 import Careers from './pages/Careers';
+import BookPrivateSession from './pages/student/BookPrivateSession';
+import BookGroupSession from './components/BookGroupSession';
 
 function App() {
   return (
@@ -49,7 +51,7 @@ function App() {
               <ScrollToTop />
 
 
-              <div className="min-h-screen bg-gradient-to-br from-cream-50 to-green-50 font-Limerick">
+              <div className="min-h-screen bg-gradient-to-r from-white via-white to-[#79A2CE4D] font-Limerick">
                 <Routes>
                   <Route path="/" element={<LandingPage />} />
                   <Route path="/main" element={<MainPage />} />
@@ -82,6 +84,8 @@ function App() {
                       <StudentDashboard />
                     </PrivateRoute>
                   } />
+                  <Route path="/book/private/:trainerId" element={<BookPrivateSession />} />
+                  <Route path="/book/group/:trainerId" element={<BookGroupSession />} />
 
                   <Route path="/admin/*" element={
                     <PrivateRoute allowedRoles={['admin']}>

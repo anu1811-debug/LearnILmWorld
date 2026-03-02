@@ -12,10 +12,10 @@ import BlogSection from '../../components/BlogSection'
 const GermanBlog = () => {
     return (
         <>
-            <div className="min-h-screen font-inter bg-[#fef5e4] text-black scroll-smooth">
+            <div className="min-h-screen font-inter  text-black scroll-smooth">
                 <Navbar />
 
-                <main className="bg-[#fef5e4]">
+                <main className="">
 
                     {/* ================= BLOG HEADER ================= */}
                     <section className="pt-28 pb-20 px-6">

@@ -1,6 +1,6 @@
 // FILE: src/components/FiltersPanel.tsx
 import React, { useMemo } from 'react'
-import { ChevronDown, SlidersHorizontal } from 'lucide-react'
+import { ChevronDown, Dot, SlidersHorizontal } from 'lucide-react'
 import * as Flags from 'country-flag-icons/react/3x2'
 
 
@@ -97,8 +97,11 @@ const FiltersPanel: React.FC<Props> = ({ learningType, filters, setFilters, nati
 
                 {/* Quick Filters */}
                 <div className="flex items-center gap-2">
-                    <SlidersHorizontal size={18} className="text-[#5186cd]" />
-                    <span className="font-bold text-[#5186cd] text-lg">Quick Filters</span>
+                    <div className='p-2 bg-blue-300 rounded-full'>
+                    <SlidersHorizontal size={18} className="text-white " />
+
+                    </div>
+                    <span className="font-bold text-[#5186cd] text-lg">Quick Filters ✨</span>
                 </div>
 
                 {/* Clear All */}
@@ -117,14 +120,14 @@ const FiltersPanel: React.FC<Props> = ({ learningType, filters, setFilters, nati
                 {/*changed CBE56A */}
                 {learningType === 'language' && (
                     <div className="relative p-4 rounded-2xl bg-white border border-[#5186cd]/20 shadow-sm">
-                        <label className="text-sm font-bold text-[#5186cd]">All Languages</label>
+                        <label className="text-sm font-bold text-[#5186cd] flex"><Dot className='text-blue-600 w-7 h-7 -mt-1 '/>All Languages</label>
                         <button onClick={() =>
                             setFilters((p: any) => ({
                                 ...p,
                                 openDropdown: p.openDropdown === "language" ? null : "language"
                             }))
                         }
-                            className="w-full mt-2 px-4 py-2 border-2 border-black rounded-full bg-white text-sm font-bold flex justify-between items-center shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
+                            className="w-full mt-3 px-4 py-2 border-2 border-black rounded-full bg-white text-sm font-bold flex justify-between items-center shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
                         >
                             <span>{filters.language || 'Language'}</span>
                             <ChevronDown className={`h-4 w-4`} />
@@ -227,7 +230,7 @@ const FiltersPanel: React.FC<Props> = ({ learningType, filters, setFilters, nati
 
                 {/* Experience */}
                 <div onMouseDown={closeAllDropdowns} className="p-4 rounded-2xl bg-white border border-[#5186cd]/20 shadow-sm">
-                    <label className="text-base font-semibold text-slate-700">Experience (yrs)</label>
+                    <label className="text-base font-semibold text-slate-700 flex"><Dot className='text-blue-600 w-7 h-7 -mt-1'/> Experience (yrs)</label>
                     <select
                         value={filters.experience}
                         onFocus={() =>
@@ -263,7 +266,7 @@ const FiltersPanel: React.FC<Props> = ({ learningType, filters, setFilters, nati
 
                 {/* Sort By */}
                 <div onMouseDown={closeAllDropdowns} className="p-4 rounded-2xl bg-white border border-[#5186cd]/20 shadow-sm">
-                    <label className="text-base font-bold text-slate-700">Sort By</label>
+                    <label className="text-base font-bold text-slate-700 flex"><Dot className='text-blue-600 w-7 h-7 -mt-1'/>Sort By</label>
                     <select value={filters.sortBy} onChange={e => setFilters((p: any) => ({ ...p, sortBy: e.target.value, openDropdown: null }))} className="w-full mt-2 px-4 py-2 border-2 border-black rounded-full bg-white text-sm font-bold shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
                         <option value="rating">Highest Rated</option>
                         <option value="price_low">Price: Low → High</option>
@@ -273,13 +276,27 @@ const FiltersPanel: React.FC<Props> = ({ learningType, filters, setFilters, nati
                 </div>
 
                 {/* Removed min, only Max Price */}
-                <div onMouseDown={closeAllDropdowns} className="p-4 rounded-2xl bg-white border border-[#5186cd]/20 shadow-sm">
+                {/* <div onMouseDown={closeAllDropdowns} className="p-4 rounded-2xl bg-white border border-[#5186cd]/20 shadow-sm">
                     <label className="text-base font-bold text-slate-700">Sort Price ($/hr)</label>
-                    <div className="flex items-center gap-2 mt-1 ">
+                    <div className="flex items-center gap-2 mt-1 "> */}
                         {/* <input type="number" value={filters.minRate} onChange={e => setFilters((p: any) => ({ ...p, minRate: e.target.value }))} className="w-1/2 px-2 py-2 border border-gray-300 bg-[#CBE56A] rounded-lg text-sm text-[#2D274B] font-semibold" placeholder="Min" /> */}
                         {/* removed 2D274B */}
-                        <input type="number" value={filters.maxRate} onChange={e => setFilters((p: any) => ({ ...p, maxRate: e.target.value, openDropdown: null }))} className="w-full mt-2 px-4 py-2 border-2 border-black rounded-full bg-white text-sm font-bold shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]" placeholder="Max" />
+                        {/* <input type="number" value={filters.maxRate} onChange={e => setFilters((p: any) => ({ ...p, maxRate: e.target.value, openDropdown: null }))} className="w-full mt-2 px-4 py-2 border-2 border-black rounded-full bg-white text-sm font-bold shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]" placeholder="Max" />
                     </div>
+                </div> */}
+
+                {/* Book Session Type */}
+                <div onMouseDown={closeAllDropdowns} className="p-4 rounded-2xl bg-white border border-[#5186cd]/20 ">
+                    <label className="text-base font-bold text-slate-700 flex"><Dot className='text-blue-600 w-7 h-7 -mt-1'/>Book Session</label>
+                    <select 
+                        value={filters.sessionType || ''} 
+                        onChange={e => setFilters((p: any) => ({ ...p, sessionType: e.target.value, openDropdown: null }))} 
+                        className="w-full mt-2 px-4 py-2 border-2 border-black rounded-full bg-white text-sm font-bold shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
+                    >
+                        <option value="">Any</option>
+                        <option value="group">Group Session</option>
+                        <option value="private">1:1 Private Room</option>
+                    </select>
                 </div>
 
                 {/* Nationality */}

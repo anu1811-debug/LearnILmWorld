@@ -325,12 +325,12 @@ export default function StepTrainerTeach({
       {/* SUBJECTS */}
       {teachingType === "subjects" && (
         <div>
-          <FormLabel required>Subjects (Max 3)</FormLabel>
+          <FormLabel required>Subjects</FormLabel>
           <MultiSelect
             options={SUBJECT_OPTIONS}
             selected={subjects}
             setSelected={(vals: string[]) => {
-              if (vals.length <= 3) {
+              if (vals.length <= 1) {
                 setSubjects(vals);
               }
             }}

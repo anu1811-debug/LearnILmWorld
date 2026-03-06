@@ -1,57 +1,40 @@
 import React, { useState, useEffect } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, useLocation } from 'react-router-dom'
 import {
-  User, Star, Globe, Award, MapPin, Calendar,
-  Play, Instagram, Youtube, Linkedin, ArrowLeft, MessageSquare,
-  Book,
-  BookOpen,
-  LoaderIcon
+  User, Star, Globe, Award, Calendar,
+  MessageSquare, BookOpen, CheckCircle,
+  Heart, Book, Play, Quote
 } from 'lucide-react'
 import axios from 'axios'
-import bg_img from '../assets/bg_main.jpeg'
-import Price from '../components/Price'
-import CurrencySelector from '../components/CurrencySelector'
+import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
+import BookGroupSession from '../components/BookGroupSession'
+import BookPrivateSession from '../pages/student/BookPrivateSession'
+import moment from 'moment-timezone'
 
 interface Trainer {
   _id: string
   name: string
-  email: string
   profile: {
     bio: string
-    languages: string[]
-    trainerLanguages: Array<{
-      language: string
-      proficiency: string
-      teachingLevel: string[]
-    }>
+    category?: string
+    languages?: string[]
+    subjects?: string[]
+    hobbies?: string[]
+    standards?: string[]
+    trainerLanguages: Array<{ language: string; proficiency: string; teachingLevel: string[] }>
     experience: number
     hourlyRate: number
-    avatar?: string
     imageUrl?: string
-    phone?: string
+    avatar?: string
     location?: string
+    timezone?: string
     specializations: string[]
-    certifications: Array<{
-      name: string
-      issuer: string
-      year: number
-    }>
-    availability: Array<{
-      day: string
-      startTime: string
-      endTime: string
-      available: boolean
-    }>
+    availability: Array<{ day: string; startTime: string; endTime: string; available: boolean }>
     demoVideo?: string
-    socialMedia: {
-      instagram?: string
-      youtube?: string
-      linkedin?: string
-    }
+    socialMedia: { instagram?: string; youtube?: string; linkedin?: string }
     teachingStyle?: string
     studentAge?: string[]
-    isAvailable?: boolean
-    totalBookings?: number
     averageRating?: number
   }
   stats: {
@@ -61,45 +44,35 @@ interface Trainer {
   }
 }
 
-interface Review {
-  _id: string
-  rating: number
-  comment: string
-  studentName: string
-  createdAt: string
-}
-
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const TrainerProfile: React.FC = () => {
   const { trainerId } = useParams<{ trainerId: string }>()
-  const [trainer, setTrainer] = useState<Trainer | null>(null)
-  const [reviews, setReviews] = useState<Review[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
-  const [previewLink, setPreviewLink] = useState<string>("")
-  // prefer uploaded imageUrl, then avatar, then show icon
-  const avatar = trainer?.profile?.imageUrl || trainer?.profile?.avatar || ''
-  
-  useEffect(() => {
-    const fetchProfileImage = async () => {
-      if (!avatar) {
-        setPreviewLink(""); 
-        return;
-      }
-      
-      try {
-        const { data } = await axios.post(`${API_BASE_URL}/api/upload/get-download-url`, {
-          fileKey: avatar 
-        });
-        setPreviewLink(data.signedUrl);
-      } catch (err) {
-        console.error("Failed to load profile image", err);
-      }
-    };
+  const location = useLocation()
 
-    fetchProfileImage();
-  }, [avatar, API_BASE_URL]);
+  const initialTab = location.state?.activeTab || 'profile';
+  const [activeTab, setActiveTab] = useState<'profile' | 'group' | 'private'>(initialTab);
+
+  const [trainer, setTrainer] = useState<Trainer | null>(null)
+  const [reviews, setReviews] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+  const [previewLink, setPreviewLink] = useState<string>("")
+  const [currentReviewIdx, setCurrentReviewIdx] = useState(0);
+
+  const passedLearningType = location.state?.learningType;
+  const category = passedLearningType || trainer?.profile?.category?.toLowerCase() || 'language';
+
+  const isLanguage = category === 'language';
+  const isSubject = category === 'subject';
+  const isHobby = category === 'hobby';
+
+  useEffect(() => {
+    if (reviews.length <= 1) return;
+    const timer = setInterval(() => {
+      setCurrentReviewIdx((prev) => (prev + 1) % reviews.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [reviews.length]);
 
   useEffect(() => {
     if (trainerId) {
@@ -108,35 +81,31 @@ const TrainerProfile: React.FC = () => {
     }
   }, [trainerId])
 
+  const avatar = trainer?.profile?.imageUrl || trainer?.profile?.avatar || ''
+
+  useEffect(() => {
+    const fetchProfileImage = async () => {
+      if (!avatar) return;
+      try {
+        const { data } = await axios.post(`${API_BASE_URL}/api/upload/get-download-url`, { fileKey: avatar });
+        setPreviewLink(data.signedUrl);
+      } catch (err) { console.error("Image error", err); }
+    };
+    fetchProfileImage();
+  }, [avatar]);
+
   const fetchTrainerProfile = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/api/users/profile/${trainerId}`)
       setTrainer(response.data)
-    } catch (err) {
-      console.error(err)
-      setError('Failed to load trainer profile')
-    } finally {
-      setLoading(false)
-    }
+    } catch (err) { console.error(err) } finally { setLoading(false) }
   }
 
   const fetchReviews = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/api/reviews/trainer/${trainerId}`)
       setReviews(Array.isArray(response.data) ? response.data : [])
-    } catch (err) {
-      console.error(err)
-    }
-  }
-
-  const getYouTubeEmbedUrl = (url?: string) => {
-    if (!url) return ''
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
-    const match = url.match(regExp)
-    if (match && match[2].length === 11) {
-      return `https://www.youtube.com/embed/${match[2]}`
-    }
-    return url.includes('embed') ? url : ''
+    } catch (err) { console.error(err) }
   }
 
   const formatAvailability = () => {
@@ -149,361 +118,332 @@ const TrainerProfile: React.FC = () => {
       }))
   }
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[var(--bg-pale)] flex items-center justify-center">
-        <div className="dots">
-          <div></div><div></div><div></div>
-        </div>
-      </div>
-    )
-  }
+  if (loading || !trainer) return <div className="min-h-screen flex items-center justify-center text-blue-600 font-medium">Loading profile...</div>
 
-  if (error || !trainer) {
-    return (
-      <div className="min-h-screen bg-[var(--bg-pale)] flex items-center justify-center">
-        <div className="text-center px-4">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Trainer not found</h2>
-          <Link
-            to="/main"
-            className="px-6 py-3 bg-[#9787F3] text-white rounded-lg font-semibold hover:bg-[#9787F3]/90 transition text-base"
-          >
-            Browse Trainers
-          </Link>
-        </div>
-      </div>
-    )
-  }
+  const getCategoryIcon = () => {
+    if (isHobby) return <Heart className="text-blue-500" size={24} />;
+    if (isSubject) return <Book className="text-blue-500" size={24} />;
+    return <Globe className="text-blue-500" size={24} />;
+  };
 
-  
-  // type AnyObj = Record<string, any>;
-  // const { user } = useAuth() as AnyObj;
-  
+  const getCategoryTitle = () => {
+    if (isHobby) return "Hobbies I Teach";
+    if (isSubject) return "Subjects I Teach";
+    return "Languages I Teach";
+  };
 
   return (
-    <div
-      className="min-h-screen font-inter text-[#2D274B] transition-colors duration-500 bg-[#FFFAF1] bg-fixed"
-      style={{
-        backgroundImage:
-          `url(${bg_img})`,
-        position: "relative",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        width: "100%",
-      }}
-    >
-      {/* Header */}
-      <header className="sticky top-0 z-10 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <Link to="/" className="flex items-center">
-              <div>
-                <div className="text-lg font-semibold">LearniLM🌎World</div>
-                <div className="text-xs text-slate-500 -mt-1">Live lessons · Micro-courses</div>
+    <>
+      <Navbar />
+      <div className="min-h-screen py-6 sm:py-10 pb-20 px-4 sm:px-6">
+        {/* RESPONSIVE GRID: 1 column on mobile, 12 on large screens */}
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+
+          {/* LEFT CARD: Adjusted padding for mobile bg-gradient-to-b from-[#1E40AF] to-[#1e3a8a]*/}
+          <div className="lg:col-span-5 bg-[#024aac]  rounded-[2rem] p-6 sm:p-8 text-white shadow-2xl relative overflow-hidden self-start lg:sticky lg:top-28 z-10 w-full">
+            <div className="relative z-10 flex flex-col items-center text-center">
+              {/* Profile Image */}
+              <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl border-4 border-blue-400/30 overflow-hidden mb-6 shadow-xl bg-white">
+                {previewLink ? (
+                  <img src={previewLink} alt={trainer.name} className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full bg-slate-200 text-slate-400 flex items-center justify-center"><User size={40} className="sm:w-12 sm:h-12" /></div>
+                )}
               </div>
-            </Link>
-            <Link
-              to="/main"
-              className="flex items-center text-gray-700 hover:text-[var(--accent-orange)] transition-colors font-medium text-base"
-            >
-              <ArrowLeft className="h-5 w-5 mr-1" />
-              Back to Trainers
-            </Link>
-          </div>
-        </div>
-      </header>
 
-      {/* Main Content */}
-      <div className="max-w-7xl font-sans mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-12 grid lg:grid-cols-3 gap-8">
-        {/* Left: Profile, Languages, Connect, Demo Video */}
-        <div className="lg:col-span-2 space-y-8">
-          {/* Profile Card */}
-          <div className="rounded-2xl p-8 bg-white/90 backdrop-blur-md shadow-[0_20px_45px_rgba(45,39,75,0.12)]">
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8 mb-8">
+              {/* Name & Title */}
+              <div className="flex items-center gap-2 mb-1">
+                <h1 className="text-2xl sm:text-3xl font-bold">{trainer.name}</h1>
+                <CheckCircle className="text-blue-400 fill-blue-400 text-white" size={20} />
+              </div>
+              <p className="text-blue-100/80 mb-6 text-base sm:text-lg">
+                {isLanguage ? "Language Teacher" : isSubject ? "Subject Expert" : "Hobby Instructor"}
+              </p>
 
-              <div className="flex items-center gap-6">
-                <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-[#9787F3] to-[#7C6CF2] overflow-hidden flex items-center justify-center shadow-md">
-
-                  {previewLink ? (
-                    <img
-                      src={previewLink}
-                      alt={trainer.name}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <User className="h-10 w-10 text-white" />
-                  )}
+              {/* Stats Row: Adjusted gap for small screens */}
+              <div className="grid grid-cols-3 gap-2 sm:gap-6 w-full max-w-md mb-8 border-t border-b border-white/10 py-5 sm:py-6">
+                <div>
+                  <div className="flex items-center justify-center gap-1 text-lg sm:text-xl font-bold">
+                    <Star className="text-yellow-400 fill-yellow-400 sm:w-[18px]" size={16} />
+                    {trainer.stats?.rating || trainer.profile.averageRating || 5.0}
+                  </div>
+                  <p className="text-[10px] sm:text-xs text-blue-200/70">{reviews.length} reviews</p>
                 </div>
                 <div>
-                  <h1 className="text-3xl font-bold tracking-tight">{trainer.name}</h1>
-                  <div className="flex items-center gap-2 mt-1 text-lg">
-                    <Star className="h-5 w-5 text-yellow-400" />
-                    <span className="font-semibold">
-                      {trainer.stats?.rating ?? trainer.profile?.averageRating ?? 0}
-                    </span>
-                    <span className="text-gray-500">({reviews.length} reviews)</span>
-                  </div>
-                  <div className="flex items-center gap-1 text-gray-700  mt-1">
-                    <MapPin className="h-5 w-5" />
-                    <span>{trainer.profile?.location || 'Online'}</span>
-                  </div>
+                  <div className="text-lg sm:text-xl font-bold">{trainer.profile.experience}+</div>
+                  <p className="text-[10px] sm:text-xs text-blue-200/70">Years Exp.</p>
+                </div>
+                <div>
+                  <div className="text-lg sm:text-xl font-bold">{trainer.stats?.completedSessions || 0}+</div>
+                  <p className="text-[10px] sm:text-xs text-blue-200/70">Sessions</p>
                 </div>
               </div>
-              <div className="text-right">
-                <CurrencySelector />
-                <div className="text-3xl font-bold text-orange-500 mt-1">
-                  <Price amount={trainer.profile?.hourlyRate ?? 0} /> / hr
 
-                </div>
-                <Link
-                  to={`/book/${trainer._id}`}
-                  className="mt-4 inline-block px-6 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-[#9787F3] to-[#7C6CF2] hover:opacity-90 transition shadow-md"
+              {/* About Section */}
+              <div className="text-left w-full mb-8 sm:mb-10">
+                <h3 className="text-base sm:text-lg font-semibold mb-2">About Me:</h3>
+                <p className="text-blue-50/80 leading-relaxed text-sm">
+                  {trainer.profile.bio}
+                </p>
+              </div>
+
+              {/* Book Buttons Container */}
+              <div className='flex flex-col gap-3 sm:gap-4 w-full'>
+                <button
+                  onClick={() => setActiveTab('private')}
+                  className={`w-full py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg transition-colors text-center shadow-lg ${activeTab === 'private' ? 'bg-blue-100 text-blue-900 border-2 border-blue-400' : 'bg-white text-blue-900 hover:bg-blue-50'}`}
                 >
-                  Book Session
-                </Link>
+                  Book Private Session
+                </button>
+                <button
+                  onClick={() => setActiveTab('group')}
+                  className={`w-full py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg transition-colors text-center shadow-lg ${activeTab === 'group' ? 'bg-blue-100 text-blue-900 border-2 border-blue-400' : 'bg-white text-blue-900 hover:bg-blue-50'}`}
+                >
+                  Book Group Session
+                </button>
+
+                {activeTab !== 'profile' && (
+                  <button
+                    onClick={() => setActiveTab('profile')}
+                    className="mt-2 text-blue-200/80 hover:text-white transition text-sm underline"
+                  >
+                    ← Back to Profile Information
+                  </button>
+                )}
               </div>
             </div>
-
-            {/* Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div className="p-5 rounded-xl text-center bg-gradient-to-b from-white to-[#F6F3FF] shadow-sm">
-                <div className="text-2xl font-bold text-[#9787F3]">
-                  {trainer.profile?.experience ?? 0}+
-                </div>
-                <div className="text-sm text-gray-600 mt-1">Years</div>
-              </div>
-              <div className="p-5 rounded-xl text-center bg-gradient-to-b from-white to-[#F6F3FF] shadow-sm">
-                <div className="text-2xl font-bold text-[#9787F3]">
-                  {trainer.stats?.completedSessions ?? 0}
-                </div>
-                <div className="text-sm text-gray-600 mt-1">Completed</div>
-              </div>
-              <div className="p-5 rounded-xl text-center bg-gradient-to-b from-white to-[#F6F3FF] shadow-sm">
-                <div className="text-2xl font-bold text-[#9787F3]">
-                  {trainer.profile?.totalBookings ?? 0}
-                </div>
-                <div className="text-sm text-gray-600 mt-1">Students</div>
-              </div>
-            </div>
-
-            {/* About */}
-            <h3 className="text-2xl font-semibold text-[var(--text)] mb-3">About Me</h3>
-            <p className="text-lg text-gray-700 leading-relaxed">
-              {trainer.profile?.bio || 'Experienced language trainer helping students achieve fluency through personalized lessons.'}
-            </p>
           </div>
 
-          {/* Languages */}
-          <div className="rounded-2xl p-6 bg-white/90 backdrop-blur-md shadow-[0_16px_35px_rgba(45,39,75,0.1)]">
-            <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-              <Globe className="h-5 w-5 text-orange-500" />
-              Languages I Teach
-            </h3>
-            <div className="grid md:grid-cols-2 gap-5">
-              {trainer.profile?.trainerLanguages && trainer.profile.trainerLanguages.length > 0
-                ? trainer.profile.trainerLanguages.map((lang, index) => (
-                  <div
-                    key={index}
-                    className="p-5 rounded-xl bg-gradient-to-b from-white to-[#F6F3FF] shadow-sm"
+          {/* RIGHT SIDEBAR */}
+          <div className="lg:col-span-7 space-y-5">
 
-                  >
-                    <div className="flex justify-between items-center mb-2">
-                      <h4 className="font-semibold text-[var(--text)] text-base">{lang.language}</h4>
-                      <span className="px-3 py-1 bg-[#9787F3] text-white rounded-full text-sm">
-                        {lang.proficiency}
-                      </span>
-                    </div>
+            {activeTab === 'profile' && (
+              <div className="space-y-5 animate-fade-in">
+                {/* 1. DYNAMIC CATEGORY SECTION */}
+                <div className="bg-white rounded-[1.5rem] p-5 sm:p-6 shadow-sm border border-slate-100">
+                  <h3 className="text-base sm:text-lg font-bold flex items-center gap-2 sm:gap-3 mb-4 text-slate-800">
+                    {getCategoryIcon()}
+                    {getCategoryTitle()}
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {(() => {
+                      let itemsToDisplay: string[] = [];
+                      if (isLanguage) {
+                        if (trainer.profile?.trainerLanguages && trainer.profile.trainerLanguages.length > 0) {
+                          itemsToDisplay = trainer.profile.trainerLanguages.map((tl: any) => tl.language);
+                        } else if (trainer.profile?.languages) {
+                          itemsToDisplay = trainer.profile.languages;
+                        }
+                      } else if (isSubject) {
+                        itemsToDisplay = trainer.profile?.specializations || [];
+                      } else if (isHobby) {
+                        itemsToDisplay = trainer.profile?.hobbies || [];
+                      }
+
+                      if (itemsToDisplay.length > 0) {
+                        return itemsToDisplay.map((item: string, i: number) => (
+                          <span key={i} className="px-3 py-1.5 sm:px-4 sm:py-2 bg-blue-50 text-blue-500 rounded-full text-xs sm:text-sm font-semibold">
+                            {item}
+                          </span>
+                        ));
+                      } else {
+                        return <span className="text-slate-400 text-sm">No items listed</span>;
+                      }
+                    })()}
+                  </div>
+                </div>
+
+                {/* 2. SPECIALIZATIONS */}
+                {!isSubject && trainer.profile?.specializations && trainer.profile.specializations.length > 0 && (
+                  <div className="bg-white rounded-[1.5rem] p-5 sm:p-6 shadow-sm border border-slate-100">
+                    <h3 className="text-base sm:text-lg font-bold flex items-center gap-2 sm:gap-3 mb-4 text-slate-800">
+                      <Award className="text-blue-500" size={24} /> Specializations
+                    </h3>
                     <div className="flex flex-wrap gap-2">
-                      {lang.teachingLevel.map((level, idx) => (
-                        <span
-                          key={idx}
-                          className="px-3 py-1 bg-[var(--accent-orange)]/20 text-gray-800 rounded-md text-sm"
-                        >
-                          {level}
+                      {trainer.profile.specializations.map((spec: string, i: number) => (
+                        <span key={i} className="px-3 py-1.5 sm:px-4 sm:py-2 bg-blue-50 text-blue-500 rounded-full text-xs sm:text-sm font-semibold">
+                          {spec}
                         </span>
                       ))}
                     </div>
                   </div>
-                ))
-                : trainer.profile?.languages?.map((language, index) => (
-                  <div key={index} className="p-4 bg-[var(--bg-pale-top)] rounded-lg">
-                    <h4 className="font-semibold text-[var(--text)] text-base">{language}</h4>
+                )}
+
+                {/* 3. CLASSES/GRADES */}
+                <div className="bg-white rounded-[1.5rem] p-5 sm:p-6 shadow-sm border border-slate-100">
+                  <h3 className="text-base sm:text-lg font-bold flex items-center gap-2 sm:gap-3 mb-4 text-slate-800">
+                    <BookOpen className="text-blue-500" size={24} /> Classes/Grades
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {trainer.profile?.standards && trainer.profile.standards.length > 0 ? (
+                      trainer.profile.standards.map((grade: string) => (
+                        <span key={grade} className="px-3 py-1.5 sm:px-4 sm:py-2 bg-blue-50 text-blue-500 rounded-full text-xs sm:text-sm font-semibold">
+                          {grade}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="text-slate-400 text-sm">Not specified</span>
+                    )}
                   </div>
-                ))}
-            </div>
-          </div>
+                </div>
 
-          {/* Connect Section */}
-          <div className="rounded-2xl p-6 bg-white/90 backdrop-blur-md shadow-[0_16px_35px_rgba(45,39,75,0.1)]">
-            <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-              <LoaderIcon className='h-5 w-5 text-orange-500' />
-              Connect</h3>
-            <div className="flex gap-4">
-              {trainer.profile?.socialMedia?.instagram && (
-                <a
-                  href={trainer.profile.socialMedia.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-3 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition"
-                >
-                  <Instagram className="h-6 w-6" />
-                </a>
-              )}
-              {trainer.profile?.socialMedia?.youtube && (
-                <a
-                  href={trainer.profile.socialMedia.youtube}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
-                >
-                  <Youtube className="h-6 w-6" />
-                </a>
-              )}
-              {trainer.profile?.socialMedia?.linkedin && (
-                <a
-                  href={trainer.profile.socialMedia.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-                >
-                  <Linkedin className="h-6 w-6" />
-                </a>
-              )}
-            </div>
-          </div>
+                {/* 4. AVAILABILITY */}
+                <div className="bg-white rounded-[1.5rem] p-5 sm:p-6 shadow-sm border border-slate-100">
+                  <h3 className="text-base sm:text-lg font-bold mb-4 flex items-center gap-2 sm:gap-3 text-slate-800">
+                    <Calendar className="text-blue-500" size={24} /> Availability
+                  </h3>
+                  {(() => {
+                    if (!trainer?.profile?.availability) return [];
 
-          {/* Demo Video */}
-          {trainer.profile?.demoVideo && (
-            <div className="rounded-2xl p-6 bg-white/90 backdrop-blur-md shadow-[0_16px_35px_rgba(45,39,75,0.1)]">
-              <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                <Play className="h-5 w-5 text-orange-500" />
-                Demo Video
-              </h3>
-              <div className="aspect-video rounded-lg overflow-hidden">
-                <iframe
-                  src={getYouTubeEmbedUrl(trainer.profile.demoVideo)}
-                  title="Trainer Demo Video"
-                  className="w-full h-full"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              </div>
-            </div>
-          )}
-        </div>
+                    // Teacher ka timezone (agar nahi set hai toh UTC maan lenge fallback ke liye)
+                    const teacherTz = trainer.profile.timezone || 'UTC';
 
-        {/* Right Sidebar: Specializations, Availability, Teaching Style, Reviews */}
-        <div className="space-y-8">
-          {/* Specializations */}
-          {trainer.profile?.specializations && trainer.profile.specializations.length > 0 && (
-            <div className="rounded-2xl p-6 bg-white/90 backdrop-blur-md shadow-[0_16px_35px_rgba(45,39,75,0.1)]">
-              <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                <Award className="h-5 w-5 text-orange-500" />
-                Specializations
-              </h3>
-              <div className="flex flex-wrap gap-3">
-                {trainer.profile.specializations.map((spec, idx) => (
-                  <span
-                    key={idx}
-                    className="px-3 py-1 bg-[#9787F3]/20 text-[var(--accent-orange)] rounded-full text-sm font-medium"
-                  >
-                    {spec}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
+                    // Browser se student ka apna local timezone nikalna
+                    const localTz = moment.tz.guess();
 
-          {/* Availability */}
-          <div className="rounded-2xl p-6 bg-white/90 backdrop-blur-md shadow-[0_16px_35px_rgba(45,39,75,0.1)]">
-            <h3 className="text-xl font-semibold mb-3 flex items-center gap-2">
-              <Calendar className="h-5 w-5 text-orange-500" />
-              Availability
-            </h3>
-            <div className="space-y-2 text-sm">
-              {formatAvailability().length > 0 ? (
-                formatAvailability().map((slot, idx) => (
-                  <div
-                    key={idx}
-                    className="flex justify-between items-center p-2 bg-[var(--bg-pale-top)] rounded-md text-base"
-                  >
-                    <span className="font-medium text-[var(--text)]">{slot.day}</span>
-                    <span className="text-gray-700">{slot.time}</span>
+                    const dayMap: { [key: string]: number } = {
+                      'monday': 0, 'tuesday': 1, 'wednesday': 2, 'thursday': 3, 'friday': 4, 'saturday': 5, 'sunday': 6
+                    };
+
+                    const availability = trainer.profile.availability
+                      .filter(slot => slot.available && slot.startTime && slot.endTime)
+                      .map(slot => {
+                        const dayNum = dayMap[slot.day.toLowerCase()];
+
+                        // Ek reference date le rahe hain jisse din automatically aage-peeche shift ho sakein
+                        const baseDateStr = '2026-01-04';
+
+                        // Teacher ke timezone me exact moment object banana
+                        const startMoment = moment.tz(`${baseDateStr} ${slot.startTime}`, "YYYY-MM-DD HH:mm", teacherTz).day(dayNum);
+                        const endMoment = moment.tz(`${baseDateStr} ${slot.endTime}`, "YYYY-MM-DD HH:mm", teacherTz).day(dayNum);
+
+                        // Usko Student ke timezone me convert karna
+                        const localStart = startMoment.clone().tz(localTz);
+                        const localEnd = endMoment.clone().tz(localTz);
+
+                        // Format karna (e.g., "07:30 PM")
+                        const localDay = localStart.format('dddd');
+                        let localTimeString = `${localStart.format('hh:mm A')} - ${localEnd.format('hh:mm A')}`;
+
+                        // Agar conversion ke chakkar mein din aage chala gaya (jaise Monday se Tuesday)
+                        // toh time ke aage din bhi likh denge taaki student ko pata rahe
+                        if (localStart.day() !== localEnd.day()) {
+                          localTimeString += ` (${localEnd.format('ddd')})`;
+                        }
+
+                        return {
+                          day: localDay,
+                          time: localTimeString
+                        }
+                      });
+
+                    return availability.length > 0 ? (
+                      <div className="space-y-2 sm:space-y-3">
+                      {availability.map((slot, idx) => (
+                        <div key={idx} className="flex flex-col sm:flex-row sm:justify-between sm:items-center p-3 sm:p-4 bg-slate-50 border border-slate-100 rounded-xl gap-1 sm:gap-0">
+                          <span className="font-semibold text-slate-700 text-sm sm:text-base">{slot.day}</span>
+                          <span className="text-slate-500 text-xs sm:text-sm font-medium">{slot.time}</span>
+                        </div>
+                      ))}
+                    </div>
+                    ) : (
+                      <div className="text-slate-600 text-sm sm:text-base">
+                        <p className="mb-1">Available by appointment</p>
+                        <p className="font-semibold text-slate-800">Please contact to schedule</p>
+                      </div>
+                    );
+                  })()}
+                </div>
+
+                {/* 5. TEACHING STYLE */}
+                <div className="bg-white rounded-[1.5rem] p-5 sm:p-6 shadow-sm border border-slate-100">
+                  <h3 className="text-base sm:text-lg font-bold flex items-center gap-2 sm:gap-3 mb-3 text-slate-800">
+                    <MessageSquare className="text-blue-500" size={24} /> Teaching Style
+                  </h3>
+                  <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+                    {trainer.profile.teachingStyle || 'Conversational'}
+                  </p>
+                </div>
+
+                {/* DEMO VIDEO */}
+                {trainer.profile?.demoVideo && (
+                  <div className="bg-white rounded-[1.5rem] p-5 sm:p-6 shadow-sm border border-slate-100">
+                    <h3 className="text-base sm:text-lg font-bold flex items-center gap-2 sm:gap-3 mb-4 text-slate-800">
+                      <Play className="text-blue-500 fill-blue-500" size={20} /> Demo Video
+                    </h3>
+                    <div className="rounded-xl overflow-hidden bg-black aspect-video border border-slate-200 w-full">
+                      <video src={trainer.profile.demoVideo} controls playsInline className="w-full h-full object-cover" />
+                    </div>
                   </div>
-                ))
-              ) : (
-                <p className="text-gray-700 text-base">Available by appointment</p>
-              )}
-            </div>
-          </div>
+                )}
 
-          {/* Teaching Style */}
-          <div className="rounded-2xl p-6 bg-white/90 backdrop-blur-md shadow-[0_16px_35px_rgba(45,39,75,0.1)]">
-            <h3 className="text-xl font-semibold mb-3 flex items-center gap-2">
-              <BookOpen className="h-5 w-5 text-orange-500" />
-              Teaching Style</h3>
-            <p className="text-lg text-gray-700 leading-relaxed">
-              {trainer.profile?.teachingStyle || 'Structured, conversational, and outcome-focused.'}
-            </p>
-            {trainer.profile?.studentAge && trainer.profile.studentAge.length > 0 && (
-              <div className="mt-3 flex flex-wrap gap-2">
-                {trainer.profile.studentAge.map((age, idx) => (
-                  <span
-                    key={idx}
-                    className="px-3 py-1 bg-[var(--accent-orange)]/20 text-gray-800 rounded-md text-sm"
-                  >
-                    {age}
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
+                {/* TESTIMONIALS */}
+                {reviews && reviews.length > 0 && (
+                  <div className="bg-white rounded-[1.5rem] p-5 sm:p-6 shadow-sm border border-slate-100 flex flex-col items-center text-center">
+                    <div className="flex items-center justify-center gap-2 sm:gap-3 mb-2">
+                      <Quote className="text-[#5186cd] fill-[#e9f1fb] rotate-180 w-6 h-6 sm:w-8 sm:h-8" />
+                      <h2 className="text-xl sm:text-2xl font-bold text-slate-800">Student Testimonials</h2>
+                    </div>
+                    <p className="text-slate-500 mb-4 sm:mb-6 text-xs sm:text-sm px-2">What our students say about their learning experience</p>
 
-          {/* Reviews */}
-          <div className="rounded-2xl p-6 bg-white/90 backdrop-blur-md shadow-[0_16px_35px_rgba(45,39,75,0.1)]">
-            <h3 className="text-xl font-semibold mb-3 flex items-center gap-2">
-              <MessageSquare className="h-5 w-5 text-orange-500" />
-              Student Reviews ({reviews.length})
-            </h3>
-            {reviews.length > 0 ? (
-              <div className="space-y-3">
-                {reviews.map((review) => (
-                  <div
-                    key={review._id}
-                    className="p-3 bg-[var(--bg-pale-top)] rounded-lg text-base"
-                  >
-                    <div className="flex justify-between items-center mb-2">
-                      <div>
-                        <div className="font-semibold text-[var(--text)]">{review.studentName}</div>
-                        <div className="text-sm text-gray-600">
-                          {new Date(review.createdAt).toLocaleDateString()}
+                    <div className="w-full bg-[#F8FAFC] rounded-[1.5rem] p-4 sm:p-6 shadow-sm border border-slate-100 text-left relative transition-all duration-300">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
+                        <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-[3px] border-blue-400 p-0.5 shrink-0">
+                          {reviews[currentReviewIdx]?.studentId?.profile?.avatar || reviews[currentReviewIdx]?.studentId?.profile?.imageUrl ? (
+                            <img src={reviews[currentReviewIdx].studentId.profile.avatar || reviews[currentReviewIdx].studentId.profile.imageUrl} alt="Student" className="w-full h-full rounded-full object-cover" />
+                          ) : (
+                            <div className="w-full h-full bg-slate-200 rounded-full flex items-center justify-center text-slate-400"><User size={20} /></div>
+                          )}
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-slate-800 text-base sm:text-lg leading-tight">
+                            {reviews[currentReviewIdx]?.studentName || "Student"}
+                          </h4>
+                          <p className="text-[10px] sm:text-xs text-slate-500 mb-1">Learner</p>
+                          <div className="flex gap-1">
+                            {[...Array(5)].map((_, i) => (
+                              <Star key={i} size={12} className={`sm:w-3.5 sm:h-3.5 ${i < (reviews[currentReviewIdx]?.rating || 5) ? "text-yellow-400 fill-yellow-400" : "text-slate-200 fill-slate-200"}`} />
+                            ))}
+                          </div>
                         </div>
                       </div>
-                      <div className="flex gap-0.5">
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className={`h-5 w-5 ${i < review.rating ? 'text-yellow-400' : 'text-gray-300'}`}
-                          />
+                      <p className="text-slate-700 italic text-sm sm:text-[15px] leading-relaxed">
+                        "{reviews[currentReviewIdx]?.comment || "Great experience learning with this trainer. Highly recommended!"}"
+                      </p>
+                    </div>
+
+                    {reviews.length > 1 && (
+                      <div className="flex justify-center gap-2 mt-4 sm:mt-5">
+                        {reviews.map((_, idx) => (
+                          <button key={idx} onClick={() => setCurrentReviewIdx(idx)} className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full transition-all duration-300 ${idx === currentReviewIdx ? 'bg-[#5186cd] w-3 sm:w-4' : 'bg-slate-400 hover:bg-slate-500'}`} aria-label={`Go to review ${idx + 1}`} />
                         ))}
                       </div>
-                    </div>
-                    <p className="text-gray-700 text-base">{review.comment}</p>
+                    )}
                   </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-4">
-                <MessageSquare className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-                <p className="text-gray-700 text-base">No reviews yet</p>
+                )}
               </div>
             )}
+
+            {/* TAB CONTENT: GROUP & PRIVATE */}
+            {activeTab === 'group' && (
+              <div className="bg-white rounded-[1.5rem] p-5 sm:p-8 shadow-sm border border-slate-100 animate-fade-in">
+                <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-slate-800 border-b pb-3 sm:pb-4">Group Sessions</h3>
+                <BookGroupSession trainerId={trainer._id} />
+              </div>
+            )}
+
+            {activeTab === 'private' && (
+              <div className="bg-white rounded-[1.5rem] p-5 sm:p-8 shadow-sm border border-slate-100 animate-fade-in">
+                <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-slate-800 border-b pb-3 sm:pb-4">1-on-1 Private Session</h3>
+                <BookPrivateSession trainerId={trainer._id} />
+              </div>
+            )}
+
           </div>
         </div>
       </div>
-    </div>
+      <Footer />
+    </>
   )
 }
 

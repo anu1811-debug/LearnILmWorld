@@ -120,7 +120,7 @@ const FiltersPanel: React.FC<Props> = ({ learningType, filters, setFilters, nati
                 {/*changed CBE56A */}
                 {learningType === 'language' && (
                     <div className="relative p-4 rounded-2xl bg-white border border-[#5186cd]/20 shadow-sm">
-                        <label className="text-sm font-bold text-[#5186cd] flex"><Dot className='text-blue-600 w-7 h-7 -mt-1 '/>All Languages</label>
+                        <label className="text-sm font-bold text-[#5186cd] flex items-center"><Dot className='text-blue-600 w-7 h-7 -mt-1 '/>All Languages</label>
                         <button onClick={() =>
                             setFilters((p: any) => ({
                                 ...p,
@@ -151,7 +151,7 @@ const FiltersPanel: React.FC<Props> = ({ learningType, filters, setFilters, nati
 
                 {learningType === 'subject' && (
                     <div className="relative p-4 rounded-2xl bg-white border border-[#5186cd]/20 shadow-sm">
-                        <label className="text-sm font-bold text-[#5186cd]">All Subjects</label>
+                        <label className="text-sm font-bold text-[#5186cd] flex items-center"><Dot className='text-blue-600 w-7 h-7 -mt-1 '/>All Subjects</label>
 
                         <button
                             onClick={() =>
@@ -161,7 +161,7 @@ const FiltersPanel: React.FC<Props> = ({ learningType, filters, setFilters, nati
 
                                 }))
                             }
-                            className="w-full mt-2 px-4 py-2 border-2 border-black rounded-full bg-white text-sm font-bold flex justify-between items-center shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
+                            className="w-full mt-3 px-4 py-2 border-2 border-black rounded-full bg-white text-sm font-bold flex justify-between items-center shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
                         >
                             <span>{filters.specialization || 'Subject'}</span>
                             <ChevronDown className="h-4 w-4" />
@@ -191,7 +191,7 @@ const FiltersPanel: React.FC<Props> = ({ learningType, filters, setFilters, nati
 
                 {learningType === 'hobby' && (
                     <div className="relative p-4 rounded-2xl bg-white border border-[#5186cd]/20 shadow-sm">
-                        <label className="text-sm font-bold text-[#5186cd]">All Hobbies</label>
+                        <label className="text-sm font-bold text-[#5186cd] flex items-center"><Dot className='text-blue-600 w-7 h-7 -mt-1 '/>All Hobbies</label>
 
                         <button
                             onClick={() =>
@@ -200,7 +200,7 @@ const FiltersPanel: React.FC<Props> = ({ learningType, filters, setFilters, nati
                                     openDropdown: p.openDropdown === "hobby" ? null : "hobby"
                                 }))
                             }
-                            className="w-full mt-2 px-4 py-2 border-2 border-black rounded-full bg-white text-sm font-bold flex justify-between items-center shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
+                            className="w-full mt-3 px-4 py-2 border-2 border-black rounded-full bg-white text-sm font-bold flex justify-between items-center shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
                         >
                             <span>{filters.hobby || 'Hobby'}</span>
                             <ChevronDown className="h-4 w-4" />
@@ -227,6 +227,20 @@ const FiltersPanel: React.FC<Props> = ({ learningType, filters, setFilters, nati
                         )}
                     </div>
                 )}
+
+                {/* Book Session Type */}
+                <div onMouseDown={closeAllDropdowns} className="p-4 rounded-2xl bg-white border border-[#5186cd]/20 ">
+                    <label className="text-base font-bold text-slate-700 flex"><Dot className='text-blue-600 w-7 h-7 -mt-1'/>Book Session</label>
+                    <select 
+                        value={filters.sessionType || ''} 
+                        onChange={e => setFilters((p: any) => ({ ...p, sessionType: e.target.value, openDropdown: null }))} 
+                        className="w-full mt-2 px-4 py-2 border-2 border-black rounded-full bg-white text-sm font-bold shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
+                    >
+                        <option value="">Any</option>
+                        <option value="group">Group Session</option>
+                        <option value="private">1:1 Private Room</option>
+                    </select>
+                </div>
 
                 {/* Experience */}
                 <div onMouseDown={closeAllDropdowns} className="p-4 rounded-2xl bg-white border border-[#5186cd]/20 shadow-sm">
@@ -285,19 +299,6 @@ const FiltersPanel: React.FC<Props> = ({ learningType, filters, setFilters, nati
                     </div>
                 </div> */}
 
-                {/* Book Session Type */}
-                <div onMouseDown={closeAllDropdowns} className="p-4 rounded-2xl bg-white border border-[#5186cd]/20 ">
-                    <label className="text-base font-bold text-slate-700 flex"><Dot className='text-blue-600 w-7 h-7 -mt-1'/>Book Session</label>
-                    <select 
-                        value={filters.sessionType || ''} 
-                        onChange={e => setFilters((p: any) => ({ ...p, sessionType: e.target.value, openDropdown: null }))} 
-                        className="w-full mt-2 px-4 py-2 border-2 border-black rounded-full bg-white text-sm font-bold shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
-                    >
-                        <option value="">Any</option>
-                        <option value="group">Group Session</option>
-                        <option value="private">1:1 Private Room</option>
-                    </select>
-                </div>
 
                 {/* Nationality */}
                 {/* <div className="relative p-3 rounded-xl shadow-sm bg-[#6b48af]">

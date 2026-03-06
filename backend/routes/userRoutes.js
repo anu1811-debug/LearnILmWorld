@@ -1,6 +1,7 @@
 import express from 'express';
 import User from '../models/User.js';
 import { authenticate } from '../middleware/auth.js';
+import ClassSchedule from '../models/ClassSchedule.js'
 
 const router = express.Router();
 
@@ -18,7 +19,8 @@ router.get('/trainers', async (req, res) => {
       availability,
       search,
       nationality,
-      sortBy
+      sortBy,
+      bookingType //for group and private in filter pannel
     } = req.query;
 
     const page = parseInt(req.query.page) || 1;
@@ -26,6 +28,26 @@ router.get('/trainers', async (req, res) => {
     const skip = (page - 1) * limit;
 
     let query = { role: 'trainer', isActive: true };
+
+    //booking type private or group
+    if (bookingType) {
+      if (bookingType === 'group') {
+        // GROUP: Find all the teachernthat have a pre-created future group class
+        const activeTeacherIds = await ClassSchedule.distinct('teacherId', {
+          type: 'group',
+          status: { $ne: 'cancelled' },
+          startTime: { $gte: new Date() } 
+        });
+        
+        query._id = { $in: activeTeacherIds };
+        
+      } else if (bookingType === 'private') {
+        // PRIVATE: works on the available slots
+        query['profile.availability'] = { 
+          $elemMatch: { available: true } 
+        };
+      }
+    }
 
     // Language filter (both arrays supported)
     if (language) {

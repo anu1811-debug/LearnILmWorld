@@ -33,8 +33,6 @@ import VerifyEmail from './pages/VerifyEmail';
 import ScrollRestoration from './components/ScrollRestoration';
 import BlogPage from './pages/BlogPage';
 import Careers from './pages/Careers';
-import BookPrivateSession from './pages/student/BookPrivateSession';
-import BookGroupSession from './components/BookGroupSession';
 
 function App() {
   return (
@@ -84,8 +82,6 @@ function App() {
                       <StudentDashboard />
                     </PrivateRoute>
                   } />
-                  <Route path="/book/private/:trainerId" element={<BookPrivateSession />} />
-                  <Route path="/book/group/:trainerId" element={<BookGroupSession />} />
 
                   <Route path="/admin/*" element={
                     <PrivateRoute allowedRoles={['admin']}>

@@ -164,11 +164,15 @@ const StudentProfile: React.FC = () => {
     try {
       let finalImageKey = formData.profile.imageUrl;
 
+      //check that's the link is new https image
+      const isNewHttpLink = finalImageKey.startsWith("http") && finalImageKey !== originalImageKey;
+
       // handle url image
-      if (finalImageKey.startsWith("data:")) {
+      if (finalImageKey.startsWith("data:") || isNewHttpLink) {
         try {
           console.log("Detecting Base64 image, converting...");
           const res = await fetch(finalImageKey);
+          if (!res.ok) throw new Error("Network response was not ok");
           const blob = await res.blob();
           const fileType = blob.type || "image/jpeg";
           const fileName = `student-pasted-${Date.now()}.jpg`;
@@ -252,8 +256,8 @@ const StudentProfile: React.FC = () => {
           if (isR2File) {
             console.log("Deleting old R2 file:", originalImageKey);
             try {
-              await axios.post(`${API_BASE_URL}/api/upload/delete-file`, {
-                fileKey: originalImageKey
+              await axios.delete(`${API_BASE_URL}/api/upload/delete-file`, {
+                data: { fileKey: originalImageKey }
               });
             } catch (delErr) { console.error("Delete failed", delErr); }
           }

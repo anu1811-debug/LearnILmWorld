@@ -674,17 +674,19 @@ export default function LandingPageAlt() {
                 </p>
 
                 <div className="flex flex-wrap gap-4 pt-2">
+
+                  {/* Book Demo */}
                   <Link
-                    to="/courses"
+                    to="/demo"
                     className="inline-flex items-center gap-3 px-8 py-3 bg-[#024AAC] text-white font-bold rounded-2xl border-2 border-white shadow-md hover:scale-105 transition-transform"
                   >
-                    <BookOpen className="w-5 h-5" />
-                    Browse Courses
+                    <Play className="w-5 h-5 fill-current" />
+                    Book a FREE Demo
                   </Link>
 
                   <Link
                     to="/become-trainer"
-                    className="inline-flex items-center gap-3 px-8 py-3 bg-white text-[#024AAC] font-bold rounded-2xl border-2 border-[#024AAC] shadow-md hover:bg-gray-50 transition-colors"
+                    className="inline-flex items-center gap-3 px-8 py-3 bg-white text-[#024AAC] font-bold rounded-2xl border-2 border-[#024AAC] shadow-md hover:bg-gray-50 hover:scale-105 transition-colors"
                   >
                     <User className="w-5 h-5 fill-current stroke-0" />Become a Trainer
                   </Link>

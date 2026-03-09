@@ -281,16 +281,23 @@ export default function StepTrainerDocuments({
         </div>
       </div>
 
-      <div className="flex justify-between mt-4">
-        <button onClick={onBack} className="px-4 py-2 rounded-lg border">
+      {/* Navigation */}
+      <div className="flex justify-center gap-3 mt-6 pt-4 border-t border-gray-100">
+
+        <button
+          onClick={onBack}
+          className="px-4 py-2 rounded-lg text-gray-500 hover:text-black hover:scale-105 transition"
+        >
           Back
         </button>
+
         <button
           onClick={validateAndNext}
-          className="px-4 py-2 rounded-lg bg-indigo-600 text-white"
+          className="w-48 sm:w-64 py-2 rounded-lg bg-[#5186cd] text-white hover:scale-105 transition font-medium"
         >
           Continue
         </button>
+
       </div>
     </div>
   );

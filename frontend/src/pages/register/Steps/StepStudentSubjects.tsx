@@ -165,8 +165,8 @@ function MultiSelect({
     query === ""
       ? options
       : options.filter((opt) =>
-          opt.toLowerCase().includes(query.toLowerCase())
-        );
+        opt.toLowerCase().includes(query.toLowerCase())
+      );
 
   return (
     <div className="mb-5">
@@ -200,8 +200,7 @@ function MultiSelect({
                   key={opt}
                   value={opt}
                   className={({ active }) =>
-                    `cursor-pointer p-2 rounded-md flex items-center justify-between ${
-                      active ? "bg-indigo-100" : ""
+                    `cursor-pointer p-2 rounded-md flex items-center justify-between ${active ? "bg-indigo-100" : ""
                     }`
                   }
                 >
@@ -247,8 +246,14 @@ export default function StepStudentSubjects({
   const validateNext = () => {
     const type = formData.learningType;
 
-    if (type === "subjects" && formData.subjects.length === 0)
-      return alert("Select at least one subject.");
+
+    if (type === "subjects") {
+      if (formData.subjects.length === 0)
+        return alert("Select at least one subject.");
+
+      if (!formData.standards || formData.standards.length === 0)
+        return alert("Please select your class / grade.");
+    }
 
     if (type === "languages" && formData.languages.length === 0)
       return alert("Select at least one language.");
@@ -354,17 +359,23 @@ export default function StepStudentSubjects({
         )}
       </div>
 
-      {/* BUTTONS */}
-      <div className="flex justify-between mt-6">
-        <button onClick={onBack} className="px-4 py-2 border rounded-lg">
+      {/* Buttons */}
+      <div className="flex justify-center gap-3 mt-6 pt-4 border-t border-gray-100">
+
+        <button
+          onClick={onBack}
+          className="px-4 py-2 rounded-lg text-gray-500 hover:text-black hover:scale-105 transition"
+        >
           Back
         </button>
+
         <button
           onClick={validateNext}
-          className="px-4 py-2 bg-indigo-600 text-white rounded-lg"
+          className="w-48 sm:w-64 py-2 rounded-lg bg-[#5186cd] text-white hover:scale-105 transition font-medium"
         >
-          Next
+          Continue
         </button>
+
       </div>
     </div>
   );

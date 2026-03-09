@@ -15,6 +15,8 @@ import StepTrainerTeach from './register/Steps/StepTrainerTeach'
 import StepTrainerDocuments from './register/Steps/StepTrainerDocuments'
 import { Home } from 'lucide-react'
 import axios from 'axios'
+import registerBg from "../assets/register_bg.png";
+import studentRegBg from "../assets/Student_reg_bg.jpeg";
 
 const initialData: RegisterFormData = {
   name: '',
@@ -30,6 +32,7 @@ const initialData: RegisterFormData = {
   resume: null,
   phone: '',
   nationalityCode: '',
+  continent: '',
   location: '',
   learningType: '',
   learningValues: [],
@@ -149,6 +152,7 @@ const Register: React.FC = () => {
       const profilePayload: any = {
         phone: formData.phone || '',
         location: formData.location || '',
+        continent: formData.continent || '',
         nationalityCode: formData.nationalityCode || '',
         bio: formData.bio || '',
         hobbies: formData.hobbies || [],
@@ -312,10 +316,13 @@ const Register: React.FC = () => {
   }
 
   return (
+
     <div
-      className={`min-h-screen w-full flex items-center justify-center px-4 py-10 relative overflow-hidden transition-all duration-700
-      ${formData.role === 'trainer' ? 'bg-[#426fab]' : 'bg-[#CBE56A]'}
-    `}
+      className="min-h-screen w-full flex items-center justify-center px-4 py-10 relative overflow-hidden bg-cover bg-center"
+      style={{
+        backgroundImage: `url(${formData.role === "student" ? studentRegBg : registerBg
+          })`,
+      }}
     >
       {/* Home Icon Button */}
       <Link
@@ -326,53 +333,53 @@ const Register: React.FC = () => {
         <Home className="h-6 w-6  transition-colors duration-300" />
       </Link>
 
-      {/* Decorative orbs (same as before) */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-20 left-10 w-32 h-32 rounded-full" style={{ background: '#fff7e1', opacity: 0.32, animation: 'floaty 6s ease-in-out infinite' }} />
-        <div className="absolute top-44 right-20 w-24 h-24 rounded-full" style={{ background: '#fff7e1', opacity: 0.36, animation: 'floaty 6s ease-in-out infinite', animationDelay: '1.8s' }} />
-        <div className="absolute bottom-24 left-1/4 w-40 h-40 rounded-full" style={{ background: '#fff7e1', opacity: 0.44, animation: 'floaty 6s ease-in-out infinite', animationDelay: '3.2s' }} />
-        <div className="absolute bottom-44 right-44 w-40 h-40 rounded-full" style={{ background: '#fff7e1', opacity: 0.44, animation: 'floaty 6s ease-in-out infinite', animationDelay: '1.8s' }} />
-      </div>
-
-
       {/* ---------------- Main Container ---------------- */}
-      <div className="w-full max-w-3xl mx-auto relative z-10">
+      <div className="w-full max-w-xl mx-auto relative z-10">
         {/* Heading */}
-        <div className="text-center mb-8">
-          <h1 className={`text-4xl font-extrabold drop-shadow-lg tracking-wide flex justify-center items-center gap-2 font-[Good Vibes] ${formData.role === 'trainer' ? 'text-gray-50' : 'text-black'}`}>
 
-            {/* Static "Join" part */}
+        <div
+          className={`text-center mb-6 sm:mb-8 px-2 ${formData.role === "student" ? "text-white" : "text-gray-900"
+            }`}
+        >
+
+          {/* Title */}
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold drop-shadow-lg tracking-wide flex flex-wrap justify-center items-center gap-1 sm:gap-2 font-[Good Vibes]">
+
+            {/* Join */}
             <span>Join</span>
 
-            {/* Clickable "LearniLM 🌎 World" */}
-            <Link to="/" className={`flex items-center gap-2 ${formData.role === 'trainer' ? 'hover:text-[#e0fa84]' : 'hover:text-[#5186cd]'}`}>
-              {/* LearniLM */}
+            {/* LearnILM World */}
+            <Link
+              to="/"
+              className={`flex items-center gap-1 sm:gap-2 ${formData.role === "student"
+                ? "hover:text-blue-300"
+                : "hover:text-[#5186cd]"
+                } transition`}
+            >
               <span>LearniLM</span>
 
-              {/* Animated Globe */}
+              {/* Globe */}
               <motion.span
                 animate={{ rotate: 360 }}
                 transition={{ repeat: Infinity, duration: 12, ease: "linear" }}
-                className="inline-block text-4xl"
+                className="inline-block text-2xl sm:text-3xl md:text-4xl"
               >
                 🌎
               </motion.span>
 
-              {/* World */}
               <span>World</span>
             </Link>
           </h1>
 
-          {/* Subtitle */}
-          <p className={`mt-1 text-xl font-bold text-center ${formData.role === 'trainer' ? 'text-gray-50' : 'text-black'}`}>
-            Start your Learning Journey Today
-          </p>
-
-          <p className={`mt-2 text-lg font-bold ${formData.role === 'trainer' ? 'text-gray-200' : 'text-gray-700'}`}>
+          {/* Sign in text */}
+          <p className="mt-3 text-sm sm:text-base md:text-lg font-bold">
             Already have an account?{" "}
             <Link
               to="/login"
-              className={`font-bold underline ${formData.role === 'trainer' ? 'hover:text-[#e0fa84]' : 'hover:text-[#5186cd]'}  transition`}
+              className={`underline transition ${formData.role === "student"
+                ? "hover:text-blue-300"
+                : "hover:text-[#5186cd]"
+                }`}
             >
               Sign in
             </Link>
@@ -381,7 +388,7 @@ const Register: React.FC = () => {
         </div>
 
         {/* Glass Card */}
-        <div className="bg-white/90 backdrop-blur-xl shadow-2xl rounded-3xl p-8 overflow-hidden">
+        <div className="bg-white/90 backdrop-blur-xl shadow-xl rounded-[28px] p-10 border border-blue-200 max-w-xl mx-auto">
 
           {/* Error Box */}
           {error && (
@@ -391,9 +398,9 @@ const Register: React.FC = () => {
           )}
 
           {/* ------------ Multi-step Animated Container ------------ */}
-          <div className="relative h-[520px]">
+          <div className="relative  min-h-[520px] overflow-hidden">
             <AnimatePresence initial={false} custom={stepIndex} mode="wait">
-              <motion.div key={currentStep} custom={stepIndex} variants={containerVariants} initial="enter" animate="center" exit="exit" transition={{ type: 'spring', stiffness: 230, damping: 24 }} className="absolute inset-0">
+              <motion.div key={currentStep} custom={stepIndex} variants={containerVariants} initial="enter" animate="center" exit="exit" transition={{ type: 'spring', stiffness: 230, damping: 24 }} className="absolute inset-0 overflow-y-auto no-scrollbar">
 
                 {/* ['role', 'basic', 'trainerTeach', 'trainerSelectValues', 'trainerDocs', 'trainerDetails', 'final'] */}
                 {currentStep === 'role' && <StepRole formData={formData} setFormData={setFormData} onNext={() => goNext()} comingFromBack={comingFromBack} />}

@@ -23,10 +23,6 @@ import {
 // import russian_student from '../assets/russian_student.png'
 import "bootstrap/dist/css/bootstrap.min.css";
 
-// import bg_img from '../assets/purple_gradient.jpg'
-// import bg_main from '../assets/bg_main.jpeg'
-// import bg_img from '../assets/header_bg.jpg'
-
 import french_st from "../assets/French_student1.jpeg";
 import german_st from "../assets/German_student1.jpeg";
 import british_st from "../assets/British_student1.jpeg";
@@ -60,7 +56,6 @@ import Footer from "../components/Footer";
 import TopTrainers from "../components/TopTrainers";
 // import { LanguageCard } from '../components/LanguageCard'
 import Navbar from "../components/Navbar";
-// import CurrencySelector from '../components/CurrencySelector'
 // import MoreLanguages from '../components/MoreLanguages'
 
 // LinguaNest — Enhanced Landing Page (single-file React component)
@@ -81,15 +76,15 @@ export default function LandingPageAlt() {
 
   const navigate = useNavigate();
   const { user } = useAuth();
-  
+
   const PHRASES: string[] = [
-  "Welcome to LearniLMWorld",           // English
-  "LearniLMWorld में आपका स्वागत है",   // Hindi
-  "LearniLMWorld-এ স্বাগতম",           // Bengali
-  "Bienvenue à LearniLMWorld",          // French
-  "Willkommen bei LearniLMWorld",        // German
-  "LearnilmWorldへようこそ",            //Japanese
-];
+    "Welcome to LearniLMWorld",           // English
+    "LearniLMWorld में आपका स्वागत है",   // Hindi
+    "LearniLMWorld-এ স্বাগতম",           // Bengali
+    "Bienvenue à LearniLMWorld",          // French
+    "Willkommen bei LearniLMWorld",        // German
+    "LearnilmWorldへようこそ",            //Japanese
+  ];
 
 
   const [currentText, setCurrentText] = useState<string>("");
@@ -121,7 +116,7 @@ export default function LandingPageAlt() {
         if (currentText === "") {
           setIsDeleting(false);
           setCurrentIndex((prevIndex) => (prevIndex + 1) % PHRASES.length);
-          
+
           // Pause slightly before typing the next phrase
           return;
         }
@@ -344,15 +339,6 @@ export default function LandingPageAlt() {
 
     setShowMore(false);
   };
-
-  // const flagIcons: Record<string, string> = {
-  //   German: "https://flagcdn.com/w40/de.png",
-  //   French: "https://flagcdn.com/w40/fr.png",
-  //   Japanese: "https://flagcdn.com/w40/jp.png",
-  //   Spanish: "https://flagcdn.com/w40/es.png",
-  //   English: "https://flagcdn.com/w40/gb.png",
-  //   Sanskrit: "https://flagcdn.com/w40/in.png"
-  // }
 
   useEffect(() => setMounted(true), []);
 
@@ -658,15 +644,15 @@ export default function LandingPageAlt() {
                   </span>
                 </h1>
 
-                 <div className="mt-4">
-                   <div className="inline-block rounded-xl border-2 border-[#0A1172] px-4  py-2"> 
+                <div className="mt-4">
+                  <div className="inline-block rounded-xl border-2 border-[#0A1172] px-4  py-2">
                     <p className="text-xl lg:text-3xl font-semibold text-white  min-h-[40px] flex items-center">
                       <span>{currentText}</span>
                       {/* Clarity comes with the{" "}
                       <span className="text-[#2D274B]">Right Mentors</span> */}
                     </p>
                   </div>
-                </div> 
+                </div>
 
                 <p className="text-xl lg:text-2xl font-bold text-white">
                   Learn from natives.{" "}
@@ -674,17 +660,19 @@ export default function LandingPageAlt() {
                 </p>
 
                 <div className="flex flex-wrap gap-4 pt-2">
+
+                  {/* Book Demo */}
                   <Link
-                    to="/courses"
+                    to="/demo"
                     className="inline-flex items-center gap-3 px-8 py-3 bg-[#024AAC] text-white font-bold rounded-2xl border-2 border-white shadow-md hover:scale-105 transition-transform"
                   >
-                    <BookOpen className="w-5 h-5" />
-                    Browse Courses
+                    <Play className="w-5 h-5 fill-current" />
+                    Book a FREE Demo
                   </Link>
 
                   <Link
                     to="/become-trainer"
-                    className="inline-flex items-center gap-3 px-8 py-3 bg-white text-[#024AAC] font-bold rounded-2xl border-2 border-[#024AAC] shadow-md hover:bg-gray-50 transition-colors"
+                    className="inline-flex items-center gap-3 px-8 py-3 bg-white text-[#024AAC] font-bold rounded-2xl border-2 border-[#024AAC] shadow-md hover:bg-gray-50 hover:scale-105 transition-colors"
                   >
                     <User className="w-5 h-5 fill-current stroke-0" />Become a Trainer
                   </Link>
@@ -716,45 +704,45 @@ export default function LandingPageAlt() {
         {/* Bottom features after grid*/}
         <div className="py-10 mt-10 px-6">
 
-  <div className="max-w-md mx-auto grid grid-cols-1 md:grid-cols-3 md:max-w-5xl gap-y-8  justify-center">
-    
-    {/* Item 1 */}
-    <div className="flex items-center gap-5 w-full max-w-[280px] mx-auto md:mx-0">
-      <div className="flex-shrink-0 p-3 bg-white rounded-full text-[#4f88f2] shadow-lg">
-        <Mic className="w-7 h-7" />
-      </div>
-      <div className="flex flex-col">
-        <p className="font-bold text-2xl text-[#2D274B]">Native</p>
-        <p className="text-base text-gray-500 ">Mentor + real accent</p>
-      </div>
-    </div>
+          <div className="max-w-md mx-auto grid grid-cols-1 md:grid-cols-3 md:max-w-5xl gap-y-8  justify-center">
 
-    {/* Item 2 */}
-    <div className="flex items-center md:gap-0 gap-5 w-full max-w-[280px] mx-auto md:mx-0">
-      <div className="flex-shrink-0 p-3 bg-white rounded-full text-[#4f88f2] shadow-lg">
-        <Headphones className="w-7 h-7" />
-      </div>
-      <div className="flex flex-col">
-        <p className="font-bold text-2xl text-[#2D274B]">Speaking</p>
-        <p className="text-base text-gray-500 whitespace-nowrap">Focused practice</p>
-      </div>
-    </div>
+            {/* Item 1 */}
+            <div className="flex items-center gap-5 w-full max-w-[280px] mx-auto md:mx-0">
+              <div className="flex-shrink-0 p-3 bg-white rounded-full text-[#4f88f2] shadow-lg">
+                <Mic className="w-7 h-7" />
+              </div>
+              <div className="flex flex-col">
+                <p className="font-bold text-2xl text-[#2D274B]">Native</p>
+                <p className="text-base text-gray-500 ">Mentor + real accent</p>
+              </div>
+            </div>
 
-    {/* Item 3 */}
-    <div className="flex items-center md:gap-0 gap-5 w-full max-w-[280px] mx-auto md:mx-0">
-      <div className="flex-shrink-0 p-3 bg-white rounded-full text-[#4f88f2] shadow-lg">
-        <Calendar className="w-7 h-7" />
-      </div>
-      <div className="flex flex-col">
-        <p className="font-bold text-2xl text-[#2D274B]">Flexible</p>
-        <p className="text-base text-gray-500 ">
-          Weekday / weekend batches
-        </p>
-      </div>
-    </div>
+            {/* Item 2 */}
+            <div className="flex items-center md:gap-0 gap-5 w-full max-w-[280px] mx-auto md:mx-0">
+              <div className="flex-shrink-0 p-3 bg-white rounded-full text-[#4f88f2] shadow-lg">
+                <Headphones className="w-7 h-7" />
+              </div>
+              <div className="flex flex-col">
+                <p className="font-bold text-2xl text-[#2D274B]">Speaking</p>
+                <p className="text-base text-gray-500 whitespace-nowrap">Focused practice</p>
+              </div>
+            </div>
 
-  </div>
-</div>
+            {/* Item 3 */}
+            <div className="flex items-center md:gap-0 gap-5 w-full max-w-[280px] mx-auto md:mx-0">
+              <div className="flex-shrink-0 p-3 bg-white rounded-full text-[#4f88f2] shadow-lg">
+                <Calendar className="w-7 h-7" />
+              </div>
+              <div className="flex flex-col">
+                <p className="font-bold text-2xl text-[#2D274B]">Flexible</p>
+                <p className="text-base text-gray-500 ">
+                  Weekday / weekend batches
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
       </main>
 
       {/* Language Levels Explanation */}

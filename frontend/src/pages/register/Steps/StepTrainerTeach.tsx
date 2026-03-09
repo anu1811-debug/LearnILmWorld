@@ -100,7 +100,7 @@ function MultiSelect({
   return (
     <Listbox value={listboxValue} onChange={handleSelection} multiple={!single}>
       <div className="relative mt-1">
-        <Listbox.Button className="relative w-full cursor-pointer rounded-lg border bg-white py-2 pl-3 pr-10 text-left shadow-sm">
+        <Listbox.Button className="relative w-full cursor-pointer rounded-full border bg-white py-2 pl-3 pr-10 text-left shadow-sm">
           <span className="block truncate">
             {(!selected || selected.length === 0)
               ? placeholder
@@ -298,7 +298,7 @@ export default function StepTrainerTeach({
 
       {/* Teaching Type */}
       <div>
-        <FormLabel required>Teaching Type</FormLabel>
+        <FormLabel required>Expertise</FormLabel>
         <MultiSelect
           single
           options={[
@@ -308,14 +308,14 @@ export default function StepTrainerTeach({
           ]}
           selected={teachingType ? [teachingType] : []}
           setSelected={(val: any) => handleTeachingTypeChange(val[0] || "")}
-          placeholder="Select teaching type"
+          placeholder="Select your Expertise"
         />
 
         {/* Clear Button */}
         {(subjects.length > 0 || languages.length > 0 || hobbies.length > 0) && (
           <button
             onClick={handleClear}
-            className="mt-2 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+            className="mt-2 px-4 py-2 bg-red-500 text-white rounded-3xl hover:bg-red-600"
           >
             Clear Selection
           </button>
@@ -325,12 +325,12 @@ export default function StepTrainerTeach({
       {/* SUBJECTS */}
       {teachingType === "subjects" && (
         <div>
-          <FormLabel required>Subjects (Max 3)</FormLabel>
+          <FormLabel required>Subjects</FormLabel>
           <MultiSelect
             options={SUBJECT_OPTIONS}
             selected={subjects}
             setSelected={(vals: string[]) => {
-              if (vals.length <= 3) {
+              if (vals.length <= 1) {
                 setSubjects(vals);
               }
             }}
@@ -347,12 +347,12 @@ export default function StepTrainerTeach({
       {/* LANGUAGES */}
       {teachingType === "languages" && (
         <div>
-          <FormLabel required>Languages (Max 2)</FormLabel>
+          <FormLabel required>Languages (Max 1)</FormLabel>
           <MultiSelect
             options={LANGUAGE_OPTIONS}
             selected={languages}
             setSelected={(vals: string[]) => {
-              if (vals.length <= 2) setLanguages(vals);
+              if (vals.length <= 1) setLanguages(vals);
             }}
             placeholder="Select languages"
           />
@@ -387,7 +387,7 @@ export default function StepTrainerTeach({
       {/* STANDARDS → visible only when subjects selected */}
       {subjects.length > 0 && (
         <div>
-          <FormLabel required>Standards Required</FormLabel>
+          <FormLabel required>Grades/Classes</FormLabel>
           <MultiSelect
             options={[...STANDARD_OPTIONS, { value: "custom", label: "Custom Range" }]}
             selected={standards}
@@ -448,10 +448,11 @@ export default function StepTrainerTeach({
       )}
 
       {/* Navigation */}
-      <div className="flex justify-between mt-6">
+      <div className="flex justify-center gap-3 mt-6 pt-4 border-t border-gray-100">
+
         <button
           onClick={onBack}
-          className="bg-gray-200 px-4 py-2 rounded-md hover:bg-gray-300"
+          className="px-4 py-2 rounded-lg text-gray-500 hover:text-black hover:scale-105 transition"
         >
           Back
         </button>
@@ -459,13 +460,15 @@ export default function StepTrainerTeach({
         <button
           onClick={onNext}
           disabled={!canProceed()}
-          className={`px-5 py-2 rounded-md text-white ${canProceed()
-              ? "bg-blue-600 hover:bg-blue-700"
-              : "bg-blue-300 cursor-not-allowed"
+          className={`w-48 sm:w-64 py-2 rounded-lg text-white transition font-medium
+      ${canProceed()
+              ? "bg-[#5186cd] hover:scale-105"
+              : "bg-[#5186cd]/50 cursor-not-allowed"
             }`}
         >
-          Next
+          Continue
         </button>
+
       </div>
     </motion.div>
   );

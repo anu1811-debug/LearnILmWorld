@@ -1,50 +1,48 @@
 import User from '../models/User.js';
 import ClassSchedule from '../models/ClassSchedule.js';
 import mongoose from 'mongoose';
+import moment from 'moment-timezone'
 
-// Helper function to convert "HH:mm" to a precise Date object
-const parseTime = (baseDate, timeStr) => {
-  const [hours, minutes] = timeStr.split(':').map(Number);
-  const newDate = new Date(baseDate);
-  newDate.setHours(hours, minutes, 0, 0);
-  return newDate;
-};
 
 export const getAvailableSlots = async (req, res) => {
   try {
     const { teacherId, dateStr, durationMinutes } = req.query;
-    
-    const targetDate = new Date(dateStr);
-    const duration = parseInt(durationMinutes, 10); 
-    const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-    const dayOfWeek = days[targetDate.getDay()];
+    const duration = parseInt(durationMinutes, 10);
 
     const teacher = await User.findById(teacherId);
     if (!teacher) return res.status(404).json({ message: 'Teacher not found' });
 
+    // Teacher ka timezone nikalo (default India rakh diya hai fallback ke liye)
+    const teacherTz = teacher.profile?.timezone || 'Asia/Kolkata';
+
+    // Student ki date ko teacher ke timezone me parse karo
+    const targetDateInTeacherTz = moment.tz(dateStr, "YYYY-MM-DD", teacherTz);
+    
+    const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    const dayOfWeek = days[targetDateInTeacherTz.day()];
+
     const dayAvailability = teacher.profile.availability.find(a => a.day === dayOfWeek);
 
     if (!dayAvailability || !dayAvailability.available || !dayAvailability.startTime || !dayAvailability.endTime) {
-      return res.status(200).json({ slots: [] }); // No availability for this day
+      return res.status(200).json({ slots: [] }); 
     }
 
-    const workStartTime = parseTime(targetDate, dayAvailability.startTime);
-    const workEndTime = parseTime(targetDate, dayAvailability.endTime);
+    // Teacher ke shift times ko UTC me convert karo
+    const workStartMoment = moment.tz(`${dateStr} ${dayAvailability.startTime}`, "YYYY-MM-DD HH:mm", teacherTz);
+    const workEndMoment = moment.tz(`${dateStr} ${dayAvailability.endTime}`, "YYYY-MM-DD HH:mm", teacherTz);
 
-    const startOfDay = new Date(targetDate).setHours(0, 0, 0, 0);
-    const endOfDay = new Date(targetDate).setHours(23, 59, 59, 999);
+    const workStartTime = workStartMoment.toDate(); 
+    const workEndTime = workEndMoment.toDate();
 
     const existingAppointments = await ClassSchedule.find({
       teacherId,
-      startTime: { $gte: startOfDay, $lte: endOfDay },
+      startTime: { $gte: workStartMoment.startOf('day').toDate(), $lte: workStartMoment.endOf('day').toDate() },
       status: { $ne: 'cancelled' }
-    }).sort({ startTime: 1 }); 
+    }).sort({ startTime: 1 });
 
-    // Map existing classSchedule to blocked intervals 
     const blockedIntervals = existingAppointments.map(appt => {
       const bufferedEndTime = new Date(appt.endTime);
-      bufferedEndTime.setMinutes(bufferedEndTime.getMinutes() + 30); //break time
-      
+      bufferedEndTime.setMinutes(bufferedEndTime.getMinutes() + 30);  //break time
       return {
         start: new Date(appt.startTime).getTime(),
         end: bufferedEndTime.getTime()
@@ -53,13 +51,12 @@ export const getAvailableSlots = async (req, res) => {
 
     const availableSlots = [];
     let currentSlotStart = new Date(workStartTime);
-    const currentTime= new Date().getTime()
+    const currentTime = new Date().getTime(); 
 
     while (true) {
       const currentSlotEnd = new Date(currentSlotStart);
       currentSlotEnd.setMinutes(currentSlotEnd.getMinutes() + duration);
 
-      // Terminate loop if the generated slot exceeds the teacher's shift
       if (currentSlotEnd.getTime() > workEndTime.getTime()) {
         break;
       }
@@ -67,28 +64,25 @@ export const getAvailableSlots = async (req, res) => {
       const slotStartTime = currentSlotStart.getTime();
       const slotEndTime = currentSlotEnd.getTime();
 
-      // Check if current slot overlaps with any blocked interval
-      if(slotStartTime>currentTime){
-
+      // Only show future slots
+      if (slotStartTime > currentTime) {
         const hasConflict = blockedIntervals.some(interval => {
           return (slotStartTime < interval.end && slotEndTime > interval.start);
         });
-        
+
         if (!hasConflict) {
-          const hours = currentSlotStart.getHours().toString().padStart(2, '0');
-          const minutes = currentSlotStart.getMinutes().toString().padStart(2, '0');
-          availableSlots.push(`${hours}:${minutes}`);
+          // Send exact UTC ISO string to frontend 
+          availableSlots.push(currentSlotStart.toISOString());
         }
       }
-
       currentSlotStart.setMinutes(currentSlotStart.getMinutes() + 30);
     }
 
     return res.status(200).json({ slots: availableSlots });
 
   } catch (error) {
-    console.error('Error in slot generation algorithm:', error);
-    return res.status(500).json({ message: 'Internal server error during slot calculation.' });
+    console.error('Error in slot generation:', error);
+    return res.status(500).json({ message: 'Internal server error' });
   }
 };
 
@@ -97,31 +91,39 @@ export const createGroupClass = async (req, res) => {
   try {
     const { teacherId, title, startTime, durationMinutes, price } = req.body;
 
-    const start = new Date(startTime);
+    const teacher = await User.findById(teacherId);
+    if (!teacher) return res.status(404).json({ message: 'Teacher not found' });
+
+    const teacherTz = teacher.profile?.timezone || 'Asia/Kolkata';
+
+    // Teacher ke form input ko uske timezone ke hisaab se UTC me convert karo
+    const startMoment = moment.tz(startTime, teacherTz);
+    const start = startMoment.toDate();
+    
     const end = new Date(start);
     end.setMinutes(end.getMinutes() + parseInt(durationMinutes, 10));
 
+    // Availability Check based on Teacher's timezone
     const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-    const dayOfWeek = days[start.getDay()];
-
-    const teacher = await User.findById(teacherId);
-    if (!teacher) return res.status(404).json({ message: 'Teacher not found' });
+    const dayOfWeek = days[startMoment.day()];
+    const dateStr = startMoment.format("YYYY-MM-DD");
 
     const dayAvailability = teacher.profile.availability.find(a => a.day === dayOfWeek);
 
     if (!dayAvailability || !dayAvailability.available || !dayAvailability.startTime || !dayAvailability.endTime) {
-      return res.status(400).json({ message: `You are not available at ${dayOfWeek}.` });
+      return res.status(400).json({ message: `You are not available on ${dayOfWeek}s.` });
     }
 
-    const workStartTime = parseTime(start, dayAvailability.startTime);
-    const workEndTime = parseTime(start, dayAvailability.endTime);
+    const workStartTime = moment.tz(`${dateStr} ${dayAvailability.startTime}`, "YYYY-MM-DD HH:mm", teacherTz).toDate();
+    const workEndTime = moment.tz(`${dateStr} ${dayAvailability.endTime}`, "YYYY-MM-DD HH:mm", teacherTz).toDate();
 
     if (start.getTime() < workStartTime.getTime() || end.getTime() > workEndTime.getTime()) {
       return res.status(400).json({ 
-        message: `Class timing (${dayAvailability.startTime} - ${dayAvailability.endTime}) is not fit with your availablitiy time.` 
+        message: `Class timing is outside your working hours (${dayAvailability.startTime} - ${dayAvailability.endTime}).` 
       });
     }
-    // Verify the teacher doesn't already have a class scheduled at this time
+
+    // Conflict Check
     const bufferedStart = new Date(start);
     bufferedStart.setMinutes(bufferedStart.getMinutes() - 30);
     
@@ -137,9 +139,10 @@ export const createGroupClass = async (req, res) => {
     });
 
     if (conflict) {
-      return res.status(400).json({ message: 'You have some other classes at this time or it is your break time.' });
+      return res.status(400).json({ message: 'You have another class or mandatory break at this time.' });
     }
 
+    // Database always saves the absolute UTC time
     const newGroupClass = await ClassSchedule.create({
       teacherId,
       title,
@@ -148,7 +151,7 @@ export const createGroupClass = async (req, res) => {
       startTime: start,
       endTime: end,
       durationMinutes,
-      maxParticipants: 5, 
+      maxParticipants: 4, 
       enrolledStudents: [] 
     });
 
@@ -177,6 +180,7 @@ export const getGroupClasses = async (req, res) => {
       startTime: { $gt: currentTime }, 
       status: 'scheduled'
     }).sort({ startTime: 1 }).populate('teacherId', 'name profile.experience stats.rating');
+    
     return res.status(200).json({ classes: groupClasses });
     
   } catch (error) {

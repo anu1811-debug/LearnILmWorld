@@ -62,6 +62,9 @@ const userSchema = new mongoose.Schema({
 
     dob: { type: Date, default: null },
 
+    timezone: { type: String, trim: true, default: 'Asia/Kolkata' }, // Default India timezone
+    location: { type: String, trim: true, default: '' },
+
     resume: { type: String, trim: true, default: '' }, // (can be a file URL or link)
 
     // primary image URL (single) - used for trainers & students
@@ -83,6 +86,7 @@ const userSchema = new mongoose.Schema({
 
     phone: { type: String, trim: true, default: '' },
     location: { type: String, trim: true, default: '' },
+    continent: { type: String, trim: true, default: '' },
 
     learningType: {
       type: String,

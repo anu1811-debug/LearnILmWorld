@@ -237,8 +237,9 @@ router.post('/register', async (req, res) => {
 
     const dob = incomingProfile.dob || null;
     const bio = incomingProfile.bio || '';
-    const resume = incomingProfile.resume || ''; // keep for email attach only, don't save to DB
+    const resume = incomingProfile.resume || '';
     const phone = incomingProfile.phone || '';
+    const continent = incomingProfile.continent || '';
     const nationalityCode = incomingProfile.nationalityCode || incomingProfile.countryCode || incomingProfile.country || '';
     const location = incomingProfile.location || incomingProfile.city || '';
     const hobbies = normalizeArray(incomingProfile.hobbies || incomingProfile.hobby || incomingProfile.interests);
@@ -327,6 +328,7 @@ router.post('/register', async (req, res) => {
     const profilePayload = {
       // common fields
       phone,
+      continent,
       location,
       nationalityCode,
       bio,

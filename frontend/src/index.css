@@ -11,8 +11,13 @@
 
 @layer base {
   body {
-    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
-      "Roboto", sans-serif;
+    font-family:
+      "Inter",
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      "Roboto",
+      sans-serif;
     line-height: 1.6;
   }
 
@@ -122,10 +127,9 @@
   display: flex;
 }
 
-
 .emoji {
-  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji",
-    sans-serif;
+  font-family:
+    "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
 }
 
 .animate-slide-up {
@@ -231,19 +235,28 @@
   }
 }
 
-
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
 
 .no-scrollbar {
-  -ms-overflow-style: none;  /* IE & Edge */
-  scrollbar-width: none;     /* Firefox */
+  -ms-overflow-style: none; /* IE & Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.country-select button {
+  border-radius: 9999px !important;
+  padding: 12px 16px;
+}
+.react-tel-input .form-control:focus {
+  outline: none;
+  border-color: #5186cd;
+  box-shadow: 0 0 0 2px rgba(81, 134, 205, 0.4);
 }
 
 @font-face {
-  font-family: 'Montreal Serial';
-  src: url('..\public\fonts\Limerick-Serial Regular.ttf') format('truetype'); 
+  font-family: "Montreal Serial";
+  src: url("..\public\fonts\Limerick-Serial Regular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }

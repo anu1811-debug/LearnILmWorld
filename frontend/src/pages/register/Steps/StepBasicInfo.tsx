@@ -7,6 +7,46 @@ import FormLabel from "../../../components/FormLabel";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+const CONTINENTS = ["Africa", "Asia", "Europe", "North America", "South America", "Australia / Oceania", "Antarctica"];
+
+// ISO country codes grouped by continent
+const CONTINENT_COUNTRIES: Record<string, string[]> = {
+  Africa: [
+    "DZ", "AO", "BJ", "BW", "BF", "BI", "CM", "CV", "CF", "TD", "KM", "CG", "CD", "DJ", "EG",
+    "GQ", "ER", "ET", "GA", "GM", "GH", "GN", "GW", "CI", "KE", "LS", "LR", "LY", "MG", "MW",
+    "ML", "MR", "MU", "MA", "MZ", "NA", "NE", "NG", "RW", "ST", "SN", "SC", "SL", "SO", "ZA",
+    "SS", "SD", "TZ", "TG", "TN", "UG", "ZM", "ZW"
+  ],
+
+  Asia: [
+    "AF", "AM", "AZ", "BH", "BD", "BT", "BN", "KH", "CN", "CY", "GE", "IN", "ID", "IR", "IQ",
+    "IL", "JP", "JO", "KZ", "KW", "KG", "LA", "LB", "MY", "MV", "MN", "MM", "NP", "KP", "KR",
+    "OM", "PK", "PH", "QA", "SA", "SG", "LK", "SY", "TW", "TJ", "TH", "TL", "TR", "TM", "AE",
+    "UZ", "VN", "YE"
+  ],
+
+  Europe: [
+    "AL", "AD", "AT", "BY", "BE", "BA", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR", "DE",
+    "GI", "GR", "HU", "IS", "IE", "IT", "LV", "LI", "LT", "LU", "MT", "MD", "MC", "ME", "NL",
+    "MK", "NO", "PL", "PT", "RO", "RU", "SM", "RS", "SK", "SI", "ES", "SE", "CH", "UA", "GB", "VA"
+  ],
+
+  "North America": [
+    "AG", "BS", "BB", "BZ", "CA", "CR", "CU", "DM", "DO", "SV", "GD", "GT", "HT", "HN", "JM",
+    "MX", "NI", "PA", "KN", "LC", "VC", "TT", "US"
+  ],
+
+  "South America": [
+    "AR", "BO", "BR", "CL", "CO", "EC", "GY", "PY", "PE", "SR", "UY", "VE"
+  ],
+
+  "Australia / Oceania": [
+    "AU", "FJ", "KI", "MH", "FM", "NR", "NZ", "PW", "PG", "WS", "SB", "TO", "TV", "VU"
+  ],
+
+  Antarctica: []
+};
+
 type Props = {
   formData: RegisterFormData;
   setFormData: React.Dispatch<React.SetStateAction<RegisterFormData>>;
@@ -20,7 +60,7 @@ const StepBasicInfo: React.FC<Props> = ({
   onNext,
   onBack,
 }) => {
-  const [errors, setErrors] = useState<{ email?: string; country?: string }>(
+  const [errors, setErrors] = useState<{ email?: string; country?: string; continent?: string }>(
     {},
   );
 
@@ -56,6 +96,8 @@ const StepBasicInfo: React.FC<Props> = ({
     else if (!/^\S+@\S+\.\S+$/.test(formData.email))
       temp.email = "Invalid email format";
 
+    if (!formData.continent) temp.continent = "Please select your continent";
+
     if (!formData.nationalityCode) temp.country = "Please select your country";
 
     setErrors(temp);
@@ -71,8 +113,8 @@ const StepBasicInfo: React.FC<Props> = ({
   };
 
   return (
-    <div className="h-full flex flex-col justify-between">
-      <div>
+    <div className="h-full flex flex-col">
+      <div className="flex-1 pr-2">
         {/* Heading */}
         <motion.h3
           initial={{ opacity: 0, y: -10 }}
@@ -85,6 +127,7 @@ const StepBasicInfo: React.FC<Props> = ({
         <p className="text-sm text-gray-500 mb-3">
           This helps us personalize your experience.
         </p>
+        {/* Tips */}
         <div className="mb-2 flex items-center gap-3 rounded-lg border border-blue-100 bg-blue-50 p-2 shadow-sm ring-1 ring-blue-200 animate-pulse-subtle">
           {/* Google Icon */}
           <div className="flex-shrink-0">
@@ -117,10 +160,6 @@ const StepBasicInfo: React.FC<Props> = ({
           {/* Email */}
           <div>
             <FormLabel required>Email address</FormLabel>
-
-            {/* <label className="block text-sm font-medium text-gray-700 mb-1">
-              Email address
-            </label> */}
             <input
               type="email"
               value={formData.email}
@@ -128,11 +167,10 @@ const StepBasicInfo: React.FC<Props> = ({
                 setFormData((prev) => ({ ...prev, email: e.target.value }))
               }
               onBlur={() => checkEmail(formData.email)}
-              className={`w-full p-3 border rounded-xl outline-none transition ${
-                errors.email
-                  ? "border-red-500"
-                  : "focus:ring-2 focus:ring-indigo-300"
-              }`}
+              className={`w-full p-3 border-2 rounded-full outline-none transition ${errors.email
+                ? "border-red-500"
+                : "focus:ring-2 focus:ring-[#5186cd]/60"
+                }`}
               placeholder="you@example.com"
             />
             {/* existing email error */}
@@ -146,17 +184,52 @@ const StepBasicInfo: React.FC<Props> = ({
             )}
           </div>
 
+          {/* Continent Select */}
+          <div>
+            <FormLabel required>Continent</FormLabel>
+
+            <select
+              value={formData.continent || ""}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  continent: e.target.value,
+                  nationalityCode: "" // reset country
+                }))
+              }
+              className="w-full p-3 border rounded-full focus:ring-2 focus:ring-[#5186cd]/60 outline-none transition"
+            >
+              <option value="">Select continent</option>
+
+              {CONTINENTS.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </select>
+
+            {errors.continent && (
+              <p className="text-xs text-red-500 mt-1">{errors.continent}</p>
+            )}
+          </div>
+
           {/* Country Select with Flags */}
           <div>
             <FormLabel required>Country</FormLabel>
-            {/* <label className="block text-sm font-medium text-gray-700 mb-1">
-              Country
-            </label> */}
 
             <ReactFlagsSelect
+              countries={
+                formData.continent
+                  ? CONTINENT_COUNTRIES[formData.continent] || []
+                  : undefined
+              }
               selected={formData.nationalityCode || ""}
               searchable={true}
-              searchPlaceholder="Search country..."
+              searchPlaceholder={
+                formData.continent
+                  ? "Search country..."
+                  : "Select continent first"
+              }
               onSelect={(code) => {
                 const upper = code.toUpperCase();
 
@@ -166,7 +239,7 @@ const StepBasicInfo: React.FC<Props> = ({
                 }));
               }}
               placeholder="Select country"
-              className={`w-full ${errors.country ? "border-red-500" : ""}`}
+              className={`country-select ${errors.country ? "border-red-500" : ""}`}
             />
 
             {errors.country && (
@@ -190,7 +263,7 @@ const StepBasicInfo: React.FC<Props> = ({
                 }))
               }
               placeholder="City, area or pin code"
-              className="w-full p-3 border rounded-xl focus:ring-2 focus:ring-indigo-300 outline-none transition"
+              className="w-full p-3 border rounded-full focus:ring-2 focus:ring-[#5186cd]/60 outline-none transition"
             />
 
             <p className="text-xs text-gray-400 mt-1">
@@ -202,19 +275,22 @@ const StepBasicInfo: React.FC<Props> = ({
       </div>
 
       {/* Buttons */}
-      <div className="flex justify-between mt-8">
+      <div className="flex justify-center gap-3 mt-6 pt-4 border-t border-gray-100">
+
         <button
           onClick={onBack}
-          className="px-4 py-2 rounded-lg border hover:bg-gray-50 transition"
+          className="px-4 py-2 rounded-lg text-gray-500 hover:text-black hover:scale-105 transition"
         >
           Back
         </button>
+
         <button
           onClick={handleNext}
-          className="px-6 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition font-medium"
+          className="w-48 sm:w-64 py-2 rounded-lg bg-[#5186cd] text-white hover:scale-105 transition font-medium"
         >
           Continue
         </button>
+
       </div>
     </div>
   );

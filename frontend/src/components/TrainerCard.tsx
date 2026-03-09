@@ -227,6 +227,7 @@ const TrainerCard: React.FC<Props> = ({ trainer, learningType, sessionMode }) =>
         <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
           <Link
             to={`/trainer-profile/${trainer._id}`}
+            state={{ learningType: learningType }}
             className="px-4 py-2 bg-white border border-[#5186cd]/20 text-[#5186cd] rounded-full font-semibold hover:bg-[#e9f1fb] text-center transition"
           >
             View Profile
@@ -234,11 +235,13 @@ const TrainerCard: React.FC<Props> = ({ trainer, learningType, sessionMode }) =>
 
           <button
             onClick={() => {
-              if (sessionMode === 'group') {
-                navigate(`/book/group/${trainer._id}`)
-              } else {
-                navigate(`/book/private/${trainer._id}`)
-              }
+              const tabToOpen = sessionMode === 'group' ? 'group' : 'private'
+              navigate(`/trainer-profile/${trainer._id}`, {
+                state: { 
+                  learningType: learningType, 
+                  activeTab: tabToOpen 
+                }
+              })
             }}
             className="px-4 py-2 bg-[#5186cd] text-white rounded-full font-semibold hover:bg-[#3f6fb0] text-center transition"
           >

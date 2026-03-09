@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import { GraduationCap, Users } from "lucide-react";
 import type { RegisterFormData } from "../types";
+import logo from "../../../assets/logo.png";
 
 type Props = {
   formData: RegisterFormData;
@@ -11,29 +12,43 @@ type Props = {
   comingFromBack: boolean;
 };
 
-const StepRole: React.FC<Props> = ({ formData, setFormData, onNext, comingFromBack }) => {
-  // Auto-skip if role already assigned (user redirected into register screen)
-  // Auto-skip ONLY when user is first entering register, not when going back
+const StepRole: React.FC<Props> = ({
+  formData,
+  setFormData,
+  onNext,
+  comingFromBack,
+}) => {
   useEffect(() => {
-    if (!comingFromBack && (formData.role === "student" || formData.role === "trainer")) {
+    if (
+      !comingFromBack &&
+      (formData.role === "student" || formData.role === "trainer")
+    ) {
       onNext();
     }
   }, [formData.role, comingFromBack]);
 
   const handleSelect = (role: "student" | "trainer") => {
-    setFormData(prev => ({ ...prev, role }));
+    setFormData((prev) => ({ ...prev, role }));
     onNext();
   };
 
   return (
-    <div className="h-full flex flex-col items-center justify-center px-4">
+    <div className="h-full flex flex-col items-center px-2 sm:px-4">
+
+      {/* Logo */}
+      <img
+        src={logo}
+        alt="LearnILM World"
+        className="h-14 sm:h-16 mb-4"
+      />
+
       {/* Heading */}
       <motion.div
-        className="text-center max-w-md"
+        className="text-center w-full max-w-xl"
         initial={{ opacity: 0, y: -12 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <h3 className="text-3xl font-extrabold text-gray-800">
+        <h3 className="text-xl sm:text-2xl font-extrabold text-gray-800 leading-snug">
           How do you want to begin your journey?
         </h3>
 
@@ -43,64 +58,89 @@ const StepRole: React.FC<Props> = ({ formData, setFormData, onNext, comingFromBa
         </p>
       </motion.div>
 
-      {/* Options */}
-      <div className="mt-10 flex flex-col sm:flex-row gap-6 justify-center max-w-xl">
-        {/* Student Card */}
+      {/* Role Cards */}
+      <div className="mt-6 w-full grid grid-cols-2 gap-4">
+
+        {/* Student */}
         <motion.button
-          whileHover={{ scale: 1.06 }}
+          whileHover={{ scale: 1.04 }}
           whileTap={{ scale: 0.97 }}
           onClick={() => handleSelect("student")}
-          className={`w-60 p-7 rounded-2xl border transition-all shadow-sm flex flex-col items-center text-center
-            ${
-              formData.role === "student"
-                ? "border-indigo-500 bg-indigo-50 shadow-md"
-                : "border-gray-200 bg-white hover:shadow-md"
-            }
-          `}
+          className={`aspect-square flex flex-col items-center justify-center rounded-2xl border transition-all p-4
+          ${formData.role === "student"
+              ? "border-[#5186cd] bg-[#5186cd]/15 shadow-md ring-2 ring-[#5186cd]/20"
+              : "border-gray-200 bg-white hover:border-[#5186cd]/40 hover:shadow-sm"
+            }`}
         >
           <GraduationCap
-            size={36}
-            className={`mb-4 ${
-              formData.role === "student" ? "text-indigo-500" : "text-gray-500"
-            }`}
+            size={40}
+            className={`mb-2 ${formData.role === "student"
+              ? "text-[#5186cd]"
+              : "text-gray-500"
+              }`}
           />
-          <div className="text-lg font-semibold">Student</div>
-          <div className="text-sm text-gray-600 mt-1">
+
+          <span
+            className={`font-semibold text-sm sm:text-base ${formData.role === "student"
+              ? "text-[#5186cd]"
+              : "text-gray-800"
+              }`}
+          >
+            Student
+          </span>
+
+          {/* Hidden on mobile */}
+          <p className="hidden sm:block text-xs text-gray-500 mt-1 text-center px-2">
             Learn new skills, improve languages, and grow with global trainers.
-          </div>
+          </p>
         </motion.button>
 
-        {/* Trainer Card */}
+        {/* Trainer */}
         <motion.button
-          whileHover={{ scale: 1.06 }}
+          whileHover={{ scale: 1.04 }}
           whileTap={{ scale: 0.97 }}
           onClick={() => handleSelect("trainer")}
-          className={`w-60 p-7 rounded-2xl border transition-all shadow-sm flex flex-col items-center text-center
-            ${
-              formData.role === "trainer"
-                ? "border-indigo-500 bg-indigo-50 shadow-md"
-                : "border-gray-200 bg-white hover:shadow-md"
-            }
-          `}
+          className={`aspect-square flex flex-col items-center justify-center rounded-2xl border transition-all p-4
+          ${formData.role === "trainer"
+              ? "border-[#5186cd] bg-[#5186cd]/15 shadow-md ring-2 ring-[#5186cd]/20"
+              : "border-gray-200 bg-white hover:border-[#5186cd]/40 hover:shadow-sm"
+            }`}
         >
           <Users
-            size={36}
-            className={`mb-4 ${
-              formData.role === "trainer" ? "text-indigo-500" : "text-gray-500"
-            }`}
+            size={40}
+            className={`mb-2 ${formData.role === "trainer"
+              ? "text-[#5186cd]"
+              : "text-gray-500"
+              }`}
           />
-          <div className="text-lg font-semibold">Trainer</div>
-          <div className="text-sm text-gray-600 mt-1">
+
+          <span
+            className={`font-semibold text-sm sm:text-base ${formData.role === "trainer"
+              ? "text-[#5186cd]"
+              : "text-gray-800"
+              }`}
+          >
+            Trainer
+          </span>
+
+          {/* Hidden on mobile */}
+          <p className="hidden sm:block text-xs text-gray-500 mt-1 text-center px-2">
             Teach learners worldwide and build your professional portfolio.
-          </div>
+          </p>
         </motion.button>
       </div>
 
-      {/* Notes */}
-      <p className="text-xs text-gray-500 mt-8 text-center opacity-80 max-w-sm leading-relaxed">
-        Once you create your account, your role cannot be changed.  
+      {/* Mobile Combined Description */}
+      <p className="sm:hidden text-xs text-gray-600 mt-4 text-center max-w-xs leading-relaxed">
+        Learn from expert trainers or share your knowledge and teach students worldwide.
+      </p>
+
+      {/* Note */}
+      <p className="text-xs text-gray-500 mt-3 text-center max-w-sm leading-relaxed">
+        Once you create your account, your role cannot be changed.
         However, you can update your profile details anytime.
       </p>
+
     </div>
   );
 };

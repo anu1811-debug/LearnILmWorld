@@ -38,6 +38,7 @@ const TrainerProfile = () => {
     // pricing: user?.profile?.pricing || { min30: 25, min60: 45, min90: 65 },
     phone: user?.profile?.phone || "",
     location: user?.profile?.location || "",
+    timezone: user?.profile?.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone,
     specializations: Array.isArray(user?.profile?.specializations)
       ? [...user.profile.specializations]
       : [],
@@ -424,11 +425,14 @@ const TrainerProfile = () => {
 
       // UPLOAD NEW IMAGE 
       let finalImageKey = formData.profile.imageUrl;
+      //check that's the link is new https image
+      const isNewHttpLink = finalImageKey.startsWith("http") && finalImageKey !== originalImageKey;
 
       //this is when someone set the image url
-      if (finalImageKey.startsWith("data:")) {
+      if (finalImageKey.startsWith("data:") || isNewHttpLink) {
         try {
           const res = await fetch(finalImageKey);
+          if (!res.ok) throw new Error("Network response was not ok");
           const blob = await res.blob();
           const fileType = blob.type || "image/jpeg";
           const fileName = `pasted-image-${Date.now()}.jpg`;
@@ -542,8 +546,8 @@ const TrainerProfile = () => {
             if (isR2File) {
               console.log("Condition Met: Deleting R2 file...", originalImageKey);
               try {
-                await axios.post(`${API_BASE_URL}/api/upload/delete-file`, {
-                  fileKey: originalImageKey
+                await axios.delete(`${API_BASE_URL}/api/upload/delete-file`, {
+                  data: { fileKey: originalImageKey }
                 });
                 console.log("Old R2 file deleted!");
               } catch (delErr) {
@@ -769,6 +773,26 @@ const TrainerProfile = () => {
                 />
               </div>
             </div>
+
+            {/* timezone */}
+            <div className="mt-6">
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Timezone
+                </label>
+                <select
+                  name="profile.timezone"
+                  value={formData.profile.timezone}
+                  onChange={handleChange}
+                  className="input-field"
+                >
+                  {/* Intl.supportedValuesOf browser ka in-built function hai jo saare timezones ki list de deta hai */}
+                  {(Intl as any).supportedValuesOf('timeZone').map((tz: string) => (
+                    <option key={tz} value={tz}>
+                      {tz}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
             {/* bio */}
             <div className="mt-6">

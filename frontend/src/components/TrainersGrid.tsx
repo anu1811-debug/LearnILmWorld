@@ -39,7 +39,8 @@ const TrainersGrid: React.FC<Props> = ({ searchTerm, filters, learningType, setN
         rating: filters.rating || '',
         sortBy: filters.sortBy || 'rating',
         nationality: filters.nationality || '',
-        bookSession: filters.bookSession || ''
+        bookSession: filters.bookSession || '',
+        sessionType: filters.sessionType || '' //for group or private session
     }), searchTerm, learningType])
 
     const buildQueryParams = useCallback(() => {
@@ -54,7 +55,7 @@ const TrainersGrid: React.FC<Props> = ({ searchTerm, filters, learningType, setN
         if (filters.sortBy && filters.sortBy !== 'rating') params.sortBy = filters.sortBy
         if (searchTerm?.trim()) params.search = searchTerm
         if (filters.sessionType && filters.sessionType !== 'any') {
-            params.sessionType = filters.sessionType;
+            params.bookingType = filters.sessionType; 
         }
         return params
     }, [filters, searchTerm, page])
@@ -92,6 +93,14 @@ const TrainersGrid: React.FC<Props> = ({ searchTerm, filters, learningType, setN
                     verified = verified.filter((t: any) => {
                         const hobbies = t.profile?.hobbies || t.profile?.interests || t.profile?.skills
                         return Array.isArray(hobbies) && hobbies.length > 0
+                    })
+                }
+
+                if (learningType === 'language') {
+                    verified = verified.filter((t: any) => {
+                        // Check both 'languages' and 'trainerLanguages' just to be safe based on your User model
+                        const langs = t.profile?.languages ;
+                        return Array.isArray(langs) && langs.length > 0;
                     })
                 }
 

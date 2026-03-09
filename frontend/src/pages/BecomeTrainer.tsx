@@ -83,9 +83,11 @@ const BecomeTrainer: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen overflow-x-hidden text-[#e0fa84] bg-[linear-gradient(185deg,#E6EEF9_0%,#FEF5E4_30%,#f7f1e6_70%,#e9f1fb_100%)]">
-      {/* text-[#e0fa84] text-[#2D274B] */}
+    <>
+    
       <Navbar />
+    <div className="min-h-screen overflow-x-hidden text-[#e0fa84]">
+      {/* text-[#e0fa84] text-[#2D274B] */}
 
       {/* Hero Section */}
       <section className="pt-14">
@@ -525,6 +527,7 @@ const BecomeTrainer: React.FC = () => {
 
       <Footer />
     </div>
+    </>
   );
 };
 

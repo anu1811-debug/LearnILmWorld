@@ -4,8 +4,8 @@ import { Facebook, Twitter, Instagram, Linkedin } from 'lucide-react'
 import logo from '../assets/logo2.png'
 
 const Footer = () => (
-  //   {/* Footer - expanded */}
-  <footer className="bg-[#5186cd] text-white py-12 text-2xl">
+  //   {/* Footer - expanded 5186cd */}
+  <footer className="bg-[#6f9bd3] text-white py-12 text-2xl">
     <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-8">
       <div>
         <div className="font-semibold text-2xl">LearniLM🌎World</div>
@@ -69,14 +69,14 @@ const Footer = () => (
           <a href="https://facebook.com/profile.php?id=61583579968490" aria-label="Facebook" target="_blank" rel="noopener noreferrer"><Facebook className='size-8 hover:text-slate-50 transition-transform duration-300 hover:scale-125' /></a>
 
           <a href="https://x.com/LearniLMWorld" aria-label="Twitter" target="_blank" rel="noopener noreferrer"><svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 1200 1227"
-    className="w-7 h-7 fill-slate-300 hover:fill-slate-50 transition-transform duration-300 hover:scale-125"
-  >
-    <path
-      d="M714.163 519.284L1160.89 0H1055.19L667.137 450.887L356.495 0H0L468.492 681.821L0 1226.37H105.69L515.476 750.078L843.505 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L523.27 622.81L152.542 97.041H316.615L609.256 512.312L655.151 577.33L1055.23 1130.54H891.16L569.165 687.828Z"
-    />
-  </svg></a>
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 1200 1227"
+            className="w-7 h-7 fill-slate-300 hover:fill-slate-50 transition-transform duration-300 hover:scale-125"
+          >
+            <path
+              d="M714.163 519.284L1160.89 0H1055.19L667.137 450.887L356.495 0H0L468.492 681.821L0 1226.37H105.69L515.476 750.078L843.505 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L523.27 622.81L152.542 97.041H316.615L609.256 512.312L655.151 577.33L1055.23 1130.54H891.16L569.165 687.828Z"
+            />
+          </svg></a>
           <a href="https://www.instagram.com/learnilmworld?igsh=MXczNnFrdHJ5Nm1vZg%3D%3D&utm_source=qr" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><Instagram className='size-8 hover:text-slate-50 transition-transform duration-300 hover:scale-125' /></a>
           <a href="https://www.linkedin.com/company/learn-ilm-world/?viewAsMember=true" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><Linkedin className='size-8 hover:text-slate-50 transition-transform duration-300 hover:scale-125' /></a>
         </div>

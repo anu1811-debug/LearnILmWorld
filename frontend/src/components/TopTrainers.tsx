@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-// import axios from "axios";
 import { Link } from "react-router-dom";
 import trainer_profile from "../assets/trainer_profile.png";
 import spanish from "../assets/Spanish_Trainer.png";
@@ -8,13 +7,12 @@ import german from "../assets/German_Trainer.jpeg";
 import english from "../assets/English_Trainer.png";
 
 import TrainerBackCard, { Trainer } from "../components/TrainerBackCard";
-import { Play, Users } from "lucide-react";
+import { BookOpen, CheckCircle, Play, Star, Users } from "lucide-react";
 
 
 // const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
 
 // Moved types in TrainerBackCard.tsx component
-
 /* small helper for rendering label */
 type PickRole = "language" | "subject" | "other";
 
@@ -124,9 +122,9 @@ export default function TopTrainers(): JSX.Element {
   }, []);
 
   return (
-    <section className="py-14 ">
+    <section className="py-14">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-
+        
         {/* Heading */}
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
@@ -146,126 +144,105 @@ export default function TopTrainers(): JSX.Element {
         <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {trainers.map((trainer, idx) => {
             const id = trainer._id;
-            const role = id ? pickRoleMap[id] ?? "other" : "other";
-
-            const showLangs =
-              role === "language" && trainer.profile?.languages?.length;
-            const showSubs =
-              role === "subject" && trainer.profile?.subjects?.length;
-
-            const displayList =
-              showLangs
-                ? trainer.profile!.languages!
-                : showSubs
-                  ? trainer.profile!.subjects!
-                  : trainer.profile?.languages?.length
-                    ? trainer.profile.languages
-                    : trainer.profile?.subjects || [];
 
             return (
               <div
                 key={id ?? idx}
-                className="group [perspective:1200px]"
-                onMouseEnter={() => setHoveredTrainerId(id)}
-                onMouseLeave={() => setHoveredTrainerId(null)}
                 onClick={() => setActiveTrainer(trainer)}
+                className="flex flex-col h-[600px]  border-blue-100 border-2 rounded-[2rem] p-4 shadow-[0_4px_20px_rgba(0,0,0,0.06)] hover:shadow-lg transition-all"
               >
-                <div
-                  className={`
-                  relative h-[420px]
-                  transition-transform duration-700
-                  [transform-style:preserve-3d]
-                  ${hoveredTrainerId === id
-                      ? "[transform:rotateY(180deg)]"
-                      : ""
-                    }
-                `}
-                >
-                  {/* FRONT */}
-                  <div className="absolute inset-0 rounded-3xl overflow-hidden shadow-xl [backface-visibility:hidden]">
-                    <img
-                      src={trainer.profile?.imageUrl || trainer_profile}
-                      alt={trainer.name}
-                      className="h-full w-full object-cover"
-                    />
-
-                    {/* Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent" />
-
-                    {/* Info Card */}
-                    <div className="absolute bottom-5 left-5 right-5">
-                      <div
-                        className="
-      rounded-2xl
-      bg-white/55
-      backdrop-blur-lg
-      p-4
-      shadow-sm
-      transition-all duration-300
-      group-hover:bg-white/75
-      group-hover:shadow-md
-    "
-                      >
-                        <h3 className="text-base font-semibold text-[#1e293b] truncate">
-                          {trainer.name}
-                        </h3>
-
-                        <p className="text-xs font-medium text-[#276dc9] mt-0.5 line-clamp-1">
-                          {displayList.slice(0, 2).join(", ")}
-                        </p>
-
-                        <p className="mt-1 text-xs text-gray-700">
-                          <span className="font-semibold">
-                            {trainer.profile?.experience ?? 0} yrs+
-                          </span>{" "}
-                          experience
-                        </p>
-
-                        <Link
-                          to={`/trainer-profile/${trainer._id}`}
-                          className="
-        mt-3 block text-center
-        bg-[#276dc9]/90
-        text-white
-        py-1.5
-        rounded-md
-        text-sm
-        font-semibold
-        hover:bg-[#205eb0]
-        transition
-      "
-                        >
-                          View Profile
-                        </Link>
-                      </div>
+                <div className="relative w-full h-[200px] rounded-2xl overflow-hidden mb-4 shrink-0 bg-gray-50">
+                  <div className="absolute top-0 right-0 z-10">
+                    <div className="bg-[#fcd574] text-[#1e293b] text-xs font-bold px-4 py-2 rounded-bl-xl shadow-sm">
+                      Free Demo
                     </div>
-
                   </div>
+                  <img
+                    src={trainer.profile?.imageUrl || trainer_profile}
+                    alt={trainer.name}
+                    className="w-full h-full object-cover object-top"
+                  />
+                </div>
 
-                  {/* BACK */}
-                  <div className="absolute inset-0 [transform:rotateY(180deg)] [backface-visibility:hidden]">
-                    <TrainerBackCard
-                      trainer={trainer}
-                      displayList={displayList}
-                      className="h-full"
-                    />
+                {/* Name & Badge */}
+                <div className="flex items-center gap-1.5 mb-2 shrink-0">
+                  <h3 className="text-[20px] font-bold text-[#1e293b] truncate">
+                    {trainer.name}
+                  </h3>
+                  <CheckCircle className="text-blue-400 fill-white text-blue-400" size={20} />
+                </div>
+
+                {/* about */}
+                <p className="text-[13px] text-gray-700 leading-relaxed overflow-y-auto no-scrollbar flex-1 ">
+                  {trainer.profile?.about}
+                </p>
+
+                {/* Ratings & Experience */}
+                <div className="flex items-center gap-3 mb-4 mt-4 shrink-0 text-[13px]">
+                  <div className="flex items-center gap-1 font-bold text-gray-900">
+                    <Star className="w-4 h-4 text-[#fbbf24] fill-current" />
+                    4.9
+                  </div>
+                  <div className="font-bold text-gray-900">
+                    {trainer.profile?.experience ?? 0}+ Years Exp.
                   </div>
                 </div>
+
+                {/* Tags Section*/}
+                <div className="shrink-0 mb-5">
+                  {/* Expertise */}
+                  {trainer.profile?.languages && trainer.profile.languages.length > 0 && (
+                    <div className="mb-2.5">
+                      <p className="text-[12px] text-gray-500 mb-1.5">Expertise</p>
+                      <div className="flex flex-wrap gap-2">
+                        {trainer.profile.languages.slice(0, 2).map((lang, i) => (
+                          <span
+                            key={i}
+                            className="bg-purple-50/50 border border-purple-100 text-[#7186ce] text-[12px] px-3 py-1 rounded-lg"
+                          >
+                            {lang}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Class */}
+                  {trainer.profile?.subjects && trainer.profile.subjects.length > 0 && (
+                    <div>
+                      <p className="text-[12px] text-gray-500 mb-1.5">Subject</p>
+                      <div className="flex flex-wrap gap-2">
+                        {trainer.profile.subjects.slice(0, 2).map((sub, i) => (
+                          <span
+                            key={i}
+                            className="bg-purple-50/50 border border-purple-100 text-[#7186ce] text-[12px] px-3 py-1 rounded-lg"
+                          >
+                            {sub}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <Link
+                  to={`/trainer-profile/${trainer._id}`}
+                  className="mt-auto block w-full text-center bg-[#276dc9] text-white py-2.5 rounded-2xl text-[15px] font-semibold  transition-colors shrink-0"
+                >
+                  View Profile
+                </Link>
               </div>
             );
           })}
         </div>
 
-        {/* CTA */}
+        {/* Bottom CTA Buttons */}
         <div className="flex justify-center gap-6 mt-14 w-full max-w-xl mx-auto">
-
-          {/* Book Demo */}
           <Link
-            to="/demo"
+            to="/courses"
             className="flex-1 flex items-center justify-center gap-2 h-[57px] bg-[#276dc9] text-white font-semibold rounded-xl shadow-md border border-white hover:bg-[#205eb0] transition text-lg"
           >
-            <Play className="w-5 h-5 fill-current" />
-            Book a FREE Demo
+            <BookOpen className="w-5 h-5" />
+            Browse Courses
           </Link>
 
           {/* More Trainers */}
@@ -281,11 +258,10 @@ export default function TopTrainers(): JSX.Element {
 
       </div>
 
-      {/* MODAL */}
       {activeTrainer && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-md"
-          onClick={() => setActiveTrainer(null)}
+          onClick={() => setActiveTrainer(null)} // Bahar click karne pe modal band ho jayega
         >
           <div onClick={(e) => e.stopPropagation()}>
             <motion.div

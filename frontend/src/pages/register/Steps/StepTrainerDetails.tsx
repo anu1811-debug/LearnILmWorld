@@ -46,7 +46,7 @@ const StepTrainerDetails: React.FC<Props> = ({
               onChange={e =>
                 setFormData(prev => ({ ...prev, education: e.target.value }))
               }
-              className="w-full p-3 border rounded-lg"
+              className="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-[#5186cd]/60 focus:border-[#5186cd]"
               placeholder="e.g., BSc in Mathematics"
             />
           </div>
@@ -61,7 +61,7 @@ const StepTrainerDetails: React.FC<Props> = ({
               onChange={e =>
                 setFormData(prev => ({ ...prev, experience: e.target.value }))
               }
-              className="w-full p-3 border rounded-lg"
+              className="w-full p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-[#5186cd]/60 focus:border-[#5186cd]"
               placeholder="e.g., 3"
             />
           </div>
@@ -74,7 +74,7 @@ const StepTrainerDetails: React.FC<Props> = ({
               onChange={e =>
                 setFormData(prev => ({ ...prev, bio: e.target.value }))
               }
-              className="w-full p-3 border rounded-lg h-32 resize-none"
+              className="w-full p-3 border rounded-3xl h-32 resize-none focus:outline-none focus:ring-2 focus:ring-[#5186cd]/60 focus:border-[#5186cd]"
               placeholder="Write something about yourself..."
             />
           </div>
@@ -83,20 +83,22 @@ const StepTrainerDetails: React.FC<Props> = ({
       </div>
 
       {/* Footer Buttons */}
-      <div className="flex justify-between mt-6">
+      <div className="flex justify-center gap-3 mt-6 pt-4 border-t border-gray-100">
+
         <button
           onClick={onBack}
-          className="px-4 py-2 rounded-lg border"
+          className="px-4 py-2 rounded-lg text-gray-500 hover:text-black hover:scale-105 transition"
         >
           Back
         </button>
 
         <button
           onClick={handleNext}
-          className="px-4 py-2 rounded-lg bg-indigo-600 text-white"
+          className="w-48 sm:w-64 py-2 rounded-lg bg-[#5186cd] text-white hover:scale-105 transition font-medium"
         >
-          Next
+          Continue
         </button>
+
       </div>
     </div>
   )

@@ -4,8 +4,10 @@ import { Mail, Lock, Eye, EyeOff, ArrowRight, Home } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 // , User - removed from above
 import "../theme.css"; // ensure theme is imported (or import once in index.tsx)
+import registerBg from "../assets/register_bg.png";
 import { GoogleLogin } from "@react-oauth/google";
 import { useFacebook } from "../hooks/useFacebook";
+import { motion } from "framer-motion";
 
 // interface LoginResult {
 //   success: boolean
@@ -37,37 +39,6 @@ const Login: React.FC = () => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  // const extractUserObject = (result: any) => {
-  //   if (!result || typeof result !== 'object') return null
-
-  //   // Common shapes:
-  //   // { user: {...}, success: true }
-  //   // { data: { user: {...} } }
-  //   // { data: {...userProps...} }
-  //   // { user: {...} } or directly user object
-  //   if ('user' in result && result.user) return result.user
-  //   if ('data' in result) {
-  //     if (result.data?.user) return result.data.user
-  //     // if data itself looks like a user object
-  //     return result.data
-  //   }
-  //   // fallback when login returns the user directly
-  //   return result
-  // }
-
-  // const getRoleFromObject = (userObj: any) => {
-  //   if (!userObj) return ''
-  //   // role could be in different keys or nested
-  //   return (
-  //     userObj.role ??
-  //     userObj.roleName ??
-  //     userObj?.user?.role ??
-  //     // roles array case
-  //     (Array.isArray(userObj.roles) && userObj.roles[0]) ??
-  //     ''
-  //   )
-  // }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -88,7 +59,7 @@ const Login: React.FC = () => {
 
 
       // pull user object if needed
-      const userObj = result.user;
+      // const userObj = result.user;
 
       const role = result.user.role;
 
@@ -196,10 +167,11 @@ const Login: React.FC = () => {
     }
   };
 
-
-
   return (
-    <div className="min-h-screen flex items-center justify-center py-12 bg-[#5186cd]">
+    <div
+      className="min-h-screen w-full flex items-center justify-center px-4 py-10 relative overflow-hidden bg-cover bg-center"
+      style={{ backgroundImage: `url(${registerBg})` }}
+    >
       {/* Home Icon Button */}
       <Link
         to="/"
@@ -249,13 +221,40 @@ const Login: React.FC = () => {
       </div>
 
       <div className="max-w-md w-full mx-4 relative z-10">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-extrabold text-[white] mb-2">
-            Welcome Back
+        <div className="text-center mb-6 sm:mb-8 px-2 text-gray-900">
+
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold drop-shadow-lg tracking-wide flex flex-wrap justify-center items-center gap-1 sm:gap-2 font-[Good Vibes]">
+
+            <span>Welcome back to</span>
+
+            <Link
+              to="/"
+              className="flex items-center gap-1 sm:gap-2 hover:text-[#5186cd] transition"
+            >
+              <span>LearniLM</span>
+
+              <motion.span
+                animate={{ rotate: 360 }}
+                transition={{ repeat: Infinity, duration: 12, ease: "linear" }}
+                className="inline-block text-2xl sm:text-3xl md:text-4xl"
+              >
+                🌎
+              </motion.span>
+
+              <span>World</span>
+            </Link>
           </h1>
-          <p className="text-[white] text-lg font-extrabold">
-            Sign in to Continue your Learning Journey
+
+          <p className="mt-3 text-sm sm:text-base md:text-lg font-bold">
+            Don't have an account?{" "}
+            <Link
+              to="/register"
+              className="underline hover:text-[#5186cd] transition"
+            >
+              Sign up
+            </Link>
           </p>
+
         </div>
 
         <div className="glass-effect rounded-2xl p-8 shadow-2xl bg-white/80 backdrop-blur">
@@ -294,7 +293,7 @@ const Login: React.FC = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#9787F3] focus:border-[#9787F3] transition-all duration-300"
+                  className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-[#5186cd]/60 focus:border-[#5186cd]/60 transition-all duration-300"
                   placeholder="Enter your email"
                   required
                 />
@@ -317,7 +316,7 @@ const Login: React.FC = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className="w-full pl-10 pr-10 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#9787F3] focus:border-[#9787F3] transition-all duration-300"
+                  className="w-full pl-10 pr-10 py-3 border-2 border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-[#5186cd]/60 focus:border-[#5186cd]/60 transition-all duration-300"
                   placeholder="Enter your password"
                   required
                 />
@@ -352,7 +351,7 @@ const Login: React.FC = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center text-base sm:text-lg py-3 rounded-xl font-semibold bg-[#5186cd] text-[#fef5e4] hover:bg-[#095ac4]  hover:opacity-90 transition"
+              className="w-full flex items-center justify-center text-base sm:text-lg py-3 rounded-full font-semibold bg-[#5186cd] text-[#fef5e4] hover:bg-[#095ac4]  hover:opacity-90 transition"
               aria-disabled={loading}
             >
               {loading ? (

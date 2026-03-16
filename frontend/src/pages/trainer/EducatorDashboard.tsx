@@ -11,7 +11,7 @@ import {
 } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import bg_img from '../../assets/bg_dashboard.jpeg'
-import logo from '../../assets/logo2.png'
+import logo from '../../assets/newlogo2.png'
 import TrainerHome from './TrainerHome'
 import TrainerSessions from './TrainerSessions'
 import TrainerStudents from './TrainerStudents'

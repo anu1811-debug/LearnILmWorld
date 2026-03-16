@@ -2,7 +2,15 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const BookPrivateSession = ({ trainerId }: { trainerId: string }) => {
+interface BookPrivateSessionProps {
+  trainerId: string;
+  rates?: {
+    30: number;
+    60: number;
+    90: number;
+  };
+}
+const BookPrivateSession = ({ trainerId, rates }: BookPrivateSessionProps) => {
   const navigate = useNavigate();
   
   const [duration, setDuration] = useState<number>(60);
@@ -11,7 +19,7 @@ const BookPrivateSession = ({ trainerId }: { trainerId: string }) => {
   const [selectedTime, setSelectedTime] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
-  const pricing = { 30: 25, 60: 45, 90: 65 }; 
+  const pricing = rates || { 30: 25, 60: 45, 90: 65 };
 
   useEffect(() => {
     if (!selectedDate) return;
@@ -36,7 +44,7 @@ const BookPrivateSession = ({ trainerId }: { trainerId: string }) => {
   const handleProceedToPayment = () => {
     if (!selectedDate || !selectedTime) return alert("Please select a date and time");
     
-    navigate('/payment', { 
+    navigate(`/book/${trainerId}`, { 
       state: { 
         trainerId, 
         duration, 

@@ -82,7 +82,11 @@ const userSchema = new mongoose.Schema({
 
 
     experience: { type: Number, min: 0, default: 0 },
-    hourlyRate: { type: Number, min: 0, default: 25 },
+    // hourlyRate: { type: Number, min: 0, default: 25 },
+    privateSessionRate: {"30": { type: Number, default: 25, min: 0 }, "60": { type: Number, default: 45, min: 0 }, "90": { type: Number, default: 65, min: 0 }
+    },
+    groupSessionRate: {"60": { type: Number, default: 25, min: 0 }, "90": { type: Number, default: 35, min: 0 }
+    },
 
     phone: { type: String, trim: true, default: '' },
     location: { type: String, trim: true, default: '' },

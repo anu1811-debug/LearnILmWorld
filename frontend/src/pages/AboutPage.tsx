@@ -736,17 +736,17 @@ export default function AboutPage() {
                 <motion.div
                   initial={{ scale: 0.85, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  className="bg-[#fef5e4] text-[#1f2937] rounded-3xl p-8 w-[90%] max-w-lg relative shadow-xl"
+                  className="bg-gradient-to-b from-[#254999] via-[#5a7bb0] to-[#b5c5db] text-[#1f2937] rounded-3xl p-8 w-[90%] max-w-lg relative shadow-xl"
                 >
                   {/* Close */}
                   <button
                     onClick={() => setShowFeedback(false)}
-                    className="absolute top-4 right-4 text-3xl font-bold text-[#5186cd] hover:text-[#3f6fb0]"
+                    className="absolute top-4 right-4 text-3xl font-bold text-white"
                   >
                     ×
                   </button>
 
-                  <h3 className="text-3xl font-extrabold mb-6 text-center text-[#5186cd]">
+                  <h3 className="text-3xl font-extrabold mb-6 text-center text-white">
                     We Value Your Feedback 🌟
                   </h3>
 
@@ -761,7 +761,7 @@ export default function AboutPage() {
                           name: e.target.value,
                         })
                       }
-                      className="w-full px-4 py-3 rounded-xl bg-white border border-[#5186cd]/30 focus:outline-none focus:ring-2 focus:ring-[#5186cd]"
+                      className="w-full px-4 py-3 rounded-3xl bg-white border border-[#5186cd]/30 focus:outline-none focus:ring-2 focus:ring-[#5186cd]"
                       required
                     />
 
@@ -775,7 +775,7 @@ export default function AboutPage() {
                           email: e.target.value,
                         })
                       }
-                      className="w-full px-4 py-3 rounded-xl bg-white border border-[#5186cd]/30 focus:outline-none focus:ring-2 focus:ring-[#5186cd]"
+                      className="w-full px-4 py-3 rounded-3xl bg-white border border-[#5186cd]/30 focus:outline-none focus:ring-2 focus:ring-[#5186cd]"
                       required
                     />
 
@@ -787,7 +787,7 @@ export default function AboutPage() {
                           category: e.target.value,
                         })
                       }
-                      className="w-full px-4 py-3 rounded-xl bg-white border border-[#5186cd]/30 focus:outline-none focus:ring-2 focus:ring-[#5186cd]"
+                      className="w-full px-4 py-3 rounded-3xl bg-white border border-[#5186cd]/30 focus:outline-none focus:ring-2 focus:ring-[#5186cd] cursor-pointer"
                       required
                     >
                       <option value="">Select a category</option>
@@ -806,13 +806,13 @@ export default function AboutPage() {
                           message: e.target.value,
                         })
                       }
-                      className="w-full px-4 py-3 rounded-xl bg-white border border-[#5186cd]/30 focus:outline-none focus:ring-2 focus:ring-[#5186cd]"
+                      className="w-full px-4 py-3 rounded-3xl bg-white border border-[#5186cd]/30 focus:outline-none focus:ring-2 focus:ring-[#5186cd] "
                       required
                     />
 
                     <button
                       type="submit"
-                      className="w-full bg-[#5186cd] hover:bg-[#3f6fb0] text-white font-bold py-3 rounded-xl hover:scale-105 transition"
+                      className="w-[85%] bg-[#024aac] hover:bg-[#033e90] text-white font-bold py-3 rounded-3xl hover:scale-105 transition"
                     >
                       Submit Feedback
                     </button>

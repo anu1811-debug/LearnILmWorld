@@ -26,7 +26,6 @@ import ScrollToTop from './components/ScrollToTop'
 import Courses from './pages/Course'
 import CoursePlayer from './components/CoursePlayer'
 import FeaturedTrainersPage from './pages/FeaturedTrainersPage'
-import TrainerProfilePageDemo from './pages/TrainerProfilePageDemo'
 import GermanBlog from './pages/blogs/GermanBlog';
 import BengaliBlog from './pages/blogs/BengaliBlog';
 import VerifyEmail from './pages/VerifyEmail';
@@ -89,7 +88,6 @@ function App() {
                     </PrivateRoute>
                   } />
 
-                  <Route path="/trainer/profile/:id" element={<TrainerProfilePageDemo />} />
 
 
                   <Route

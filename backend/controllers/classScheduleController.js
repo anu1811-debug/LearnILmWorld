@@ -179,7 +179,7 @@ export const getGroupClasses = async (req, res) => {
       type: 'group',
       startTime: { $gt: currentTime }, 
       status: 'scheduled'
-    }).sort({ startTime: 1 }).populate('teacherId', 'name profile.experience stats.rating');
+    }).sort({ startTime: 1 }).populate('teacherId', 'name profile.experience stats.rating profile.groupSessionRate');
     
     return res.status(200).json({ classes: groupClasses });
     

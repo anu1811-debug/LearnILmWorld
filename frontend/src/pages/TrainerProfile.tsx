@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import { useParams, useLocation } from 'react-router-dom'
+import React, { useState, useEffect, useRef } from 'react'
+import { useParams, useLocation, useNavigate } from 'react-router-dom'
 import {
   User, Star, Globe, Award, Calendar,
   MessageSquare, BookOpen, CheckCircle,
   Heart, Book, Play, Quote
 } from 'lucide-react'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import BookGroupSession from '../components/BookGroupSession'
@@ -36,6 +36,11 @@ interface Trainer {
     teachingStyle?: string
     studentAge?: string[]
     averageRating?: number
+    privateSessionRate?: {
+      30: number;
+      60: number;
+      90: number;
+    };
   }
   stats: {
     rating?: number
@@ -58,6 +63,11 @@ const TrainerProfile: React.FC = () => {
   const [loading, setLoading] = useState(true)
   const [previewLink, setPreviewLink] = useState<string>("")
   const [currentReviewIdx, setCurrentReviewIdx] = useState(0);
+  const [showModal, setShowModal] = useState(false);
+  const [videoUrl, setVideoUrl] = useState<string | null>(null); 
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
+    const demoSectionRef = useRef<HTMLDivElement>(null);
 
   const passedLearningType = location.state?.learningType;
   const category = passedLearningType || trainer?.profile?.category?.toLowerCase() || 'language';
@@ -94,12 +104,58 @@ const TrainerProfile: React.FC = () => {
     fetchProfileImage();
   }, [avatar]);
 
+  useEffect(() => {
+    if (!loading && trainer && location.state?.scrollToDemo && activeTab === 'profile') {
+      setTimeout(() => {
+        demoSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 300);
+      window.history.replaceState({}, document.title)
+    }
+  }, [loading, trainer, location.state, activeTab]);
+
   const fetchTrainerProfile = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/api/users/profile/${trainerId}`)
       setTrainer(response.data)
     } catch (err) { console.error(err) } finally { setLoading(false) }
   }
+
+  const handleUnlockDemo = async () => {
+    try {
+      setError('');
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert("Please login to watch the free demo."); 
+        navigate('/login'); 
+        return; 
+      }
+      
+      const res = await axios.post(`${API_BASE_URL}/api/bookings/free-demo-access`, {
+        trainerId: trainerId,
+      }, {
+         headers: { Authorization: `Bearer ${token}` } 
+      });
+
+      if (res.data.success) {
+        setVideoUrl(res.data.videoUrl); 
+        setShowModal(false); 
+      }
+    } catch (err) {
+      const error = err as AxiosError;
+      if (error.response && error.response.status === 401) {
+         alert("Session expired. Please login again.");
+         navigate('/login');
+         return;
+      }
+      setError((error.response?.data as any)?.message || "Something went wrong!");
+    }
+  };
+
+  const getYoutubeId = (url: string) => {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+  };
 
   const fetchReviews = async () => {
     try {
@@ -108,15 +164,15 @@ const TrainerProfile: React.FC = () => {
     } catch (err) { console.error(err) }
   }
 
-  const formatAvailability = () => {
-    if (!trainer?.profile?.availability) return []
-    return trainer.profile.availability
-      .filter(slot => slot.available)
-      .map(slot => ({
-        day: slot.day.charAt(0).toUpperCase() + slot.day.slice(1),
-        time: `${slot.startTime} - ${slot.endTime}`
-      }))
-  }
+  // const formatAvailability = () => {
+  //   if (!trainer?.profile?.availability) return []
+  //   return trainer.profile.availability
+  //     .filter(slot => slot.available)
+  //     .map(slot => ({
+  //       day: slot.day.charAt(0).toUpperCase() + slot.day.slice(1),
+  //       time: `${slot.startTime} - ${slot.endTime}`
+  //     }))
+  // }
 
   if (loading || !trainer) return <div className="min-h-screen flex items-center justify-center text-blue-600 font-medium">Loading profile...</div>
 
@@ -179,19 +235,11 @@ const TrainerProfile: React.FC = () => {
                 </div>
               </div>
 
-              {/* About Section */}
-              <div className="text-left w-full mb-8 sm:mb-10">
-                <h3 className="text-base sm:text-lg font-semibold mb-2">About Me:</h3>
-                <p className="text-blue-50/80 leading-relaxed text-sm">
-                  {trainer.profile.bio}
-                </p>
-              </div>
-
               {/* Book Buttons Container */}
-              <div className='flex flex-col gap-3 sm:gap-4 w-full'>
+              <div className='grid sm:grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 w-full mb-8 sm:mb-10'>
                 <button
                   onClick={() => setActiveTab('private')}
-                  className={`w-full py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg transition-colors text-center shadow-lg ${activeTab === 'private' ? 'bg-blue-100 text-blue-900 border-2 border-blue-400' : 'bg-white text-blue-900 hover:bg-blue-50'}`}
+                  className={`w-full py-3 sm:py-4 rounded-xl font-bold sm:text-lg transition-colors text-center shadow-lg ${activeTab === 'private' ? 'bg-blue-100 text-blue-900 border-2 border-blue-400' : 'bg-white text-blue-900 hover:bg-blue-50'}`}
                 >
                   Book Private Session
                 </button>
@@ -210,6 +258,14 @@ const TrainerProfile: React.FC = () => {
                     ← Back to Profile Information
                   </button>
                 )}
+              </div>
+
+              {/* About Section */}
+              <div className="text-left w-full mb-8 sm:mb-10">
+                <h3 className="text-base sm:text-lg font-semibold mb-2">About Me:</h3>
+                <p className="text-blue-50/80 leading-relaxed text-sm">
+                  {trainer.profile.bio}
+                </p>
               </div>
             </div>
           </div>
@@ -302,7 +358,7 @@ const TrainerProfile: React.FC = () => {
                     const localTz = moment.tz.guess();
 
                     const dayMap: { [key: string]: number } = {
-                      'monday': 0, 'tuesday': 1, 'wednesday': 2, 'thursday': 3, 'friday': 4, 'saturday': 5, 'sunday': 6
+                      'sunday': 0,'monday': 1, 'tuesday': 2, 'wednesday': 3, 'thursday': 4, 'friday': 5, 'saturday': 6
                     };
 
                     const availability = trainer.profile.availability
@@ -367,13 +423,91 @@ const TrainerProfile: React.FC = () => {
 
                 {/* DEMO VIDEO */}
                 {trainer.profile?.demoVideo && (
-                  <div className="bg-white rounded-[1.5rem] p-5 sm:p-6 shadow-sm border border-slate-100">
+                  <div ref={demoSectionRef} className="bg-white rounded-[1.5rem] p-5 sm:p-6 shadow-sm border border-slate-100">
                     <h3 className="text-base sm:text-lg font-bold flex items-center gap-2 sm:gap-3 mb-4 text-slate-800">
                       <Play className="text-blue-500 fill-blue-500" size={20} /> Demo Video
                     </h3>
-                    <div className="rounded-xl overflow-hidden bg-black aspect-video border border-slate-200 w-full">
-                      <video src={trainer.profile.demoVideo} controls playsInline className="w-full h-full object-cover" />
-                    </div>
+                    <div className="p-8">
+            {videoUrl ? (
+              <div className="rounded-2xl overflow-hidden shadow-2xl bg-black">
+                {videoUrl.includes('youtube') || videoUrl.includes('youtu.be') ? (
+                  <iframe 
+                    width="100%" 
+                    height="500" 
+                    src={`https://www.youtube.com/embed/${getYoutubeId(videoUrl)}?autoplay=1`}
+                    title="YouTube video player" 
+                    frameBorder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowFullScreen
+                    className="w-full aspect-video"
+                  ></iframe>
+                ) : (
+                  <video src={videoUrl} controls autoPlay className="w-full h-[300px] object-contain" />
+                )}
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center py-12 px-4">
+                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4 text-3xl">
+                  🎥
+                </div>
+                <h3 className="text-2xl font-bold text-gray-800 mb-2">Experience the Teaching Style</h3>
+                <p className="text-gray-500 mb-8 text-center max-w-md">
+                  Unlock an exclusive free demo session to see if this mentor is the right fit for your learning journey.
+                </p>
+                <button 
+                  onClick={() => setShowModal(true)}
+                  className="group relative px-8 py-4 bg-[#024aac] text-white text-lg font-bold rounded-full shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300"
+                >
+                  <span className="flex items-center gap-2">
+                    <span className="bg-white text-blue-500 rounded-full w-6 h-6 flex items-center justify-center text-xs">▶</span>
+                    Watch Free Demo
+                  </span>
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-blue-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-3xl p-8 w-full max-w-md relative shadow-2xl transform transition-all scale-100">
+            <button 
+              onClick={() => setShowModal(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full p-2 transition"
+            >
+              ✕
+            </button>
+            
+            <div className="text-center">
+              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-600 text-xl">
+                🔓
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-2 ">Unlock Free Demo</h3>
+              
+              <p className="text-gray-500 mb-6">
+                You are about to unlock the free demo class for <span className="font-semibold text-blue-700">{trainer?.name}</span>.
+                <br/>
+                <span className="text-xs text-blue-500 font-medium mt-2 block bg-blue-50 py-1 px-2 rounded-full mx-auto w-max">
+                  Note: One-time access only
+                </span>
+              </p>
+
+              {error && (
+                <div className="bg-red-50 text-red-500 text-sm mb-4 p-3 rounded-xl border border-red-100">
+                  {error}
+                </div>
+              )}
+
+              <button 
+                onClick={handleUnlockDemo}
+                className="w-full bg-[#024aac] text-white py-3 rounded-xl font-bold hover:opacity-90 transition shadow-lg hover:shadow-blue-500/25"
+              >
+                Confirm & Unlock
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
                   </div>
                 )}
 
@@ -435,7 +569,7 @@ const TrainerProfile: React.FC = () => {
             {activeTab === 'private' && (
               <div className="bg-white rounded-[1.5rem] p-5 sm:p-8 shadow-sm border border-slate-100 animate-fade-in">
                 <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-slate-800 border-b pb-3 sm:pb-4">1-on-1 Private Session</h3>
-                <BookPrivateSession trainerId={trainer._id} />
+                <BookPrivateSession trainerId={trainer._id} rates={trainer?.profile?.privateSessionRate} />
               </div>
             )}
 

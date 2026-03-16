@@ -67,6 +67,7 @@ export default function LandingPageAlt() {
   const [mounted, setMounted] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   // const [showOffcanvas, setShowOffcanvas] = useState(false)
+  const [activeFaq, setActiveFaq] = useState("learner");
 
   const [activeCategory, setActiveCategory] = useState<"popular" | "asian" | "euro" | "africa" | "more">("popular");
 
@@ -537,7 +538,7 @@ export default function LandingPageAlt() {
     },
   ];
 
-  const faqs = [
+  const learnerFaqs = [
     {
       q: "How do I choose a trainer?",
       a: "Use filters (experience, rating, price) and send a short message to get a feel. Look for video intros and student reviews.",
@@ -546,7 +547,6 @@ export default function LandingPageAlt() {
       q: "What languages are available?",
       a: "20+ languages including Spanish, French, German, Chinese, Japanese, Arabic and many dialects.",
     },
-    // { q: 'Can I try before I pay?', a: 'Yes — we offer a free trial credit for first-time students. Trial availability depends on the trainer.' },
     {
       q: "How do payments work?",
       a: "We use Stripe for secure checkout. Cards and Apple/Google Pay are accepted where available.",
@@ -563,6 +563,9 @@ export default function LandingPageAlt() {
       q: "Is there a mobile app?",
       a: "Coming soon — our PWA works great on mobile and can be installed to your home screen.",
     },
+  ];
+
+  const tutorFaqs = [
     {
       q: "What is the procedure to become a tutor at LearniLM🌍World?",
       a: "Becoming a tutor involves a few simple steps — from applying to onboarding. Here’s how you can start your journey with us:",
@@ -588,6 +591,8 @@ export default function LandingPageAlt() {
       a: "Once you complete the required steps and training, you officially join LearniLM🌍World as a tutor — ready to empower learners with improved spoken English skills.",
     },
   ];
+
+  const faqs = activeFaq === "learner" ? learnerFaqs : tutorFaqs;
 
   const reviews = [
     {
@@ -817,7 +822,7 @@ export default function LandingPageAlt() {
             {(activeCategory === "more"
               ? [
                 { lang: "Thai", code: "th" },
-                { lang: "Bengali", code: "in" },
+                // { lang: "Bengali", code: "in" },
                 { lang: "Russian", code: "ru" },
                 { lang: "Mandarin", code: "cn" },
                 // { lang: "Swahili", code: "ke" },
@@ -888,7 +893,7 @@ export default function LandingPageAlt() {
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 md:gap-6 mt-6">
                 {[
                   { name: "Thai", flag: "th" },
-                  { name: "Bengali", flag: "in" },
+                  // { name: "Bengali", flag: "in" },
                   { name: "Russian", flag: "ru" },
                   { name: "Mandarin", flag: "cn" },
                   // { name: "Swahili", flag: "ke" },
@@ -925,6 +930,7 @@ export default function LandingPageAlt() {
           </div>
         )}
       </section>
+
       {/* Explore subjects section */}
       {/* bg-[#dc8d33] */}
       <section className="relative py-12" aria-labelledby="sdil-subjects">
@@ -1071,6 +1077,7 @@ export default function LandingPageAlt() {
           </div>
         )}
       </section>
+
       {/* Explore Hobbies Section */}
       {/* bg-[#2D274B] */}
       <section className="relative py-12 " aria-labelledby="sdil-hobbies">
@@ -1265,54 +1272,80 @@ export default function LandingPageAlt() {
           </div>
         )}
       </section>
+
       {/* top trainer section */}
       <TopTrainers />
+
       {/* Why learners love us section */}
       {/* bg-[#2D274B] */}
-      <section className="py-20 ]">
+      <section className="py-24 ">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
+
           {/* HEADING */}
           <div className="text-center">
-            <h3 className="text-4xl lg:text-5xl  font-extrabold text-[#203989]">
-              Why learners love LearniLM🌍World
+            <h3 className="text-4xl lg:text-5xl font-extrabold text-[#173b86]">
+              Why Learners love LearniLM🌍World
             </h3>
 
-            {/* SUBTITLE BAR */}
-            <div className="mt-5 inline-block bg-[#5b8fd6] text-white px-6 py-3 rounded-md shadow-md max-w-3xl">
+            {/* SUBTITLE */}
+            <div className="mt-6 inline-block bg-gradient-to-r from-[#5b78b8] to-[#3a5aa5] text-white px-10 py-4 rounded-xl shadow-lg max-w-3xl">
               <p className="text-base lg:text-lg font-semibold">
-                Short lessons, lots of speaking time and tutors focused on
-                practical outcomes. Learn phrases you’ll use the very next day.
+                Short lessons, lots of speaking time and tutors focused on practical
+                outcome. Learn phrases you’ll use the very next day.
               </p>
             </div>
           </div>
 
-          {/* TOP FEATURE CARDS */}
-          <div className="mt-14 grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* FEATURE CARDS */}
+          <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-10">
+
             {features.map((f, idx) => (
               <div
                 key={idx}
-                className="bg-[#203989] text-white rounded-2xl p-6 shadow-lg hover:scale-[1.02] transition-transform"
+                className="bg-gradient-to-b from-[#8aa0cc] to-[#193c87] text-white 
+          rounded-tl-[40px] rounded-br-[40px]
+          p-8 shadow-xl hover:scale-[1.04] transition-transform duration-300"
               >
-                <f.icon className="w-8 h-8 mb-4 text-white" />
-                <h4 className="text-xl font-bold mb-2">{f.title}</h4>
-                <p className="text-sm font-semibold opacity-90">{f.text}</p>
+
+                {/* ICON */}
+                <div className="w-12 h-12 flex items-center justify-center mb-3 bg-white/10 rounded-full backdrop-blur-sm">
+                  <f.icon
+                    className={`w-8 h-8 text-white ${f.icon === Clock ? "stroke-[2.5]" : "fill-white stroke-none"
+                      }`}
+                  />
+                </div>
+
+                {/* TITLE */}
+                <h4 className="text-xl font-bold mb-3">
+                  {f.title}
+                </h4>
+
+                {/* TEXT */}
+                <p className="text-lg opacity-90 leading-relaxed">
+                  {f.text}
+                </p>
+
               </div>
             ))}
+
           </div>
 
-          {/* REAL OUTCOMES CARD */}
+          {/* BOTTOM BUTTON TAGS */}
+          <div className="mt-16 flex flex-col sm:flex-row justify-center gap-10">
 
-          {/* BOTTOM TAGS */}
-          <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            <div className="bg-[#5b8fd6] text-white text-center border-white border-2 py-4 rounded-xl font-extrabold shadow-md">
+            <div className="bg-[#3e5fa8] text-white px-16 py-4 rounded-full text-lg font-semibold shadow-lg text-center hover:scale-105 transition">
               Quick lessons
             </div>
-            <div className="bg-[#5b8fd6] border-white border-2 text-white text-center py-4 rounded-xl font-extrabold shadow-md">
+
+            <div className="bg-[#3e5fa8] text-white px-16 py-4 rounded-full text-lg font-semibold shadow-lg text-center hover:scale-105 transition">
               Excellent Material
             </div>
+
           </div>
+
         </div>
       </section>
+
       {/* Highlights Section */}
       <section
         className="relative py-24  text-white"
@@ -1420,6 +1453,7 @@ export default function LandingPageAlt() {
           </motion.p>
         </div>
       </section>
+
       {/* How it works section */}
       <section className="py-1" aria-labelledby="how-it-works">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -1462,21 +1496,55 @@ export default function LandingPageAlt() {
           </div>
         </div>
       </section>
+
       {/* Removed Reviews section */}
       {/* FAQ */}
       <section className="py-16" aria-labelledby="faq-heading">
         <div className="max-w-5xl mx-auto px-6 lg:px-8">
-          <h3 id="faq-heading" className="text-4xl  text-center font-extrabold">
+
+          <h3 id="faq-heading" className="text-4xl text-center font-extrabold">
             <span>Frequently Asked</span>
-            <span className="text-[#5186cd]"> Questions</span>{" "}
+            <span className="text-[#5186cd]"> Questions</span>
           </h3>
-          <h1 className="mt-4 translate-y-1 flex text-center items-center justify-center">
-            Getting ready to apply? Check out the Admission FAQ for answers to
-            your{" "}
-          </h1>
-          <h1 className="mt-1 flex text-center items-center justify-center">
-            questions on application requirement.
-          </h1>
+
+          <p className="mt-4 text-center text-gray-600">
+            Getting ready to apply? Check out the FAQ for answers to your questions.
+          </p>
+
+          {/* Toggle Buttons */}
+          <div className="flex justify-center mt-6">
+            <div className="bg-gray-100 rounded-full p-1 flex gap-1">
+
+              <button
+                onClick={() => {
+                  setActiveFaq("learner");
+                  setOpenFaq(null);
+                }}
+                className={`px-5 py-2 rounded-full text-sm font-semibold transition ${activeFaq === "learner"
+                  ? "bg-white shadow text-gray-900"
+                  : "text-gray-500"
+                  }`}
+              >
+                Learner FAQs
+              </button>
+
+              <button
+                onClick={() => {
+                  setActiveFaq("tutor");
+                  setOpenFaq(null);
+                }}
+                className={`px-5 py-2 rounded-full text-sm font-semibold transition ${activeFaq === "tutor"
+                  ? "bg-white shadow text-gray-900"
+                  : "text-gray-500"
+                  }`}
+              >
+                Tutor FAQs
+              </button>
+
+            </div>
+          </div>
+
+          {/* FAQ LIST */}
           <div className="mt-8 space-y-4">
             {faqs.map((f, i) => (
               <div
@@ -1492,6 +1560,7 @@ export default function LandingPageAlt() {
                   <span className="font-semibold text-lg text-gray-800">
                     {f.q}
                   </span>
+
                   <motion.div
                     animate={{ rotate: openFaq === i ? 180 : 0 }}
                     transition={{ duration: 0.25 }}
@@ -1500,6 +1569,7 @@ export default function LandingPageAlt() {
                     <ChevronDown />
                   </motion.div>
                 </button>
+
                 <motion.div
                   id={`faq-${i}`}
                   initial={false}
@@ -1510,7 +1580,7 @@ export default function LandingPageAlt() {
                   transition={{ duration: 0.25 }}
                   className="overflow-hidden"
                 >
-                  <div className="px-4 py-3 bg-blue-200 pb-4 text-md  leading-relaxed">
+                  <div className="px-4 py-3 bg-blue-200 pb-4 text-md leading-relaxed">
                     {f.a}
                   </div>
                 </motion.div>
@@ -1519,6 +1589,7 @@ export default function LandingPageAlt() {
           </div>
         </div>
       </section>
+
       {/* text-[#e0fa84] text-[#2D274B] */}
       {/* CTA  bg-gradient-to-r from-[#9787F3]/10 to-[#f97316]/8*/}
       {/* <section className="py-12 ">

@@ -8,6 +8,17 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 type AnyObj = Record<string, any>
 
+interface PrivateSessionRates {
+	30: number | string;
+	60: number | string;
+	90: number | string;
+}
+
+interface GroupSessionRates {
+	60: number | string;
+	90: number | string;
+}
+
 interface Certification {
 	id: string
 	name: string
@@ -30,6 +41,8 @@ interface UserProfile {
 	location?: string
 	emailVerification?: EmailVerification
 	resume?: string
+	privateSessionRate?: PrivateSessionRates;
+	groupSessionRate?: GroupSessionRates;
 }
 
 
@@ -63,6 +76,8 @@ const AdminUsers: React.FC = () => {
 				isVerified: false,
 			},
 			resume: "",
+			privateSessionRate: { 30: 25, 60: 45, 90: 65 },
+			groupSessionRate: { 60: 15, 90: 25 }
 		},
 	})
 
@@ -165,6 +180,34 @@ const AdminUsers: React.FC = () => {
 			setFormData(prev => ({ ...prev, [name]: value }))
 		}
 	}
+
+	// handle private session rate
+	const handlePrivateRateChange = (duration: 30 | 60 | 90, value: string) => {
+		setFormData(prev => ({
+			...prev,
+			profile: {
+				...prev.profile,
+				privateSessionRate: {
+					...(prev.profile.privateSessionRate as PrivateSessionRates),
+					[duration]: value === '' ? '' : Number(value)
+				}
+			}
+		}));
+	};
+
+	//handle group session rate
+	const handleGroupRateChange = (duration: 60 | 90, value: string) => {
+		setFormData(prev => ({
+			...prev,
+			profile: {
+				...prev.profile,
+				groupSessionRate: {
+					...(prev.profile.groupSessionRate as GroupSessionRates),
+					[duration]: value === '' ? '' : Number(value)
+				}
+			}
+		}));
+	};
 
 	// text fields change
 	const handleCertFieldChange = (index: number, field: keyof Certification, value: string) => {
@@ -430,6 +473,8 @@ const AdminUsers: React.FC = () => {
 				bio: user.profile?.bio || '',
 				location: user.profile?.location || '',
 				resume: user.profile?.resume || "",
+				privateSessionRate: user.profile?.privateSessionRate || { 30: 25, 60: 45, 90: 65 },
+				groupSessionRate: user.profile?.groupSessionRate || { 60: 15, 90: 25 }
 			},
 		});
 	};
@@ -521,6 +566,64 @@ const AdminUsers: React.FC = () => {
 							<input type="text" name="profile.education" placeholder="Degree / Education" value={formData.profile.education || ''} onChange={handleChange} className="p-3 border rounded-md" />
 							{/* experience */}
 							<input type="text" name="profile.experience" placeholder="Experience (years)" value={formData.profile.experience || ''} onChange={handleChange} className="p-3 border rounded-md" />
+
+							<div className="col-span-1 md:col-span-4 p-3 border rounded-md bg-gray-50 mb-2 mt-2">
+								<label className="font-semibold block mb-2">Private Session Rates ($)</label>
+								<div className="grid grid-cols-3 gap-4">
+									<div>
+										<label className="text-sm text-gray-600 block mb-1">30 Mins</label>
+										<input
+											type="number"
+											value={formData.profile.privateSessionRate?.[30] ?? ''}
+											onChange={(e) => handlePrivateRateChange(30, e.target.value)}
+											className="p-2 border rounded-md w-full"
+										/>
+									</div>
+									<div>
+										<label className="text-sm text-gray-600 block mb-1">60 Mins</label>
+										<input
+											type="number"
+											value={formData.profile.privateSessionRate?.[60] ?? ''}
+											onChange={(e) => handlePrivateRateChange(60, e.target.value)}
+											className="p-2 border rounded-md w-full"
+										/>
+									</div>
+									<div>
+										<label className="text-sm text-gray-600 block mb-1">90 Mins</label>
+										<input
+											type="number"
+											value={formData.profile.privateSessionRate?.[90] ?? ''}
+											onChange={(e) => handlePrivateRateChange(90, e.target.value)}
+											className="p-2 border rounded-md w-full"
+										/>
+									</div>
+								</div>
+							</div>
+
+							{/* Group Session Rates */}
+							<div className="col-span-1 md:col-span-4 p-3 border rounded-md bg-gray-50 mb-4">
+								<label className="font-semibold block mb-2">Group Session Rates ($)</label>
+								<div className="grid grid-cols-2 gap-4">
+									<div>
+										<label className="text-sm text-gray-600 block mb-1">60 Mins</label>
+										<input
+											type="number"
+											value={formData.profile.groupSessionRate?.[60] ?? ''}
+											onChange={(e) => handleGroupRateChange(60, e.target.value)}
+											className="p-2 border rounded-md w-full"
+										/>
+									</div>
+									<div>
+										<label className="text-sm text-gray-600 block mb-1">90 Mins</label>
+										<input
+											type="number"
+											value={formData.profile.groupSessionRate?.[90] ?? ''}
+											onChange={(e) => handleGroupRateChange(90, e.target.value)}
+											className="p-2 border rounded-md w-full"
+										/>
+									</div>
+								</div>
+							</div>
 
 							{/*  Resume Management  */}
 							<div className="col-span-1 md:col-span-4 p-3 border rounded-md bg-gray-50">

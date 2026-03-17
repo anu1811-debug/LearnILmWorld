@@ -1,19 +1,32 @@
 // src/components/Footer.jsx
 import { Link } from 'react-router-dom'
-import { Facebook, Twitter, Instagram, Linkedin } from 'lucide-react'
-import logo from '../assets/logo2.png'
+import { Facebook, Twitter, Instagram, Linkedin, Copyright } from 'lucide-react'
+import logo from '../assets/newlogo2.png'
 
 const Footer = () => (
   //   {/* Footer - expanded 5186cd */}
-  <footer className="bg-[#6f9bd3] text-white py-12 text-2xl">
-    <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-8">
+  <footer className="bg-[#203989] text-white py-12 text-2xl">
+    <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-5 gap-4">
       <div>
-        <div className="font-semibold text-2xl">LearniLM🌎World</div>
+        {/* <div className="font-semibold text-2xl">LearniLM🌎World</div> */}
         {/* {new Date().getFullYear()} */}
-        <div className="text-lg text-slate-300 mt-2 ">© 2025 LearniLM🌎World — All rights reserved</div>
+        {/* <div className="text-lg text-slate-300 mt-2 ">© 2025 LearniLM🌎World — All rights reserved</div> */}
+
+        <div className="text-sm text-slate-300 mt-2 ">Learnilmworld helps students learn languages, skills and hobbies through experts for the modern world</div>
+        {/* phone */}
+        <div className="text-xl text-slate-300 mt-4"> 
+          Phone:{' '}
+          <br />
+          <a
+            href="tel:+918100261773"
+            className="hover:underline hover:text-white"
+          >
+            +91 81002 61773
+          </a>
+        </div>
         {/* email */}
         <div className="mt-4 text-xl text-slate-300">
-          Email:{' '}
+          Email Us Directly:{' '}
           <a
             href="mailto:support@learnilmworld.com"
             onClick={(e) => {
@@ -31,16 +44,7 @@ const Footer = () => (
           </a>
 
         </div>
-        {/* phone */}
-        <div className="text-xl text-slate-300">
-          Phone:{' '}
-          <a
-            href="tel:+918100261773"
-            className="hover:underline hover:text-white"
-          >
-            +91 81002 61773
-          </a>
-        </div>
+        
 
       </div>
 
@@ -63,6 +67,14 @@ const Footer = () => (
       </div>
 
       <div>
+        <div className="font-semibold ">Support</div>
+        <ul className="mt-3 space-y-2 text-xl text-slate-300">
+          <li><Link to="/about#help" className="hover:underline text-xl">Contact Us</Link></li>
+          <li><Link to="/demo" className="hover:underline text-xl">Book a Demo</Link></li>
+        </ul>
+      </div>
+
+      <div>
         <div className="font-semibold">Stay in touch</div>
         <div className="mt-4 flex items-center gap-3 text-slate-300 text-xl ">
 
@@ -80,13 +92,28 @@ const Footer = () => (
           <a href="https://www.instagram.com/learnilmworld?igsh=MXczNnFrdHJ5Nm1vZg%3D%3D&utm_source=qr" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><Instagram className='size-8 hover:text-slate-50 transition-transform duration-300 hover:scale-125' /></a>
           <a href="https://www.linkedin.com/company/learn-ilm-world/?viewAsMember=true" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><Linkedin className='size-8 hover:text-slate-50 transition-transform duration-300 hover:scale-125' /></a>
         </div>
-        <div className='Logo py-3 mt-5'>
-          <img src={logo} width={'350px'} />
-          <div className="mt-3 sm:mt-0 text-xl">Version 2.0 • Privacy policy</div>
+        <div className='mt-9'>
+        <img src={logo} alt="" />
         </div>
       </div>
     </div>
 
+    <div className='bg-white p-[0.5px] mt-5'></div>
+    <div className='max-w-7xl mx-auto px-6 text-gray-300 grid md:grid-cols-2 gap-4 mt-3'>
+            <div className=" flex items-center gap-2 text-lg">
+              <Copyright className='w-4 h-4'/>
+              LearniLM🌎World - All rights reserved</div>
+      
+      <div className='flex gap-4'>
+          <div className='text-lg'>
+            Privacy Policy - Version 2.0</div>
+            <div className='text-lg'>
+              Terms of Service</div> 
+            <div className='text-lg'>
+              Cookies Policy
+            </div>
+      </div>
+    </div>
   </footer>
 )
 

@@ -1,6 +1,6 @@
 // src/pages/BookingPage.jsx
 import React, { useEffect, useState } from 'react'
-import { useParams, useNavigate, Link } from 'react-router-dom'
+import { useParams, useNavigate, Link , useLocation} from 'react-router-dom'
 import {
   User,
   Star,
@@ -126,12 +126,13 @@ const mountBrandToContainer = (containerId, brand) => {
 }
 
 /* ---------------- PaymentPanel (right) - uses separate Stripe elements ---------------- */
-const PaymentPanel = ({ trainer, selectedMethod, onPaymentSuccess, onPaymentError }) => {
+const PaymentPanel = ({ trainer, selectedMethod, onPaymentSuccess, onPaymentError, bookingDetails }) => {
   const stripe = useStripe()
   const elements = useElements()
   const [loading, setLoading] = useState(false)
   const [studentName, setStudentName] = useState('')
   const [cardError, setCardError] = useState('')
+  const finalPrice = bookingDetails?.price || trainer.profile?.hourlyRate || 25
 
   useEffect(() => {
     injectCssOnce()
@@ -263,7 +264,8 @@ const PaymentPanel = ({ trainer, selectedMethod, onPaymentSuccess, onPaymentErro
         trainerId: trainer?._id || trainer?.id,
         studentName,
         paymentMethod: 'fake',
-        amount: 0
+        amount: finalPrice, 
+        bookingType: bookingDetails?.type || 'paid',
       };
 
       console.log("Payload being sent:", payload);
@@ -280,7 +282,7 @@ const PaymentPanel = ({ trainer, selectedMethod, onPaymentSuccess, onPaymentErro
         ...bookingResponse.data,
         paymentDetails: {
           paymentId: 'FREE-BOOKING',
-          amount: 0,
+          amount: finalPrice,
           currency: 'usd',
           status: 'succeeded'
         }
@@ -309,7 +311,7 @@ const PaymentPanel = ({ trainer, selectedMethod, onPaymentSuccess, onPaymentErro
           <div style={{ textAlign: 'right' }}>
             <div className="small-muted">Total</div>
             <div style={{ fontWeight: 800, fontSize: 20, color: 'var(--brand-#9787F3)' }}>
-              ${trainer.profile?.hourlyRate || 25}
+              ${finalPrice}
             </div>
           </div>
         </div>
@@ -383,7 +385,7 @@ const PaymentPanel = ({ trainer, selectedMethod, onPaymentSuccess, onPaymentErro
 
         <div style={{ marginTop: 16, display: 'flex', gap: 12 }}>
           <button type="submit" disabled={loading || (selectedMethod === 'card' && !stripe)} className="btn-primary" style={{ flex: 1 }}>
-            {loading ? 'Processing…' : selectedMethod === 'card' ? `Pay $${trainer.profile?.hourlyRate || 25}` : `Complete Demo $${trainer.profile?.hourlyRate || 25}`}
+            {loading ? 'Processing…' : selectedMethod === 'card' ? `Pay $${finalPrice}` : `Complete Demo $${finalPrice}`}
           </button>
         </div>
 
@@ -406,6 +408,16 @@ const BookingPage = () => {
   const [success, setSuccess] = useState(false)
   const [booking, setBooking] = useState(null)
   const [selectedMethod, setSelectedMethod] = useState('card') // 'card' or 'demo'
+  const location = useLocation() 
+  const bookingDetails = location.state || {}
+
+  const sessionTitle = bookingDetails.type === 'group' 
+    ? `Group Class: ${bookingDetails.title}` 
+    : bookingDetails.duration 
+      ? `${bookingDetails.duration} Min Private Session` 
+      : 'Private Session';
+      
+  const finalPrice = bookingDetails.price || trainer?.profile?.hourlyRate || 25;
 
   useEffect(() => {
     injectCssOnce()
@@ -598,8 +610,12 @@ const BookingPage = () => {
 
                 <div className="card " style={{ marginTop: 12 }}>
                   <div className='mt-6 bg-gradient-to-r from-orange-50 to-pink-50 rounded-2xl px-6 py-4 flex justify-between items-center' style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div className='font-semibold text-gray-800' >Session Rate</div>
-                    <div className='text-xl font-bold text-orange-500'>${trainer.profile?.hourlyRate || 25}/hour</div>
+                    <div className='font-semibold text-gray-800' >{sessionTitle}</div>
+                    {bookingDetails.date && (
+                           <div className='text-sm text-gray-600 mt-1'>
+                             {new Date(bookingDetails.date).toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit' })}
+                           </div>
+                        )}
                   </div>
                 </div>
               </div>
@@ -664,6 +680,7 @@ const BookingPage = () => {
                     selectedMethod={selectedMethod}
                     onPaymentSuccess={handlePaymentSuccess}
                     onPaymentError={handlePaymentError}
+                    bookingDetails={bookingDetails}
                   />
                 </Elements>
               </div>

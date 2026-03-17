@@ -4,7 +4,7 @@ import { Routes, Route, Link, useLocation } from "react-router-dom";
 import { Home, Calendar, User, Menu, Bell } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
 
-import logo from "../../assets/logo2.png";
+import logo from "../../assets/newlogo2.png";
 
 import StudentHome from "./StudentHome";
 import StudentLanding from "./StudentLanding";

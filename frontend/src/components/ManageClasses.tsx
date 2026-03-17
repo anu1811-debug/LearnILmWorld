@@ -95,7 +95,7 @@ const ManageClasses = () => {
               onChange={(e) => setDurationMinutes(Number(e.target.value))}
               className="input-field w-full"
             >
-              <option value={30}>30 Minutes</option>
+              {/* <option value={30}>30 Minutes</option> */}
               <option value={60}>60 Minutes</option>
               <option value={90}>90 Minutes</option>
             </select>

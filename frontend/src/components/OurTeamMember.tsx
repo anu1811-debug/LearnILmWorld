@@ -17,7 +17,7 @@ const teamMembers = [
   {
     id: 2,
     name: "Prateek Patil",
-    role: "Head of Product",
+    role: "Product Head",
     bio: "Oversees platform development and ensures smooth technical performance.",
     imageUrl: img2,
     linkedin: "https://www.linkedin.com/in/prateekmpatil"

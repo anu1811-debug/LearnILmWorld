@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Calendar, Users, Clock, Star, Dot } from 'lucide-react';
+import Price from './Price';
 
 const BookGroupSession = ({ trainerId }: { trainerId: string }) => {
   const navigate = useNavigate();
@@ -29,13 +30,18 @@ const BookGroupSession = ({ trainerId }: { trainerId: string }) => {
       alert("Sorry, this class is full!");
       return;
     }
-    navigate('/payment', {
+    
+    const duration = groupClass.durationMinutes;
+    const adminRate = groupClass.teacherId?.profile?.groupSessionRate?.[duration];
+    const finalPrice = adminRate !== undefined ? adminRate : groupClass.price;
+    navigate(`/book/${trainerId}`, {
       state: { 
         trainerId, 
         classId: groupClass._id, 
         type: 'group', 
         title: groupClass.title, 
-        date: groupClass.startTime 
+        date: groupClass.startTime ,
+        price: finalPrice
       }
     });
   };

@@ -50,10 +50,16 @@ const StepFinal: React.FC<Props> = ({
 
     // PASSWORD VALIDATION
     if (!formData.password) {
-      newErrors.password = "Password is required"
-    } else if (formData.password.length < 8) {
-      newErrors.password = "Password must be at least 8 characters long"
+    newErrors.password = "Password is required";
+    } else {
+    const strongRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+    
+    if (!strongRegex.test(formData.password)) {
+    newErrors.password =
+      "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character.";
     }
+}
 
     // CONFIRM PASSWORD VALIDATION
     if (formData.password !== formData.confirmPassword) {

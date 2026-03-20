@@ -15,7 +15,6 @@ interface PrivateSessionRates {
 }
 
 interface GroupSessionRates {
-	60: number | string;
 	90: number | string;
 }
 
@@ -77,7 +76,7 @@ const AdminUsers: React.FC = () => {
 			},
 			resume: "",
 			privateSessionRate: { 30: 25, 60: 45, 90: 65 },
-			groupSessionRate: { 60: 15, 90: 25 }
+			groupSessionRate: {  90: 25 }
 		},
 	})
 
@@ -604,15 +603,7 @@ const AdminUsers: React.FC = () => {
 							<div className="col-span-1 md:col-span-4 p-3 border rounded-md bg-gray-50 mb-4">
 								<label className="font-semibold block mb-2">Group Session Rates ($)</label>
 								<div className="grid grid-cols-2 gap-4">
-									<div>
-										<label className="text-sm text-gray-600 block mb-1">60 Mins</label>
-										<input
-											type="number"
-											value={formData.profile.groupSessionRate?.[60] ?? ''}
-											onChange={(e) => handleGroupRateChange(60, e.target.value)}
-											className="p-2 border rounded-md w-full"
-										/>
-									</div>
+									
 									<div>
 										<label className="text-sm text-gray-600 block mb-1">90 Mins</label>
 										<input

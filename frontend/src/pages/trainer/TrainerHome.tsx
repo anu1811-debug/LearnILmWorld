@@ -73,16 +73,19 @@ const TrainerHome = () => {
       const bookings = bookingsRes.data || []
       const userData = userRes.data || {}
 
+      const totalCalculatedEarnings = bookings
+        .filter((b: any) => b.paymentStatus === "completed").reduce((sum: number, b: any) => sum + (Number(b.amount) || 0), 0)
+
       setStats({
         students: new Set(bookings.map((b: any) => b.student?._id)).size,
         rating: userData.stats?.rating || 5,
-        earnings: userData.stats?.totalEarnings || 0,
+        earnings: totalCalculatedEarnings ,
         totalSessions: sessions.length,
         upcoming: sessions.filter((s: any) => s.status === "scheduled").length,
         completed: sessions.filter((s: any) => s.status === "completed").length,
       })
-
-      setRecentBookings(bookings.slice(0, 5))
+      const completedBookings = bookings.filter((b: any) => b.paymentStatus === "completed");
+      setRecentBookings(completedBookings.slice(0, 5))
       setEarningsData(generateMonthlyData())
     } finally {
       setLoading(false)

@@ -39,11 +39,11 @@ const topTrainers = [
     pickRole: "language",
   },
   {
-    _id: "69a5595a3f85166805d591aa",
-    name: "kar",
+    _id: "69b7c806c409f3b76c0db217",
+    name: "Kartik",
     role: "trainer",
     profile: {
-      imageUrl: "", 
+      imageUrl: "trainers/profiles/1773652094598-pasted-image-1773652094594.jpg", 
       languages: [],
       subjects: ["Maths"],
       hobbies: [],
@@ -55,7 +55,7 @@ const topTrainers = [
   },
 ];
 
-const categories = ["All Subjects", "Languages", "Subject", "Hobbies"];
+const categories = ["All Trainers", "Languages", "Subject", "Hobbies"];
 
 const teachingFeatures = [
   {
@@ -82,7 +82,7 @@ const teachingFeatures = [
 
 const FeaturedSection = () => {
   const navigate = useNavigate();
-  const [activeCategory, setActiveCategory] = useState("All Subjects");
+  const [activeCategory, setActiveCategory] = useState("All Trainers");
   const [resolvedImages, setResolvedImages] = useState<Record<string, string>>({});
 
   useEffect(() => {
@@ -121,7 +121,7 @@ const FeaturedSection = () => {
 
   // Filter logic
   const filteredTrainers = topTrainers.filter(trainer => {
-    if (activeCategory === "All Subjects") return true;
+    if (activeCategory === "All Trainers") return true;
     if (activeCategory === "Languages" && trainer.pickRole === "language") return true;
     if (activeCategory === "Subject" && trainer.pickRole === "subject") return true;
     if (activeCategory === "Hobbies" && trainer.pickRole === "hobbies") return true;
@@ -142,7 +142,7 @@ const FeaturedSection = () => {
           </h1>
           
           <p className="text-lg md:text-xl text-blue-50 mb-8 max-w-2xl">
-            Watch free Demo lessons from our expert instructors. No registration required, just click and learn!
+            Watch free Demo lessons from our expert instructors, just click and learn!
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-sm md:text-base font-medium">

@@ -9,7 +9,11 @@ const LANGUAGES = [
     { code: 'fr', name: 'French', flag: '🇫🇷' },
     { code: 'de', name: 'German', flag: '🇩🇪' },
     { code: 'it', name: 'Italian', flag: '🇮🇹' },
-    { code: 'jp', name: 'Japanese', flag: '🇯🇵' }
+    { code: 'jp', name: 'Japanese', flag: '🇯🇵' },
+    { code: 'hi', name: 'Hindi', flag: '🇮🇳' },
+    { code: 'sa', name: 'Sanskrit', flag: '🇮🇳' }, 
+    { code: 'mr', name: 'Marathi', flag: '🇮🇳' },
+    { code: 'bn', name: 'Bengali', flag: '🇮🇳' }
 ]
 
 // const COUNTRIES = [
@@ -61,7 +65,7 @@ const SUBJECTS = [
 
 
 const HOBBIES = [
-    'Dance', 'Singing', 'Guitar', 'Piano', 'Photography', 'Yoga', 'Fitness', 'Cooking', 'Drawing', 'Painting'
+    'Astrology','Dance', 'Singing', 'Guitar', 'Piano', 'Photography', 'Yoga', 'Fitness', 'Cooking', 'Drawing', 'Painting'
 ]
 
 

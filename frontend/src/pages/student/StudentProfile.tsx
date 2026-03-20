@@ -4,6 +4,7 @@ import { useAuth } from '../../contexts/AuthContext'
 import axios from 'axios'
 import { Camera, MapPin, User } from 'lucide-react'
 import PreferenceTab from './PreferenceTab'
+import SecurityTab from './SecurityTab'
 
 /* ---------- Types ---------- */
 type AnyObj = Record<string, any>
@@ -532,6 +533,9 @@ const [isEditingPhoto, setIsEditingPhoto] = useState(false)
       )}
       {activeTab === 'Preference' && (
 <PreferenceTab user={user} updateProfile={updateProfile} />
+)}
+    {activeTab === 'Security' && (
+   <SecurityTab />
 )}
     </div>
   )

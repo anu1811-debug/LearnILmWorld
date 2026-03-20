@@ -24,6 +24,12 @@ import {
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import french_st from "../assets/French_student1.jpeg";
+import high from "../assets/highlight.jpeg";
+import chemistry from "../assets/chemistry.jpeg";
+import bengali from "../assets/bengali.png";
+import sanskrit from "../assets/sanskrit.jpeg";
+import hindi from "../assets/hindi.png";
+import marathi from "../assets/marathi.png";
 import german_st from "../assets/German_student1.jpeg";
 import british_st from "../assets/British_student1.jpeg";
 import spanish_st from "../assets/Spanish_student1.jpeg";
@@ -44,6 +50,8 @@ import arab_flag from "../assets/arab_flag.jpeg";
 // import heroImage2 from '../assets/Hero_image2.jpg'
 
 import heroImage3 from "../assets/together child1.png";
+import astro from "../assets/astrology.jpeg"
+import astrology from "../assets/astrology.png"
 
 import math from "../assets/Maths_new.jpeg";
 import hist from "../assets/History_new.png";
@@ -131,6 +139,48 @@ export default function LandingPageAlt() {
     return () => clearTimeout(timer);
   }, [currentText, isDeleting, currentIndex]);
 
+  //Updated common code
+  const handleCommonClick = (itemName: string) => {
+  const formattedName = itemName.charAt(0).toUpperCase() + itemName.slice(1).toLowerCase();
+  const itemTrainerMap: Record<string, string> = {
+    Chemistry: "trainer_id_for_chemistry",
+    Hindi: "trainer_id_for_hindi",
+    Bengali: "trainer_id_for_bengali",
+    Marathi: "trainer_id_for_marathi", 
+    Sanskrit: "trainer_id_for_sanskrit", 
+    Astrology: "trainer_id_for_astrology", 
+  };
+
+  const trainerId = itemTrainerMap[formattedName];
+
+  if (!trainerId) {
+    alert(
+      "We are currently finalizing a top-tier expert for this. We believe in providing the best quality education, so we are taking a little extra time to find the perfect instructor."
+    );
+    return;
+  }
+  const languages = ['Sanskrit', 'Hindi', 'Marathi', 'Bengali'];
+  const subjects = ['Chemistry'];
+  const hobbies = ['Astrology'];
+
+  let targetUrl = "";
+  if (languages.includes(formattedName)) {
+    targetUrl = `/main?type=language&language=${encodeURIComponent(formattedName)}`;
+  } else if (subjects.includes(formattedName)) {
+    targetUrl = `/main?type=subject&subject=${encodeURIComponent(formattedName)}`;
+  } else if (hobbies.includes(formattedName)) {
+    targetUrl = `/main?type=hobby&hobby=${encodeURIComponent(formattedName)}`;
+  } else {
+    return; 
+  }
+  if (!user) {
+    localStorage.setItem("redirectAfterLogin", targetUrl);
+    navigate("/login");
+  } else {
+    navigate(targetUrl);
+  }
+};
+
   // languages
   const handleLanguageClick = async (language: any) => {
     const trainerMap: Record<string, string> = {
@@ -208,7 +258,7 @@ export default function LandingPageAlt() {
     const hobbyTrainerMap: Record<string, string> = {
       Painting: "trainer_id_painting",
       Dancing: "trainer_id_dancing",
-      Cooking: "trainer_id_cooking",
+      Cooking: "trainer_id_astrology",
       Photography: "68ef33d0cad95b62472f382a",
       Singing: "68ef33d0cad95b62472f382a",
       Fitness: "",
@@ -504,13 +554,13 @@ export default function LandingPageAlt() {
       ind: "02",
       icon: BookOpen,
       title: "Book a session",
-      desc: "One-click booking, instant calendar sync and secure payments.",
+      desc: "One-click booking, calendar and secure payments.",
     },
     {
       ind: "03",
       icon: Play,
       title: "Practice & improve",
-      desc: "Live lessons, role-plays, recordings and tailored homework.",
+      desc: "Live lessons and tailored homework.",
     },
     {
       ind: "04",
@@ -533,7 +583,7 @@ export default function LandingPageAlt() {
     },
     {
       icon: Star,
-      title: "Real outcomes",
+      title: "Real Outcomes",
       text: "Our curriculum is outcome-focused so you can see measurable improvement",
     },
   ];
@@ -549,7 +599,7 @@ export default function LandingPageAlt() {
     },
     {
       q: "How do payments work?",
-      a: "We use Stripe for secure checkout. Cards and Apple/Google Pay are accepted where available.",
+      a: "We use Razorpay for secure checkout. Cards and Apple/Google Pay are accepted where available.",
     },
     {
       q: "Can I reschedule or cancel?",
@@ -752,13 +802,13 @@ export default function LandingPageAlt() {
 
       {/* Language Levels Explanation */}
       {/*  bg-[#2D274B] */}
-      <section
+      {/* <section
         className="relative py-12 md:py-20 text-[#dc8d33]"
         aria-labelledby="sdil-courses"
       >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center"> */}
           {/* Heading */}
-          <motion.h2
+          {/* <motion.h2
             id="sdil-courses"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -770,10 +820,10 @@ export default function LandingPageAlt() {
             <span className="block text-[#5186cd] mt-2 md:mt-1 text-2xl md:text-5xl">
               Speak to the World with Confidence
             </span>
-          </motion.h2>
+          </motion.h2> */}
 
           {/* Subtitle */}
-          <motion.p
+          {/* <motion.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -782,17 +832,17 @@ export default function LandingPageAlt() {
           >
             Explore world languages guided by international certification standards.
             Learn from certified trainers across every level.
-          </motion.p>
+          </motion.p> */}
 
           {/* Tag */}
-          <div className="mt-6 flex justify-center">
+          {/* <div className="mt-6 flex justify-center">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border text-xs md:text-sm font-medium text-[#4B437C] shadow-sm">
               🌍 Languages & Levels
             </div>
-          </div>
+          </div> */}
 
           {/* CATEGORY OPTIONS */}
-          <div className="mt-8 md:mt-12 flex flex-wrap justify-center gap-2 md:gap-4">
+          {/* <div className="mt-8 md:mt-12 flex flex-wrap justify-center gap-2 md:gap-4">
             {[
               { key: "popular", label: "Popular" },
               { key: "asian", label: "Asian Languages" },
@@ -814,11 +864,11 @@ export default function LandingPageAlt() {
                 {cat.label}
               </button>
             ))}
-          </div>
+          </div> */}
 
           {/* Responsive Grid with Flags */}
           {/* LANGUAGE GRID (REPLACED CONTENT) */}
-          <div className="mt-8 md:mt-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-6 justify-center">
+          {/* <div className="mt-8 md:mt-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-6 justify-center">
             {(activeCategory === "more"
               ? [
                 { lang: "Thai", code: "th" },
@@ -859,9 +909,9 @@ export default function LandingPageAlt() {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
         {/* Modal for More Languages */}
-        {showMoreLanguages && (
+        {/* {showMoreLanguages && (
           <div
             className="fixed inset-0 flex items-center justify-center bg-black/60 z-50 p-4"
             onClick={() => setShowMoreLanguages(false)}
@@ -875,29 +925,27 @@ export default function LandingPageAlt() {
           border border-white/40
           max-h-[85vh] overflow-y-auto
         "
-            >
+            > */}
               {/* Close Button */}
-              <button
+              {/* <button
                 onClick={() => setShowMoreLanguages(false)}
                 className="absolute top-4 right-4 text-[#2D274B] hover:text-black text-xl md:text-2xl z-10"
               >
                 ✕
-              </button>
+              </button> */}
 
               {/* Title */}
-              <h3 className="text-2xl md:text-3xl font-bold text-[#2D274B] mb-6 pr-8">
+              {/* <h3 className="text-2xl md:text-3xl font-bold text-[#2D274B] mb-6 pr-8">
                 Explore More Languages
-              </h3>
+              </h3> */}
 
               {/* Languages Grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 md:gap-6 mt-6">
+              {/* <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 md:gap-6 mt-6">
                 {[
-                  { name: "Thai", flag: "th" },
-                  // { name: "Bengali", flag: "in" },
-                  { name: "Russian", flag: "ru" },
-                  { name: "Mandarin", flag: "cn" },
-                  // { name: "Swahili", flag: "ke" },
-                  { name: "Italian", flag: "it" },
+                  { name: "Thai", flag: "th" }, */}
+                  {/* { name: "Russian", flag: "ru" },
+                  { name: "Mandarin", flag: "cn" }, */}
+                  {/* { name: "Italian", flag: "it" },
                   { name: "Portuguese", flag: "pt" },
                   { name: "Korean", flag: "kr" },
                 ].map((lang, i) => (
@@ -929,14 +977,14 @@ export default function LandingPageAlt() {
             </div>
           </div>
         )}
-      </section>
+      </section> */}
 
       {/* Explore subjects section */}
       {/* bg-[#dc8d33] */}
-      <section className="relative py-12" aria-labelledby="sdil-subjects">
-        <div className="max-w-6xl mx-auto px-6 lg:px-8 text-center">
+      {/* <section className="relative py-12" aria-labelledby="sdil-subjects">
+        <div className="max-w-6xl mx-auto px-6 lg:px-8 text-center"> */}
           {/* Heading */}
-          <motion.h2
+          {/* <motion.h2
             id="sdil-subjects"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -945,10 +993,10 @@ export default function LandingPageAlt() {
             className="text-5xl md:text-5xl tracking-tight font-extrabold text-[#5186cd]"
           >
             Subjects You Can Explore
-          </motion.h2>
+          </motion.h2> */}
 
           {/* Subtitle */}
-          <motion.p
+          {/* <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -957,10 +1005,10 @@ export default function LandingPageAlt() {
           >
             Comprehensive courses across academic and <br /> professional
             subjects for holistic learning.
-          </motion.p>
+          </motion.p> */}
 
           {/* Grid Subjects */}
-          <motion.div
+          {/* <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
@@ -994,32 +1042,30 @@ export default function LandingPageAlt() {
                   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
                 }}
                 whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.98 }}
-                // Updated styling to match Hobbies: h-56, rounded-xl, overflow-hidden
-                className="group relative h-56 rounded-xl overflow-hidden shadow-sm border border-slate-200 hover:shadow-xl transition-all duration-300 cursor-pointer"
+                whileTap={{ scale: 0.98 }} */}
+                {/* className="group relative h-56 rounded-xl overflow-hidden shadow-sm border border-slate-200 hover:shadow-xl transition-all duration-300 cursor-pointer"
                 style={{
                   backgroundImage: `url(${subject.img})`,
-                  backgroundSize: "100% 100%",
-                  //backgroundSize: "cover",
-                  backgroundPosition: "center",
+                  backgroundSize: "100% 100%", */}
+                  {/* backgroundPosition: "center",
                 }}
                 onClick={() => handleSubjectClick(subject)}
-              >
+              > */}
                 {/* Overlay */}
-                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-all duration-300"></div>
+                {/* <div className="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-all duration-300"></div> */}
 
                 {/* Subject Name */}
-                <div
+                {/* <div
                   className={`absolute top-3 left-3 ${subject.isMore
                     ? "bg-[#5186cd] text-white"
                     : "bg-white/90 text-[#2D274B]"
                     } px-3 py-1 rounded-md font-bold text-lg shadow`}
                 >
                   {subject.name}
-                </div>
+                </div> */}
 
                 {/* More Overlay (Consistent with Hobbies) */}
-                {subject.isMore && (
+                {/* {subject.isMore && (
                   <div className="absolute inset-0 flex items-center justify-center text-white font-bold text-xl bg-black/40 opacity-0 group-hover:opacity-100 transition">
                     Explore More →
                   </div>
@@ -1027,17 +1073,17 @@ export default function LandingPageAlt() {
               </motion.div>
             ))}
           </motion.div>
-        </div>
+        </div> */}
 
         {/* Modal for More Subjects */}
-        {showMore && (
+        {/* {showMore && (
           <div
             className="fixed inset-0 flex items-center justify-center bg-black/50 z-50"
             onClick={() => setShowMore(false)}
           >
             <div
               className="rounded-3xl p-10 max-w-4xl w-[90%] relative shadow-2xl bg-gradient-to-br from-[#ffffff] via-[#f8f1ff] to-[#e9d8ff] border border-white/40"
-              onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
+              onClick={(e) => e.stopPropagation()} 
             >
               <button
                 onClick={() => setShowMore(false)}
@@ -1077,14 +1123,14 @@ export default function LandingPageAlt() {
             </div>
           </div>
         )}
-      </section>
+      </section> */}
 
       {/* Explore Hobbies Section */}
       {/* bg-[#2D274B] */}
-      <section className="relative py-12 " aria-labelledby="sdil-hobbies">
-        <div className="max-w-6xl mx-auto px-6 lg:px-8 text-center">
+      {/* <section className="relative py-12 " aria-labelledby="sdil-hobbies">
+        <div className="max-w-6xl mx-auto px-6 lg:px-8 text-center"> */}
           {/* Heading */}
-          <motion.h2
+          {/* <motion.h2
             id="sdil-hobbies"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -1093,10 +1139,10 @@ export default function LandingPageAlt() {
             className="text-5xl md:text-5xl  tracking-tight font-extrabold text-[#5186cd]"
           >
             Beyond Academics, Your Passion Awaits
-          </motion.h2>
+          </motion.h2> */}
 
           {/* Subtitle */}
-          <motion.p
+          {/* <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -1105,10 +1151,10 @@ export default function LandingPageAlt() {
           >
             Build creativity and skills with professional <br />
             Hobby / Passion trainers.
-          </motion.p>
+          </motion.p> */}
 
           {/* Grid Hobbies */}
-          <motion.div
+          {/* <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
@@ -1131,8 +1177,8 @@ export default function LandingPageAlt() {
                 img: "https://images.unsplash.com/photo-1558611848-73f7eb4001a1?auto=format&fit=crop&w=1200&q=100",
               },
               {
-                name: "Cooking",
-                img: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1200&q=100",
+                name: "Astrology",
+                img: astro,
               },
               {
                 name: "Singing",
@@ -1171,22 +1217,22 @@ export default function LandingPageAlt() {
                   backgroundPosition: "center",
                 }}
                 onClick={() => handleHobbyClick(hobby)}
-              >
+              > */}
                 {/* Overlay */}
-                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-all duration-300"></div>
+                {/* <div className="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-all duration-300"></div> */}
 
                 {/* Hobby Name */}
-                <div
+                {/* <div
                   className={`absolute top-3 left-3 ${hobby.isMore
                     ? "bg-[#5186cd] text-white"
                     : "bg-white/90 text-[#2D274B]"
                     } px-3 py-1 rounded-md font-bold text-lg shadow`}
                 >
                   {hobby.name}
-                </div>
+                </div> */}
 
                 {/* More Overlay */}
-                {hobby.isMore && (
+                {/* {hobby.isMore && (
                   <div className="absolute inset-0 flex items-center justify-center text-white font-bold text-xl bg-black/40 opacity-0 group-hover:opacity-100 transition">
                     Explore More →
                   </div>
@@ -1194,10 +1240,10 @@ export default function LandingPageAlt() {
               </motion.div>
             ))}
           </motion.div>
-        </div>
+        </div> */}
 
         {/* Modal for More Hobbies */}
-        {showMoreHobbies && (
+        {/* {showMoreHobbies && (
           <div
             className="fixed inset-0 flex items-center justify-center bg-black/50 z-50"
             onClick={() => setShowMoreHobbies(false)}
@@ -1210,25 +1256,25 @@ export default function LandingPageAlt() {
                 border border-white/40
               "
               onClick={(e) => e.stopPropagation()}
-            >
+            > */}
               {/* Close Button */}
-              <button
+              {/* <button
                 onClick={() => setShowMoreHobbies(false)}
                 className="absolute top-4 right-4 text-[#2D274B] hover:text-black text-2xl"
               >
                 ✕
-              </button>
+              </button> */}
 
               {/* Title */}
-              <h3 className="text-3xl font-bold text-[#2D274B] mb-6">
+              {/* <h3 className="text-3xl font-bold text-[#2D274B] mb-6">
                 Explore More Hobbies
-              </h3>
+              </h3> */}
 
               {/* Hobbies Grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
+              {/* <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
                 {[
                   { name: "Yoga", icon: "🧘‍♀️" },
-                  { name: "Knitting", icon: "🧶" },
+                  { name: "Swimming", icon: "🏊‍♂️" },
 
                   { name: "Guitar", icon: "🎸" },
                   { name: "Piano (Theory)", icon: "🎹" },
@@ -1272,24 +1318,103 @@ export default function LandingPageAlt() {
             </div>
           </div>
         )}
-      </section>
+      </section> */}
+
+      <section className="relative py-12 " aria-labelledby="sdil-languages">
+  <div className="max-w-6xl mx-auto px-6 lg:px-8 text-center">
+    
+    {/* Heading: Image ke text ke according update kiya gaya hai */}
+    <motion.h2
+      id="sdil-languages"
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7 }}
+      viewport={{ once: true }}
+      className="text-4xl md:text-5xl tracking-tight font-extrabold text-[#5186cd]"
+    >
+      Learn Languages, Subjects, and Skills for Your Future
+    </motion.h2>
+
+    {/* Subtitle: Image ke chote text ke according */}
+    <motion.p
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, delay: 0.2 }}
+      viewport={{ once: true }}
+      className="mt-5 text-lg text-slate-600 font-medium max-w-3xl mx-auto leading-relaxed"
+    >
+      Explore world languages and subjects guided by international certification standards. <br />
+      Learn from certified trainers across every level.
+    </motion.p>
+
+    {/* Grid: 6 items based on the image */}
+    <motion.div
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
+      variants={{
+        hidden: { opacity: 0 },
+        visible: {
+          opacity: 1,
+          transition: { staggerChildren: 0.2, delayChildren: 0.2 },
+        },
+      }}
+      className="mt-16 grid gap-6 sm:grid-cols-2 md:grid-cols-3"
+    >
+      {[
+        { name: "SANSKRIT", img: sanskrit },
+        { name: "HINDI", img: hindi },
+        { name: "MARATHI", img: marathi },
+        { name: "BENGALI", img: bengali },
+        { name: "CHEMISTY", img: chemistry },
+        { name: "ASTROLOGY", img: astrology },
+      ].map((item, idx) => (
+        <motion.div
+          key={idx}
+          variants={{
+            hidden: { opacity: 0, y: 30 },
+            visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+          }}
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.98 }}
+          className="group relative h-64 rounded-xl overflow-hidden shadow-md border border-slate-200 cursor-pointer"
+          style={{
+            backgroundImage: `url(${item.img})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+          onClick={() => handleCommonClick(item.name)}
+        >
+          {/* Dark Overlay taaki text clear dikhe */}
+          <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-all duration-300"></div>
+          <div
+            className="absolute top-4 left-4 bg-white/90 text-[#2D274B] px-4 py-1.5 rounded-md font-bold text-sm shadow-lg"
+          >
+            {item.name}
+          </div>
+        </motion.div>
+      ))}
+    </motion.div>
+  </div>
+</section>
 
       {/* top trainer section */}
       <TopTrainers />
 
       {/* Why learners love us section */}
       {/* bg-[#2D274B] */}
-      <section className="py-24 ">
+      <section className="py-12 ">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
 
           {/* HEADING */}
           <div className="text-center">
-            <h3 className="text-4xl lg:text-5xl font-extrabold text-[#173b86]">
+            <h3 className="text-4xl lg:text-5xl font-extrabold text-[#5186cd]">
               Why Learners love LearniLM🌍World
             </h3>
 
             {/* SUBTITLE */}
-            <div className="mt-6 inline-block bg-gradient-to-r from-[#5b78b8] to-[#3a5aa5] text-white px-10 py-4 rounded-xl shadow-lg max-w-3xl">
+            {/* bg-gradient-to-b from-[#294cae] to-[#1E3A8A] */}
+            <div className="mt-6 inline-block  text-[#024aac] bg-white border-2 border-black/20 px-10 py-4 rounded-xl shadow-lg w-full">
               <p className="text-base lg:text-lg font-semibold">
                 Short lessons, lots of speaking time and tutors focused on practical
                 outcome. Learn phrases you’ll use the very next day.
@@ -1298,20 +1423,23 @@ export default function LandingPageAlt() {
           </div>
 
           {/* FEATURE CARDS */}
-          <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-10">
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-10">
 
             {features.map((f, idx) => (
+              // bg-gradient-to-b from-[#294cae] to-[#1E3A8A] text-white
               <div
                 key={idx}
-                className="bg-gradient-to-b from-[#8aa0cc] to-[#193c87] text-white 
+                className="text-[#024aac] bg-white border-2 border-black/20 
           rounded-tl-[40px] rounded-br-[40px]
           p-8 shadow-xl hover:scale-[1.04] transition-transform duration-300"
               >
+                <div className="flex items-center gap-3">
 
+                
                 {/* ICON */}
                 <div className="w-12 h-12 flex items-center justify-center mb-3 bg-white/10 rounded-full backdrop-blur-sm">
                   <f.icon
-                    className={`w-8 h-8 text-white ${f.icon === Clock ? "stroke-[2.5]" : "fill-white stroke-none"
+                    className={`w-8 h-8 text-[#024aac] ${f.icon === Clock ? "stroke-[2.5]" : "fill-[#024aac] stroke-none"
                       }`}
                   />
                 </div>
@@ -1320,7 +1448,7 @@ export default function LandingPageAlt() {
                 <h4 className="text-xl font-bold mb-3">
                   {f.title}
                 </h4>
-
+</div>
                 {/* TEXT */}
                 <p className="text-lg opacity-90 leading-relaxed">
                   {f.text}
@@ -1332,13 +1460,13 @@ export default function LandingPageAlt() {
           </div>
 
           {/* BOTTOM BUTTON TAGS */}
-          <div className="mt-16 flex flex-col sm:flex-row justify-center gap-10">
-
-            <div className="bg-[#3e5fa8] text-white px-16 py-4 rounded-full text-lg font-semibold shadow-lg text-center hover:scale-105 transition">
+          <div className="mt-8 flex flex-col sm:flex-row justify-center gap-10">
+            {/* bg-[#024aac] text-white */}
+            <div className=" text-[#024aac] bg-white border-2 border-black/20 px-16 py-4 rounded-full text-lg font-semibold shadow-lg text-center hover:scale-105 transition">
               Quick lessons
             </div>
 
-            <div className="bg-[#3e5fa8] text-white px-16 py-4 rounded-full text-lg font-semibold shadow-lg text-center hover:scale-105 transition">
+            <div className="text-[#024aac] bg-white border-2 border-black/20 px-16 py-4 rounded-full text-lg font-semibold shadow-lg text-center hover:scale-105 transition">
               Excellent Material
             </div>
 
@@ -1349,7 +1477,7 @@ export default function LandingPageAlt() {
 
       {/* Highlights Section */}
       <section
-        className="relative py-24  text-white"
+        className="relative py-12  text-white"
         aria-labelledby="sdil-highlights"
       >
         <div className="max-w-6xl mx-auto px-6 lg:px-8">
@@ -1360,7 +1488,7 @@ export default function LandingPageAlt() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl  text-[#5186cd] tracking-tight text-center"
+            className="text-4xl md:text-5xl  text-[#5186cd] font-extrabold text-center"
           >
             Highlights of LearniLM 🌎 World
           </motion.h2>
@@ -1383,14 +1511,15 @@ export default function LandingPageAlt() {
             <motion.div
               initial={{ opacity: 0, x: -40 }}
               whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.2 }}
               viewport={{ once: true }}
-              className="flex justify-center"
+              // whileHover={{ scale: 1.05 }}
+              className="flex justify-center "
             >
               <img
-                src="https://tse1.mm.bing.net/th/id/OIP.wDczP_2HXmI-762eR-rEoQHaHa?w=612&h=612&rs=1&pid=ImgDetMain&o=7&rm=3"
+                src={high}
                 alt="Learning Highlights"
-                className="rounded-2xl shadow-md max-w-sm w-full object-cover"
+                className="rounded-2xl border-t border-black/20 shadow-[0_-2px_4px_rgba(0,0,0,0.06)] object- w-full"
               />
             </motion.div>
 
@@ -1427,13 +1556,14 @@ export default function LandingPageAlt() {
                 <motion.div
                   key={idx}
                   whileHover={{ scale: 1.05 }}
-                  className="p-6 bg-[#5186cd] rounded-2xl border border-white/20 hover:border-[#dc8d33] transition"
+                  // [#6f9bd3]
+                  className="p-6 bg-white text-black rounded-2xl border-2 border-black/20 hover:border-[#024AAC]/50 transition"
                 >
                   <div className="text-5xl mb-3">{feature.icon}</div>
-                  <h4 className="text-lg font-semibold text-[#e0fa84]">
+                  <h4 className="text-lg font-semibold ">
                     {feature.title}
                   </h4>
-                  <p className="mt-2 text-white text-sm leading-relaxed">
+                  <p className="mt-2  text-sm leading-relaxed">
                     {feature.desc}
                   </p>
                 </motion.div>
@@ -1461,7 +1591,7 @@ export default function LandingPageAlt() {
           <div className="text-center mb-12">
             <h2
               id="how-it-works"
-              className="text-4xl font-bold md:text-4xl  text-[#5186cd]"
+              className="text-4xl font-extrabold md:text-4xl  text-[#5186cd]"
             >
               How it works — in 4 simple steps
             </h2>
@@ -1475,7 +1605,7 @@ export default function LandingPageAlt() {
               <motion.div
                 key={i}
                 whileHover={{ y: -6 }}
-                className="bg-gradient-to-b from-[#f0fdf4] to-white rounded-3xl px-6 relative py-12 border-2 border-sky-800 shadow hover:shadow-xl transition overflow-hidden"
+                className="bg-gradient-to-b from-[#eff5fc] to-white rounded-3xl px-6 relative py-12 border-2 border-sky-800 shadow hover:shadow-xl transition overflow-hidden"
                 role="article"
               >
                 <div className="absolute  w-28 h-28 -top-9 -left-9 ">

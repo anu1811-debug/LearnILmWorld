@@ -3,7 +3,6 @@ import { useState, useEffect, ChangeEvent } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import ReactFlagsSelect from "react-flags-select";
 import axios from "axios";
-import ManageClasses from "../../components/ManageClasses";
 //  commented out trainers hourly rate
 
 // const FRONTEND_URL= import.meta.env.VITE_FRONTEND_URL;
@@ -1355,9 +1354,7 @@ const TrainerProfile = () => {
             </button>
           </div>
         </form>
-        <div className="mt-12 pt-8 border-t border-gray-200">
-          <ManageClasses />
-        </div>
+        
       </div>
     </div>
   );

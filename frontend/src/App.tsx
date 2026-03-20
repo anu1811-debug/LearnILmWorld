@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
-import { StripeProvider } from './contexts/StripeContext'
+// import { StripeProvider } from './contexts/StripeContext'
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
 // Components
@@ -37,7 +37,7 @@ function App() {
   return (
 
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-      <StripeProvider>
+      {/* <StripeProvider> */}
         <AuthProvider>
           <CurrencyProvider>
             <Router>
@@ -111,7 +111,7 @@ function App() {
             </Router>
           </CurrencyProvider>
         </AuthProvider>
-      </StripeProvider>
+      {/* </StripeProvider> */}
     </GoogleOAuthProvider>
   );
 }

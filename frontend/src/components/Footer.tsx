@@ -12,7 +12,7 @@ const Footer = () => (
         {/* {new Date().getFullYear()} */}
         {/* <div className="text-lg text-slate-300 mt-2 ">© 2025 LearniLM🌎World — All rights reserved</div> */}
 
-        <div className="text-sm text-slate-300 mt-2 ">Learnilmworld helps students learn languages, skills and hobbies through experts for the modern world</div>
+        <div className="text-sm text-slate-300 mt-2 ">LearniLMWorld helps students learn languages, skills and hobbies through experts for the modern world</div>
         {/* phone */}
         <div className="text-xl text-slate-300 mt-4"> 
           Phone:{' '}

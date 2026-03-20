@@ -1,305 +1,110 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Plus, Users, User, X, Video, StopCircle } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Calendar, Clock, User as UserIcon, BookOpen, Mail } from 'lucide-react';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-/* ---------- TrainerStudents ---------- */
 const TrainerStudents = () => {
-  const navigate = useNavigate();
-
   const [bookings, setBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const [selectedBookings, setSelectedBookings] = useState<string[]>([]);
-  const [creating, setCreating] = useState(false);
-
-  const [sessionData, setSessionData] = useState({
-    title: "",
-    description: "",
-    duration: 60,
-    language: "",
-    level: "beginner",
-    scheduledDate: "",
-    scheduledTime: "",
-  });
 
   useEffect(() => {
-    fetchBookings();
+    const fetchStudents = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+
+        // Fetching bookings for the logged-in trainer
+        const res = await axios.get(`${API_BASE_URL}/api/bookings/trainer-bookings`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setBookings(res.data);
+      } catch (error) {
+        console.error("Error fetching students:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStudents();
   }, []);
 
-  /* ---------- Fetch Bookings ---------- */
-  const fetchBookings = async () => {
-    try {
-      const res = await axios.get(
-        `${API_BASE_URL}/api/bookings/trainer-bookings`
-      );
-      setBookings(
-        Array.isArray(res.data)
-          ? res.data.filter((b) => b.paymentStatus === "completed")
-          : []
-      );
-    } catch (err) {
-      console.error("Failed to fetch bookings:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  /* ---------- Create Session (ZEGO room created on backend) ---------- */
-  const handleCreateSession = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (selectedBookings.length === 0) {
-      alert("Please select at least one student");
-      return;
-    }
-
-    try {
-      setCreating(true);
-
-      const scheduledDateTime = new Date(
-        `${sessionData.scheduledDate}T${sessionData.scheduledTime}`
-      );
-
-      await axios.post(`${API_BASE_URL}/api/sessions`, {
-        ...sessionData,
-        bookingIds: selectedBookings,
-        scheduledDate: scheduledDateTime.toISOString(),
-      });
-
-      setShowCreateModal(false);
-      setSelectedBookings([]);
-      setSessionData({
-        title: "",
-        description: "",
-        duration: 60,
-        language: "",
-        level: "beginner",
-        scheduledDate: "",
-        scheduledTime: "",
-      });
-
-      fetchBookings();
-    } catch (err) {
-      console.error("Failed to create session:", err);
-      alert("Failed to create session");
-    } finally {
-      setCreating(false);
-    }
-  };
-
-  /* ---------- Trainer joins ZEGO as HOST ---------- */
-  const handleJoinSession = async (sessionId: string) => {
-    navigate(`/session/${sessionId}`);
-  };
-
-  /* ---------- Trainer ends session ---------- */
-  const handleEndSession = async (sessionId: string) => {
-    const confirm = window.confirm("End this session for all participants?");
-    if (!confirm) return;
-
-    try {
-      await axios.post(
-        `${API_BASE_URL}/api/sessions/${sessionId}/end`
-      );
-      fetchBookings();
-    } catch (err) {
-      console.error("Failed to end session:", err);
-      alert("Failed to end session");
-    }
-  };
-
-  const toggleBookingSelection = (bookingId: string) => {
-    setSelectedBookings((prev) =>
-      prev.includes(bookingId)
-        ? prev.filter((id) => id !== bookingId)
-        : [...prev, bookingId]
-    );
-  };
-
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="loading-dots">
-          <div></div><div></div><div></div><div></div>
-        </div>
-      </div>
-    );
+    return <div className="p-8 text-center text-gray-500 font-medium">Loading student data...</div>;
   }
 
   return (
-    <div className="space-y-8 max-w-[1200px] mx-auto p-6">
-      <div className="rounded-2xl p-8 bg-white shadow-lg border border-gray-100">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-3xl font-bold text-[#2D274B]">My Students</h2>
-          <button
-            onClick={() => setShowCreateModal(true)}
-            className="flex items-center px-5 py-2 rounded-xl bg-[#3B3361] text-[#CBE56A] font-medium hover:bg-[#CBE56A] hover:text-[#2D274B]"
-          >
-            <Plus className="h-5 w-5 mr-2" /> Create Session
-          </button>
+    <div className="max-w-4xl mx-auto p-4 sm:p-6 font-sans">
+      <h2 className="text-2xl font-bold text-gray-800 mb-6">Upcoming Classes</h2>
+
+      {bookings.length === 0 ? (
+        <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center text-gray-500">
+          No class is booked by any student yet.
         </div>
+      ) : (
+        <div className="space-y-4">
+          {bookings.map((booking) => {
+                        const sessionDate = booking.date ? new Date(booking.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) : 'Date Pending';
+            const sessionTime = booking.time ? new Date(booking.time).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }) : '';
 
-        {/* Student List */}
-        {bookings.length > 0 ? (
-          <div className="space-y-4">
-            {bookings.map((booking: any) => {
-              const session = booking.session;
+            return (
+              <div key={booking._id} className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 transition hover:shadow-md">
 
-              return (
-                <div
-                  key={booking._id || booking.id}
-                  className="p-6 bg-white rounded-xl flex justify-between border"
-                >
-                  <div className="flex items-center">
-                    <div className="w-10 h-10 bg-[#9787F3] rounded-lg flex items-center justify-center mr-4">
-                      <User className="h-5 w-5 text-white" />
-                    </div>
-
-                    <div>
-                      <div className="font-bold text-[#2D274B]">
-                        {booking.student?.name}
-                      </div>
-                      <div className="text-sm text-gray-600">
-                        {booking.student?.email}
-                      </div>
-                    </div>
+                {/* Student Name */}
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-[#f0f5fb] text-[#7fa2ce] flex items-center justify-center shrink-0">
+                    <UserIcon size={24} strokeWidth={2} />
                   </div>
-
-                  <div className="text-right space-y-2">
-                    {session ? (
-                      <>
-                        <div className="text-xs font-semibold px-3 py-1 rounded-full bg-green-100 text-green-800">
-                          SESSION READY
-                        </div>
-
-                        <div className="flex gap-2 justify-end">
-                          <button
-                            onClick={() => handleJoinSession(session._id)}
-                            className="flex items-center gap-1 px-3 py-1.5 bg-[#9787F3] text-white rounded-md text-sm"
-                          >
-                            <Video className="h-4 w-4" /> Start
-                          </button>
-
-                          <button
-                            onClick={() => handleEndSession(session._id)}
-                            className="flex items-center gap-1 px-3 py-1.5 bg-red-500 text-white rounded-md text-sm"
-                          >
-                            <StopCircle className="h-4 w-4" /> End
-                          </button>
-                        </div>
-                      </>
-                    ) : (
-                      <label className="flex items-center justify-end gap-2">
-                        <input
-                          type="checkbox"
-                          checked={selectedBookings.includes(
-                            booking._id || booking.id
-                          )}
-                          onChange={() =>
-                            toggleBookingSelection(
-                              booking._id || booking.id
-                            )
-                          }
-                          className="accent-[#3B3361]"
-                        />
-                        <span className="text-sm text-gray-600">
-                          Select
-                        </span>
-                      </label>
-                    )}
+                  <div>
+                    <p className="text-xs text-gray-400 font-medium mb-0.5">Student Name</p>
+                    <p className="text-[17px] font-bold text-gray-800">
+                      {booking.studentName || booking.student?.name || 'Unknown'}
+                    </p>
                   </div>
                 </div>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="text-center py-12">
-            <Users className="mx-auto h-8 w-8 text-gray-400" />
-            <p className="mt-2 text-gray-600">No students yet</p>
-          </div>
-        )}
-      </div>
+                {/* student email */}
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-[#f0f5fb] text-[#7fa2ce] flex items-center justify-center shrink-0">
+                    <Mail size={24} strokeWidth={2} />
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-400 font-medium mb-0.5">Student Email</p>
+                    <p className="text-[17px] font-bold text-gray-800">
+                      {booking.studentEmail ||  'Unknown'}
+                    </p>
+                  </div>
+                </div>
 
-      {/* Create Session Modal */}
-      {showCreateModal && (
-        <div
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
-          onClick={() => !creating && setShowCreateModal(false)}
-        >
-          <div
-            className="bg-white rounded-2xl p-8 max-w-2xl w-full relative"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Header */}
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-bold">Create Session</h3>
+                {/* Class Type */}
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-full bg-orange-50 text-orange-500 flex items-center justify-center shrink-0">
+                    <BookOpen size={16} />
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-400 font-medium mb-0.5">Session</p>
+                    <p className="text-sm font-semibold text-gray-700 capitalize">
+                      {booking.bookingType || 'Private'} Class
+                    </p>
+                  </div>
+                </div>
 
-              <button
-                type="button"
-                disabled={creating}
-                onClick={() => setShowCreateModal(false)}
-                className="p-2 rounded-full hover:bg-gray-100"
-              >
-                <X className="h-5 w-5 text-gray-600" />
-              </button>
-            </div>
+                {/*Time & Duration */}
+                <div className="flex flex-col gap-1 bg-gray-50 px-4 py-2.5 rounded-xl border border-gray-100 min-w-[160px]">
+                  <div className="flex items-center gap-2 text-gray-700">
+                    <Calendar size={14} className="text-[#7fa2ce]" />
+                    <span className="text-sm font-bold">{sessionDate}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-gray-600">
+                    <Clock size={14} className="text-[#7fa2ce]" />
+                    <span className="text-[13px] font-medium">
+                      {sessionTime} {booking.duration ? `(${booking.duration} mins)` : ''}
+                    </span>
+                  </div>
+                </div>
 
-            <form onSubmit={handleCreateSession} className="space-y-4">
-              <input
-                required
-                placeholder="Session Title"
-                className="w-full border p-2 rounded"
-                value={sessionData.title}
-                onChange={(e) =>
-                  setSessionData({ ...sessionData, title: e.target.value })
-                }
-              />
-
-              <textarea
-                placeholder="Description"
-                className="w-full border p-2 rounded"
-                value={sessionData.description}
-                onChange={(e) =>
-                  setSessionData({ ...sessionData, description: e.target.value })
-                }
-              />
-
-              <div className="flex gap-2">
-                <input
-                  type="date"
-                  required
-                  className="border p-2 rounded w-1/2"
-                  onChange={(e) =>
-                    setSessionData({
-                      ...sessionData,
-                      scheduledDate: e.target.value,
-                    })
-                  }
-                />
-                <input
-                  type="time"
-                  required
-                  className="border p-2 rounded w-1/2"
-                  onChange={(e) =>
-                    setSessionData({
-                      ...sessionData,
-                      scheduledTime: e.target.value,
-                    })
-                  }
-                />
               </div>
-
-              <button
-                disabled={creating}
-                className="w-full bg-[#9787F3] text-white py-2 rounded"
-              >
-                {creating ? "Creating..." : "Create Session"}
-              </button>
-            </form>
-          </div>
+            );
+          })}
         </div>
       )}
     </div>

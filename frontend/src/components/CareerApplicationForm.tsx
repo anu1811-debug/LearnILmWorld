@@ -138,7 +138,7 @@ export default function CareerApplicationForm({ onClose }: Props) {
                     {/* Core Internship Roles */}
                     <option value="Full Stack Developer Intern">Full Stack Developer Intern</option>
                     <option value="UI/UX Design Intern">UI/UX Design Intern</option>
-                    <option value="Q/A Intern">Q/A Intern</option>
+                    <option value="Q/A Intern">QA Intern</option>
                     <option value="Digital Marketing Intern">Digital Marketing Intern</option>
                     <option value="Content Creator Intern">Content Creator Intern</option>
 

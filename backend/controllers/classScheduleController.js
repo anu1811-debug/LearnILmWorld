@@ -2,7 +2,7 @@ import User from '../models/User.js';
 import ClassSchedule from '../models/ClassSchedule.js';
 import mongoose from 'mongoose';
 import moment from 'moment-timezone'
-
+import Booking from '../models/Booking.js';
 
 export const getAvailableSlots = async (req, res) => {
   try {
@@ -34,19 +34,44 @@ export const getAvailableSlots = async (req, res) => {
     const workStartTime = workStartMoment.toDate(); 
     const workEndTime = workEndMoment.toDate();
 
-    const existingAppointments = await ClassSchedule.find({
+    const existingGroupClasses = await ClassSchedule.find({
       teacherId,
       startTime: { $gte: workStartMoment.startOf('day').toDate(), $lte: workStartMoment.endOf('day').toDate() },
       status: { $ne: 'cancelled' }
     }).sort({ startTime: 1 });
 
-    const blockedIntervals = existingAppointments.map(appt => {
+    const existingPrivateBookings = await Booking.find({
+      trainer: teacherId,
+      paymentStatus: 'completed', 
+      date: dateStr 
+    });
+
+    let blockedIntervals = [];
+
+    existingGroupClasses.forEach(appt => {
       const bufferedEndTime = new Date(appt.endTime);
-      bufferedEndTime.setMinutes(bufferedEndTime.getMinutes() + 30);  //break time
-      return {
+      bufferedEndTime.setMinutes(bufferedEndTime.getMinutes() + 30);  // break time
+      blockedIntervals.push({
         start: new Date(appt.startTime).getTime(),
         end: bufferedEndTime.getTime()
-      };
+      });
+    });
+
+    existingPrivateBookings.forEach(booking => {
+      // Kyunki private booking mein time aur date alag-alag strings hain (e.g., "14:30")
+      // Humein use combine karke date object banana padega
+      if (booking.time) {
+        // Assume format is like "14:30" or full ISO string depending on how frontend sends it
+        // Yahan hum safely ISO string assume kar rahe hain jo BookPrivateSession bhej raha tha
+        const bookingStart = new Date(booking.time);
+        const bookingEnd = new Date(bookingStart);
+        bookingEnd.setMinutes(bookingEnd.getMinutes() + (booking.duration || 60) + 30); // add duration + break
+
+        blockedIntervals.push({
+          start: bookingStart.getTime(),
+          end: bookingEnd.getTime()
+        });
+      }
     });
 
     const availableSlots = [];
@@ -151,7 +176,7 @@ export const createGroupClass = async (req, res) => {
       startTime: start,
       endTime: end,
       durationMinutes,
-      maxParticipants: 4, 
+      maxParticipants: 3, 
       enrolledStudents: [] 
     });
 

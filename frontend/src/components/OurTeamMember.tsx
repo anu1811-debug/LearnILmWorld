@@ -52,45 +52,54 @@ const OurTeamMember = () => {
 
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 justify-items-center">
-          {teamMembers.map((member) => (
-            <Link
-              to={member.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full max-w-[350px]"
-            >
-              <div
-                key={member.id}
-                className="bg-white rounded-[2rem] shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden flex flex-col items-center w-full max-w-[350px]"
-              >
-                {/* Image Container */}
-                <div className="w-full h-[300px] overflow-hidden relative">
-                  <img
-                    src={member.imageUrl}
-                    alt={member.role}
-                    className={`w-full h-full ${member.id === 4
-                      ? "object-contain bg-white p-2"
-                      : "object-cover object-top"
-                      }`}
-                  />
-                </div>
+          {teamMembers.map((member) => {
+  const CardContent = (
+    <div
+      key={member.id}
+      className="bg-white rounded-[2rem] shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden flex flex-col items-center w-full max-w-[350px]"
+    >
+      {/* Image */}
+      <div className="w-full h-[300px] overflow-hidden relative">
+        <img
+          src={member.imageUrl}
+          alt={member.role}
+          className={`w-full h-full ${
+            member.id === 4
+              ? "object-contain bg-white p-2"
+              : "object-cover object-top"
+          }`}
+        />
+      </div>
 
-                {/* Text Content */}
-                <div className="p-8 text-center flex flex-col flex-grow">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-1">
-                    {member.name}
-                  </h3>
-                  <p className={`text-blue-500 font-bold text-sm ${member.id !== 4
-                    ? "uppercase" : ""} tracking-wider mb-4`}>
-                    {member.role}
-                  </p>
-                  {/* <p className="text-gray-500 text-sm leading-relaxed">
-                  {member.bio}
-                </p> */}
-                </div>
-              </div>
-            </Link>
-          ))}
+      {/* Text */}
+      <div className="p-8 text-center flex flex-col flex-grow">
+        <h3 className="text-2xl font-bold text-gray-900 mb-1">
+          {member.name}
+        </h3>
+        <p
+          className={`text-blue-500 font-bold text-sm ${
+            member.id !== 4 ? "uppercase" : ""
+          } tracking-wider mb-4`}
+        >
+          {member.role}
+        </p>
+      </div>
+    </div>
+  );
+
+  return member.id === 4 ? (
+    <div className="w-full max-w-[350px] cursor-not-allowed">{CardContent}</div>
+  ) : (
+    <Link
+      to={member.linkedin}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="w-full max-w-[350px]"
+    >
+      {CardContent}
+    </Link>
+  );
+})}
         </div>
       </div>
     </section>

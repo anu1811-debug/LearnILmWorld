@@ -8,6 +8,7 @@ const BookGroupSession = ({ trainerId }: { trainerId: string }) => {
   const navigate = useNavigate();
   const [classes, setClasses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  
 
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -31,7 +32,7 @@ const BookGroupSession = ({ trainerId }: { trainerId: string }) => {
       return;
     }
     
-    const duration = groupClass.durationMinutes;
+    const duration = 90;
     const adminRate = groupClass.teacherId?.profile?.groupSessionRate?.[duration];
     const finalPrice = adminRate !== undefined ? adminRate : groupClass.price;
     navigate(`/book/${trainerId}`, {
@@ -40,7 +41,9 @@ const BookGroupSession = ({ trainerId }: { trainerId: string }) => {
         classId: groupClass._id, 
         type: 'group', 
         title: groupClass.title, 
-        date: groupClass.startTime ,
+        date: groupClass.startTime, 
+        time: groupClass.startTime, 
+        duration: duration,
         price: finalPrice
       }
     });

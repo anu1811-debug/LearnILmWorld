@@ -67,7 +67,7 @@ const Navbar = ({ variant = "default" }: NavbarProps) => {
             <Link
               to="/about#about"
               onClick={() => handleScroll("about")}
-              className="text-lg font-medium text-[#203989] hover:text-black transition no-underline"
+              className="relative text-lg font-medium text-[#203989] transition-all duration-300 no-underline hover:text-black hover:-translate-y-1 after:content-[''] after:absolute after:left-0 after:bottom-[-4px] after:w-0 after:h-[2px] after:bg-[#024AAC] after:transition-all after:duration-300 hover:after:w-full"
             >
               About
             </Link>
@@ -75,7 +75,7 @@ const Navbar = ({ variant = "default" }: NavbarProps) => {
             <Link
               to="/careers"
               onClick={() => handleScroll("careers")}
-              className="text-lg font-medium text-[#203989] hover:text-black transition no-underline"
+              className="relative text-lg font-medium text-[#203989] transition-all duration-300 no-underline hover:text-black hover:-translate-y-1 after:content-[''] after:absolute after:left-0 after:bottom-[-4px] after:w-0 after:h-[2px] after:bg-[#024AAC] after:transition-all after:duration-300 hover:after:w-full"
             >
               Careers
             </Link>
@@ -87,7 +87,7 @@ const Navbar = ({ variant = "default" }: NavbarProps) => {
                     logout();
                     navigate("/login");
                   }}
-                  className="text-lg font-medium text-[#203989] hover:text-black transition"
+                  className="relative text-lg font-medium text-[#203989] transition-all duration-300 no-underline hover:text-black hover:-translate-y-1 after:content-[''] after:absolute after:left-0 after:bottom-[-4px] after:w-0 after:h-[2px] after:bg-[#024AAC] after:transition-all after:duration-300 hover:after:w-full"
                 >
                   Log Out
                 </button>
@@ -103,7 +103,7 @@ const Navbar = ({ variant = "default" }: NavbarProps) => {
               <div className="flex items-center gap-6">
                 <Link
                   to="/login"
-                  className="text-lg font-medium text-[#203989] hover:text-black transition"
+                  className="relative text-lg font-medium text-[#203989] transition-all duration-300 no-underline hover:text-black hover:-translate-y-1 after:content-[''] after:absolute after:left-0 after:bottom-[-4px] after:w-0 after:h-[2px] after:bg-[#024AAC] after:transition-all after:duration-300 hover:after:w-full"
                 >
                   Sign In
                 </Link>

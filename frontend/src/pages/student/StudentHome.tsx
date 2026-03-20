@@ -110,7 +110,7 @@ const StudentHome: React.FC = () => {
           <p className="text-3xl font-semibold text-gray-900 mt-2">
             {stats.completedSessions ?? 0}
           </p>
-          <p className="text-xs text-green-600 font-medium mt-1">
+          <p className="text-xs text-blue-500 font-medium mt-1">
             Successfully attended
           </p>
         </div>
@@ -132,7 +132,7 @@ const StudentHome: React.FC = () => {
           <p className="text-3xl font-semibold text-gray-900 mt-2">
             {stats.avgProgress ?? 0}%
           </p>
-          <p className="text-xs text-purple-600 font-medium mt-1">
+          <p className="text-xs text-blue-500 font-medium mt-1">
             Learning progress
           </p>
         </div>

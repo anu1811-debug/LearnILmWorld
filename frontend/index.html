@@ -1,75 +1,121 @@
 <!doctype html>
 <html lang="en">
   <head>
-  <meta charset="UTF-8" />
+    <meta charset="UTF-8" />
 
-   <!--Allow Google OAuth popups -->
-  <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin-allow-popups" />
+    <!--Allow Google OAuth popups -->
+    <meta
+      http-equiv="Cross-Origin-Opener-Policy"
+      content="same-origin-allow-popups"
+    />
 
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Satisfy&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Yellowtail&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet" />
+    <!-- Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Satisfy&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Alex+Brush&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Yellowtail&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap"
+      rel="stylesheet"
+    />
 
-  <!-- FAVICONS -->
-  <link rel="icon" href="/favicon.ico" />
+    <!-- FAVICONS -->
+    <link rel="icon" href="/favicon.ico" />
 
-  <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 
-  <!-- Web App Icons -->
-  <link rel="icon" sizes="192x192" href="/web-app-manifest-192x192.png" />
-  <link rel="icon" sizes="512x512" href="/web-app-manifest-512x512.png" />
+    <!-- Web App Icons -->
+    <link rel="icon" sizes="192x192" href="/web-app-manifest-192x192.png" />
+    <link rel="icon" sizes="512x512" href="/web-app-manifest-512x512.png" />
 
-  <!-- Manifest -->
-  <link rel="manifest" href="/site.webmanifest" />
+    <!-- Manifest -->
+    <link rel="manifest" href="/site.webmanifest" />
 
-  <!-- Open Graph Preview (for Google & Social Media) -->
-  <meta property="og:image" content="https://learnilmworld.com/web-app-manifest-512x512.png" />
-  <meta name="twitter:image" content="https://learnilmworld.com/web-app-manifest-512x512.png" />
+    <!-- Open Graph Preview (for Google & Social Media) -->
+    <meta
+      property="og:image"
+      content="https://learnilmworld.com/web-app-manifest-512x512.png"
+    />
+    <meta
+      name="twitter:image"
+      content="https://learnilmworld.com/web-app-manifest-512x512.png"
+    />
 
-  <!-- Google Structured Data Logo -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "LearnILM World",
-    "url": "https://learnilmworld.com",
-    "logo": "https://learnilmworld.com/web-app-manifest-512x512.png"
-  }
-  </script>
+    <!-- Google Structured Data Logo -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "LearnILM World",
+        "url": "https://learnilmworld.com",
+        "logo": "https://learnilmworld.com/web-app-manifest-512x512.png"
+      }
+    </script>
 
-  <!-- Jitsi -->
-  <!-- <script src="https://meet.jit.si/external_api.js"></script> -->
+    <!-- Jitsi -->
+    <!-- <script src="https://meet.jit.si/external_api.js"></script> -->
 
-  <!-- Google verification -->
-  <!-- Keep it to Stay VERIFIED -->
-  <meta name="google-site-verification" content="ly9IiIm-wcWdMkzNTHXTEsZYyU2G2iUU1nSbXx8lWwQ" />
+    <!-- Google verification -->
+    <!-- Keep it to Stay VERIFIED -->
+    <meta
+      name="google-site-verification"
+      content="ly9IiIm-wcWdMkzNTHXTEsZYyU2G2iUU1nSbXx8lWwQ"
+    />
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-DHR48ST8PZ"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LearniLMWorld</title>
-</head>
+      gtag("config", "G-DHR48ST8PZ");
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LearniLMWorld</title>
+  </head>
 
   <body>
     <div id="root"></div>
-      <!-- ZEGO owns this completely -->
-  <div
-  id="zego-root"
-  style="
-    position: fixed;
-    top: 64px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 40;
-    background: #000;
-    display: none;
-  "
-></div>
+    <!-- ZEGO owns this completely -->
+    <div
+      id="zego-root"
+      style="
+        position: fixed;
+        top: 64px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 40;
+        background: #000;
+        display: none;
+      "
+    ></div>
 
     <script type="module" src="/src/main.tsx"></script>
   </body>

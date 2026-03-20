@@ -122,7 +122,7 @@ export default function TopTrainers(): JSX.Element {
   }, []);
 
   return (
-    <section className="py-14">
+    <section className="py-12">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         
         {/* Heading */}
@@ -131,7 +131,7 @@ export default function TopTrainers(): JSX.Element {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
-          className="text-4xl md:text-5xl font-extrabold text-[#276dc9] text-center"
+          className="text-4xl md:text-5xl font-extrabold text-[#5186cd] text-center"
         >
           Meet Our Top Trainers
         </motion.h2>

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { Calendar, Video, Clock, User } from "lucide-react";
+import { Calendar, Video, Clock, User, Plus } from "lucide-react";
+import ManageClasses from "../../components/ManageClasses";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -9,6 +10,8 @@ const TrainerSessions = () => {
   const navigate = useNavigate();
   const [sessions, setSessions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isManageModalOpen, setIsManageModalOpen] = useState(false);
+
 
   useEffect(() => {
     fetchSessions();
@@ -74,18 +77,21 @@ const TrainerSessions = () => {
   return (
     <div className="space-y-6 max-w-[1200px] mx-auto px-3 sm:px-4 py-4 sm:py-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-5">
-        <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">My Sessions</h2>
-        <Link
-          to="/trainer/students"
-          className="inline-flex items-center justify-center
-      px-4 py-2 rounded-xl bg-blue-600 text-white font-medium text-sm
-    "
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold text-gray-800">My Sessions</h2>
+        <button 
+          onClick={() => setIsManageModalOpen(true)}
+          className="flex items-center gap-2 bg-[#024AAC] hover:bg-[#033c8c] text-white px-4 py-2 rounded-lg font-medium transition"
         >
-          <Calendar className="h-4 w-4 mr-2" />
-          Create New Session
-        </Link>
+          <Plus size={18} />
+          Create Group Session
+        </button>
       </div>
+
+      <ManageClasses 
+        isOpen={isManageModalOpen} 
+        onClose={() => setIsManageModalOpen(false)} 
+      />
 
       {/* Sessions */}
       <div className="bg-white rounded-2xl p-4 shadow-md border">

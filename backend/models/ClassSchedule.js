@@ -6,7 +6,7 @@ const ClassScheduleSchema = new mongoose.Schema({
   title: { type: String },
   price: { type: Number }, 
   enrolledStudents: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], 
-  maxParticipants: { type: Number, default: 5 },
+  maxParticipants: { type: Number, default: 4 },
   type: { type: String, enum: ['private', 'group'], required: true },
   startTime: { type: Date, required: true, index: true }, 
   endTime: { type: Date, required: true },

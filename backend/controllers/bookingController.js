@@ -3,10 +3,12 @@ import User from '../models/User.js';
 
 export const accessFreeDemo = async (req, res) => {
   try {
-    const { trainerId } = req.body; 
+    console.log('📥 Received booking body:', JSON.stringify(req.body, null, 2));
+    const { trainerId, classType, sessionTime, sessionId } = req.body; 
 
     const studentId = req.user._id; 
-    const studentEmail = req.user.email; 
+    //changed to req.user.studentEmail 
+    const studentEmail = req.user.studentEmail || req.user.email; 
     const studentName = req.user.name;
 
     const existingLog = await Booking.findOne({
@@ -35,6 +37,13 @@ export const accessFreeDemo = async (req, res) => {
       studentName: studentName,
       studentEmail: studentEmail, 
       bookingType: 'free_demo',
+
+      // Store classType and sessionTime for analytics
+      classType: classType,
+      sessionTime: sessionTime,
+      sessionId: sessionId,
+
+
       status: 'completed',
       paymentStatus: 'na', 
       paymentMethod: 'none',
@@ -54,3 +63,6 @@ export const accessFreeDemo = async (req, res) => {
     res.status(500).json({ message: "Server Error Booking controller", error: error.message });
   }
 };
+
+
+

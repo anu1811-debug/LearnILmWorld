@@ -24,12 +24,13 @@
     "mongoose": "^8.23.0",
     "node-fetch": "^3.3.2",
     "nodemailer": "^7.0.9",
+    "razorpay": "^2.9.6",
     "react-router-dom": "^7.9.1",
     "resend": "^6.5.2",
     "stripe": "^14.9.0",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "nodemon": "^3.0.2"
+    "nodemon": "^3.1.14"
   }
 }

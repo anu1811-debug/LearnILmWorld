@@ -20,47 +20,47 @@ const router = express.Router();
 // });
 
 // Create payment intent (Stripe)
-router.post('/create-payment-intent', authenticate, async (req, res) => {
+// router.post('/create-payment-intent', authenticate, async (req, res) => {
 
-  console.log('📦 Received payment intent request body:', req.body);
-  console.log('🔐 Authenticated user:', req.user);
+//   console.log('📦 Received payment intent request body:', req.body);
+//   console.log('🔐 Authenticated user:', req.user);
 
-  try {
-    const { amount, currency = 'usd' } = req.body;
+//   try {
+//     const { amount, currency = 'usd' } = req.body;
 
-    if (!stripe || !process.env.STRIPE_SECRET_KEY) {
-      return res.status(500).json({ message: 'Stripe not configured' });
-    }
+//     if (!stripe || !process.env.STRIPE_SECRET_KEY) {
+//       return res.status(500).json({ message: 'Stripe not configured' });
+//     }
 
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(amount * 100), // Stripe uses cents
-      currency,
-      automatic_payment_methods: {
-        enabled: true,
-      },
-      metadata: {
-        userId: req.user._id.toString(),
-        userEmail: req.user.email,
-        userName: req.user.name
-      }
-    });
+//     const paymentIntent = await stripe.paymentIntents.create({
+//       amount: Math.round(amount * 100), // Stripe uses cents
+//       currency,
+//       automatic_payment_methods: {
+//         enabled: true,
+//       },
+//       metadata: {
+//         userId: req.user._id.toString(),
+//         userEmail: req.user.email,
+//         userName: req.user.name
+//       }
+//     });
 
-    console.log('✅ Stripe PaymentIntent created:', paymentIntent.id);
+//     console.log('✅ Stripe PaymentIntent created:', paymentIntent.id);
 
-    res.json({
-      clientSecret: paymentIntent.client_secret,
-      paymentIntentId: paymentIntent.id,
-      amount: paymentIntent.amount,
-      currency: paymentIntent.currency
-    });
-  } catch (error) {
-    console.error('Stripe payment error:', error);
-    res.status(400).json({
-      message: error.message,
-      type: 'stripe_error'
-    });
-  }
-});
+//     res.json({
+//       clientSecret: paymentIntent.client_secret,
+//       paymentIntentId: paymentIntent.id,
+//       amount: paymentIntent.amount,
+//       currency: paymentIntent.currency
+//     });
+//   } catch (error) {
+//     console.error('Stripe payment error:', error);
+//     res.status(400).json({
+//       message: error.message,
+//       type: 'stripe_error'
+//     });
+//   }
+// });
 
 // Store payment details
 router.post('/store-payment', authenticate, async (req, res) => {
@@ -133,53 +133,54 @@ router.post('/fake-payment', authenticate, async (req, res) => {
 });
 
 // Webhook endpoint for Stripe
-router.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
-  if (!stripe) {
-    return res.status(400).send('Stripe not configured');
-  }
+// router.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+//   if (!stripe) {
+//     return res.status(400).send('Stripe not configured');
+//   }
 
-  const sig = req.headers['stripe-signature'];
+//   const sig = req.headers['stripe-signature'];
 
-  let event;
+//   let event;
 
-  try {
-    event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
-  } catch (err) {
-    console.log(`Webhook signature verification failed.`, err.message);
-    return res.status(400).send(`Webhook Error: ${err.message}`);
-  }
+//   try {
+//     event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
+//   } catch (err) {
+//     console.log(`Webhook signature verification failed.`, err.message);
+//     return res.status(400).send(`Webhook Error: ${err.message}`);
+//   }
 
-  // Handle the event
-  switch (event.type) {
-    case 'payment_intent.succeeded':
-      const paymentIntent = event.data.object;
-      console.log('PaymentIntent was successful!', paymentIntent.id);
+//   // Handle the event
+//   switch (event.type) {
+//     case 'payment_intent.succeeded':
+//       const paymentIntent = event.data.object;
+//       console.log('PaymentIntent was successful!', paymentIntent.id);
 
-      // Update booking status
-      try {
-        await Booking.updateMany(
-          { paymentId: paymentIntent.id },
-          {
-            paymentStatus: 'completed',
-            status: 'confirmed'
-          }
-        );
-      } catch (error) {
-        console.error('Error updating booking:', error);
-      }
-      break;
+//       // Update booking status
+//       try {
+//         await Booking.updateMany(
+//           { paymentId: paymentIntent.id },
+//           {
+//             paymentStatus: 'completed',
+//             status: 'confirmed'
+//           }
+//         );
+//       } catch (error) {
+//         console.error('Error updating booking:', error);
+//       }
+//       break;
 
-    case 'payment_method.attached':
-      const paymentMethod = event.data.object;
-      console.log('PaymentMethod was attached to a Customer!', paymentMethod.id);
-      break;
+//     case 'payment_method.attached':
+//       const paymentMethod = event.data.object;
+//       console.log('PaymentMethod was attached to a Customer!', paymentMethod.id);
+//       break;
 
-    default:
-      console.log(`Unhandled event type ${event.type}`);
-  }
+//     default:
+//       console.log(`Unhandled event type ${event.type}`);
+//   }
 
-  res.json({ received: true });
-});
+//   res.json({ received: true });
+// });
+
 
 //for razorpay
 const razorpay = new Razorpay({
@@ -232,6 +233,7 @@ router.post('/verify-razorpay-payment', authenticate, async (req, res) => {
         {
           paymentId: razorpay_payment_id,
           paymentStatus: 'completed',
+          status: 'confirmed',
           paymentDetails: {
             amount,
             currency,
@@ -253,3 +255,4 @@ router.post('/verify-razorpay-payment', authenticate, async (req, res) => {
   }
 });
 export default router;
+

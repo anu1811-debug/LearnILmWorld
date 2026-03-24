@@ -814,10 +814,10 @@ export default function LandingPageAlt() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-3xl md:text-5xl font-extrabold text-[#5186cd] tracking-tight"
+            className="text-3xl md:text-5xl font-extrabold text-[#1a56ad] tracking-tight"
           >
             Languages That Open Doors
-            <span className="block text-[#5186cd] mt-2 md:mt-1 text-2xl md:text-5xl">
+            <span className="block text-[#1a56ad] mt-2 md:mt-1 text-2xl md:text-5xl">
               Speak to the World with Confidence
             </span>
           </motion.h2> */}
@@ -990,7 +990,7 @@ export default function LandingPageAlt() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
             viewport={{ once: true }}
-            className="text-5xl md:text-5xl tracking-tight font-extrabold text-[#5186cd]"
+            className="text-5xl md:text-5xl tracking-tight font-extrabold text-[#1a56ad]"
           >
             Subjects You Can Explore
           </motion.h2> */}
@@ -1136,7 +1136,7 @@ export default function LandingPageAlt() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
             viewport={{ once: true }}
-            className="text-5xl md:text-5xl  tracking-tight font-extrabold text-[#5186cd]"
+            className="text-5xl md:text-5xl  tracking-tight font-extrabold text-[#1a56ad]"
           >
             Beyond Academics, Your Passion Awaits
           </motion.h2> */}
@@ -1330,7 +1330,7 @@ export default function LandingPageAlt() {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7 }}
       viewport={{ once: true }}
-      className="text-4xl md:text-5xl tracking-tight font-extrabold text-[#5186cd]"
+      className="text-4xl md:text-5xl tracking-tight font-extrabold text-[#1a56ad]"
     >
       Learn Languages, Subjects, and Skills for Your Future
     </motion.h2>
@@ -1408,7 +1408,7 @@ export default function LandingPageAlt() {
 
           {/* HEADING */}
           <div className="text-center">
-            <h3 className="text-4xl lg:text-5xl font-extrabold text-[#5186cd]">
+            <h3 className="text-4xl lg:text-5xl font-extrabold text-[#1a56ad]">
               Why Learners love LearniLM🌍World
             </h3>
 
@@ -1488,7 +1488,7 @@ export default function LandingPageAlt() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl  text-[#5186cd] font-extrabold text-center"
+            className="text-4xl md:text-5xl  text-[#1a56ad] font-extrabold text-center"
           >
             Highlights of LearniLM 🌎 World
           </motion.h2>
@@ -1591,7 +1591,7 @@ export default function LandingPageAlt() {
           <div className="text-center mb-12">
             <h2
               id="how-it-works"
-              className="text-4xl font-extrabold md:text-4xl  text-[#5186cd]"
+              className="text-4xl font-extrabold md:text-4xl  text-[#1a56ad]"
             >
               How it works — in 4 simple steps
             </h2>
@@ -1614,7 +1614,7 @@ export default function LandingPageAlt() {
                   </div>
                 </div>
                 <div className="w-14 h-14 mx-auto rounded-lg  flex items-center justify-center mb-4 text-center">
-                  <s.icon className="text-[#5186cd] size-12" aria-hidden />
+                  <s.icon className="text-[#1a56ad] size-12" aria-hidden />
                 </div>
                 <h3 className="font-semibold text-lg flex justify-center items-center text-center">
                   {s.title}
@@ -1635,7 +1635,7 @@ export default function LandingPageAlt() {
 
           <h3 id="faq-heading" className="text-4xl text-center font-extrabold">
             <span>Frequently Asked</span>
-            <span className="text-[#5186cd]"> Questions</span>
+            <span className="text-[#1a56ad]"> Questions</span>
           </h3>
 
           <p className="mt-4 text-center text-gray-600">
@@ -1725,7 +1725,7 @@ export default function LandingPageAlt() {
       {/* CTA  bg-gradient-to-r from-[#9787F3]/10 to-[#f97316]/8*/}
       {/* <section className="py-12 ">
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <h4 className="text-4xl font-extrabold text-[#5186cd] ">Master Your Skills, Confidently</h4>
+          <h4 className="text-4xl font-extrabold text-[#1a56ad] ">Master Your Skills, Confidently</h4>
           {/* <p className="text-[#2D274B] text-xl font-bold mt-2">Sign up to Claim Your Free Trial Session. Get a Personalized 7-Day Learning Path After Your First Session.</p>
           2D274B */}{" "}
       {/*

@@ -49,7 +49,7 @@ const BookGroupSession = ({ trainerId }: { trainerId: string }) => {
     });
   };
 
-  if (loading) return <div className="text-center py-10 animate-pulse text-[#5186cd]">Loading group classes...</div>;
+  if (loading) return <div className="text-center py-10 animate-pulse text-[#1a56ad]">Loading group classes...</div>;
 
   return (
     <div className="w-full">

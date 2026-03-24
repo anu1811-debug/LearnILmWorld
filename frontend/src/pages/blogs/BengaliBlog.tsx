@@ -219,7 +219,7 @@ const BengaliBlog: React.FC = () => {
 
 
           <div className="mt-16">
-            <Link to="/blog" className="text-[#5186cd] font-semibold hover:underline">
+            <Link to="/blog" className="text-[#1a56ad] font-semibold hover:underline">
               View all blogs →
             </Link>
           </div>

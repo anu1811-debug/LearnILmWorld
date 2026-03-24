@@ -184,7 +184,7 @@ const BecomeTrainer: React.FC = () => {
             transition={{ duration: 0.6 }}
           >
             <div>
-              <h2 className="text-5xl md:text-5xl font-bold text-[#5186cd] mx-auto">
+              <h2 className="text-5xl md:text-5xl font-bold text-[#1a56ad] mx-auto">
                 Teach, Inspire, and Make a Difference
               </h2>
             </div>
@@ -249,7 +249,7 @@ const BecomeTrainer: React.FC = () => {
                 <li className="flex items-start border-2 rounded-2xl border-blue-300 px-8 py-4 shadow-sm text-start bg-white/80 gap-3">
                   <div>
                     <div className="flex gap-1">
-                      <div className="text-[#5186cd] text-lg ">✔</div>
+                      <div className="text-[#1a56ad] text-lg ">✔</div>
                       <div className="text-xl font-bold ">
                         {" "}
                         Continuous Flow of Learners
@@ -263,7 +263,7 @@ const BecomeTrainer: React.FC = () => {
                 <li className="flex items-start border-2 rounded-2xl border-blue-300 px-8 py-4 shadow-sm text-start bg-white/80 gap-3">
                   <div>
                     <div className="flex gap-1">
-                      <div className="text-[#5186cd] text-lg ">✔</div>
+                      <div className="text-[#1a56ad] text-lg ">✔</div>
                       <div className="text-xl font-bold ">
                         {" "}
                         Smart Scheduling Tools{" "}
@@ -278,7 +278,7 @@ const BecomeTrainer: React.FC = () => {
                 <li className="flex items-start border-2 rounded-2xl border-blue-300 px-8 py-4 shadow-sm text-start bg-white/80 gap-3">
                   <div>
                     <div className="flex gap-1">
-                      <div className="text-[#5186cd] text-lg ">✔</div>
+                      <div className="text-[#1a56ad] text-lg ">✔</div>
                       <div className="text-xl font-bold ">
                         {" "}
                         Interactive Virtual Classrooms{" "}
@@ -293,7 +293,7 @@ const BecomeTrainer: React.FC = () => {
                 <li className="flex items-start border-2 rounded-2xl border-blue-300 px-8 py-4 shadow-sm text-start bg-white/80 gap-3">
                   <div>
                     <div className="flex gap-1">
-                      <div className="text-[#5186cd] text-lg ">✔</div>
+                      <div className="text-[#1a56ad] text-lg ">✔</div>
                       <div className="text-xl font-bold ">
                         {" "}
                         Secure & Flexible Payments{" "}
@@ -307,7 +307,7 @@ const BecomeTrainer: React.FC = () => {
                 <li className="flex items-start border-2 rounded-2xl border-blue-300 px-8 py-4 shadow-sm text-start bg-white/80 gap-3">
                   <div>
                     <div className="flex gap-1">
-                      <div className="text-[#5186cd] text-lg ">✔</div>
+                      <div className="text-[#1a56ad] text-lg ">✔</div>
                       <div className="text-xl font-bold ">
                         {" "}
                         Growth-Focused Training Access{" "}
@@ -321,7 +321,7 @@ const BecomeTrainer: React.FC = () => {
                 <li className="flex items-start border-2 rounded-2xl border-blue-300 px-8 py-4 shadow-sm text-start bg-white/80 gap-3">
                   <div>
                     <div className="flex gap-1">
-                      <div className="text-[#5186cd] text-lg ">✔</div>
+                      <div className="text-[#1a56ad] text-lg ">✔</div>
                       <div className="text-xl font-bold ">
                         {" "}
                   Thriving Educator Community {" "}
@@ -343,7 +343,7 @@ const BecomeTrainer: React.FC = () => {
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* Header Section */}
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold text-[#5186cd] mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-[#1a56ad] mb-4">
                 Why Become a Trainer at{" "}
                 <span className="inline-flex items-baseline  tracking-tight mx-2">
                   <span>LearniLMWorl</span>
@@ -390,7 +390,7 @@ const BecomeTrainer: React.FC = () => {
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* Header Section */}
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-[#5186cd] mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-[#1a56ad] mb-4">
                 Who Can Apply?
               </h2>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -428,7 +428,7 @@ const BecomeTrainer: React.FC = () => {
         {/* Testimonials Section - trainer review */}
         {/* bg-[#2D274B]  e0fa84*/}
         {/* <section className=" py-12 px-6 ">
-        <h2 className="text-5xl md:text-4xl sm:text-3xl font-bold text-center mb-12 text-[#5186cd]">
+        <h2 className="text-5xl md:text-4xl sm:text-3xl font-bold text-center mb-12 text-[#1a56ad]">
           Straight from the Heart ❤️
         </h2>
         <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8 ">
@@ -486,7 +486,7 @@ const BecomeTrainer: React.FC = () => {
             <div className="text-center mb-10">
               <h2
                 id="trainer-faq"
-                className="text-4xl md:text-4xl font-extrabold text-[#5186cd]"
+                className="text-4xl md:text-4xl font-extrabold text-[#1a56ad]"
               >
                 Frequently Asked Questions
               </h2>

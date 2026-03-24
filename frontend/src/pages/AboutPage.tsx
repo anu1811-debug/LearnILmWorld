@@ -236,7 +236,7 @@ export default function AboutPage() {
 
             <div
               className="inline-flex items-center gap-2 px-6 py-2 mt-2 mb-8
-          rounded-full bg-white text-[#5186cd] font-semibold 
+          rounded-full bg-white text-[#1a56ad] font-semibold 
           shadow-[0_4px_10px_rgba(0,0,0,0.1)] border border-gray-100"
             >
               🎓 Transforming Education Globally
@@ -262,7 +262,7 @@ export default function AboutPage() {
                 <div
                   key={index}
                   className="flex items-center gap-2 px-6 py-3 rounded-full
-              bg-white text-[#5186cd] font-bold shadow-[0_4px_15px_rgba(0,0,0,0.08)] 
+              bg-white text-[#1a56ad] font-bold shadow-[0_4px_15px_rgba(0,0,0,0.08)] 
               border border-gray-50 transition-transform hover:scale-105"
                 >
                   <span>{feature.icon}</span> {feature.text}
@@ -294,7 +294,7 @@ export default function AboutPage() {
 
             {/* Vision Text */}
             <p className="max-w-5xl mx-auto text-lg md:text-xl leading-relaxed text-gray-700 mb-24">
-              <strong className="text-[#5186cd]">Our Vision:</strong> To create
+              <strong className="text-[#1a56ad]">Our Vision:</strong> To create
               a world where learning is limitless, empowering individuals to
               explore, innovate, and grow without barriers — transforming
               education into a lifelong adventure.
@@ -831,7 +831,7 @@ export default function AboutPage() {
                   </form>
 
                   {feedbackStatus === "success" && (
-                    <p className="text-[#5186cd] mt-4 text-center font-semibold">
+                    <p className="text-[#1a56ad] mt-4 text-center font-semibold">
                       ✅ Thank you! Your feedback has been submitted.
                     </p>
                   )}

@@ -155,7 +155,7 @@ const TrainersGrid: React.FC<Props> = ({ searchTerm, filters, learningType, setN
     if (loading && page === 1) {
         return (
             <div className="py-24 flex flex-col items-center justify-center text-center">
-                <div className="flex items-center gap-3 text-[#5186cd] text-xl font-bold mb-4">
+                <div className="flex items-center gap-3 text-[#1a56ad] text-xl font-bold mb-4">
                     <span className="animate-pulse">Loading verified trainers</span>
                     <span className="animate-pulse">…</span>
                 </div>
@@ -175,7 +175,7 @@ const TrainersGrid: React.FC<Props> = ({ searchTerm, filters, learningType, setN
             {/* Results Header */}
             <div className="mb-10 text-center">
                 <h2 className="text-2xl md:text-3xl font-extrabold text-[#1f2937]">
-                    {trainers.length} <span className="text-[#5186cd]">Verified Trainers</span> Available
+                    {trainers.length} <span className="text-[#1a56ad]">Verified Trainers</span> Available
                 </h2>
                 <p className="text-gray-600 mt-1">
                     Explore expert mentors ready to guide your learning
@@ -193,7 +193,7 @@ const TrainersGrid: React.FC<Props> = ({ searchTerm, filters, learningType, setN
             {/* Infinite Scroll Loader */}
             <div ref={loadMoreRef} className="h-16 flex items-center justify-center">
                 {loadingMore && (
-                    <div className="flex items-center gap-3 text-[#5186cd] font-semibold">
+                    <div className="flex items-center gap-3 text-[#1a56ad] font-semibold">
                         <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#5186cd]"></div>
                         Loading more trainers...
                     </div>
@@ -215,7 +215,7 @@ const TrainersGrid: React.FC<Props> = ({ searchTerm, filters, learningType, setN
             {/* Empty State */}
             {trainers.length === 0 && !loading && (
                 <div className="text-center py-20">
-                    <div className="w-24 h-24 bg-[#e9f1fb] rounded-full flex items-center justify-center mx-auto mb-6 text-[#5186cd] text-3xl">
+                    <div className="w-24 h-24 bg-[#e9f1fb] rounded-full flex items-center justify-center mx-auto mb-6 text-[#1a56ad] text-3xl">
                         😕
                     </div>
                     <h3 className="text-2xl font-bold text-[#1f2937] mb-3">No trainers found</h3>

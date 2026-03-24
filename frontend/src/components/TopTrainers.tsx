@@ -131,7 +131,7 @@ export default function TopTrainers(): JSX.Element {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
-          className="text-4xl md:text-5xl font-extrabold text-[#5186cd] text-center"
+          className="text-4xl md:text-5xl font-extrabold text-[#1a56ad] text-center"
         >
           Meet Our Top Trainers
         </motion.h2>

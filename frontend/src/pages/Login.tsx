@@ -175,7 +175,7 @@ const Login: React.FC = () => {
       {/* Home Icon Button */}
       <Link
         to="/"
-        className="absolute top-6 right-6 p-2 rounded-lg bg-[#fef5e4] text-[#5186cd] backdrop-blur-md hover:bg-[#205eb0]/30 hover:text-[#fef5e4]  transition flex items-center justify-center"
+        className="absolute top-6 right-6 p-2 rounded-lg bg-[#fef5e4] text-[#1a56ad] backdrop-blur-md hover:bg-[#205eb0]/30 hover:text-[#fef5e4]  transition flex items-center justify-center"
         aria-label="Go to Home"
       >
         <Home className="h-6 w-6  transition-colors duration-300" />
@@ -229,7 +229,7 @@ const Login: React.FC = () => {
 
             <Link
               to="/"
-              className="flex items-center gap-1 sm:gap-2 hover:text-[#5186cd] transition"
+              className="flex items-center gap-1 sm:gap-2 hover:text-[#1a56ad] transition"
             >
               <span>LearniLM</span>
 
@@ -249,7 +249,7 @@ const Login: React.FC = () => {
             Don't have an account?{" "}
             <Link
               to="/register"
-              className="underline hover:text-[#5186cd] transition"
+              className="underline hover:text-[#1a56ad] transition"
             >
               Sign up
             </Link>
@@ -347,7 +347,7 @@ const Login: React.FC = () => {
             </div>
 
             {/* Submit button */}
-            {/* bg-[#fef5e4] text-[#5186cd] hover:bg-[#205eb0]/30 hover:text-[#fef5e4]  */}
+            {/* bg-[#fef5e4] text-[#1a56ad] hover:bg-[#205eb0]/30 hover:text-[#fef5e4]  */}
             <button
               type="submit"
               disabled={loading}

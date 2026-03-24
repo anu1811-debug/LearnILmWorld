@@ -84,7 +84,7 @@ const VerifyEmail: React.FC = () => {
             {/* Home Icon Button */}
             <Link
                 to="/"
-                className="absolute top-6 right-6 p-2 rounded-lg bg-[#fef5e4] text-[#5186cd] backdrop-blur-md hover:bg-[#205eb0]/30 hover:text-[#fef5e4] transition flex items-center justify-center"
+                className="absolute top-6 right-6 p-2 rounded-lg bg-[#fef5e4] text-[#1a56ad] backdrop-blur-md hover:bg-[#205eb0]/30 hover:text-[#fef5e4] transition flex items-center justify-center"
                 aria-label="Go to Home"
             >
                 <Home className="h-6 w-6 transition-colors duration-300" />

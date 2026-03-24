@@ -128,12 +128,12 @@ const MainPage: React.FC = () => {
           {/* Hero */}
           <section className="pt-10 pb-16 px-6 text-center">
             {/* Top Pill */}
-            <div className="inline-flex items-center gap-2 px-6 py-2 mb-8 rounded-full bg-white text-[#5186cd] font-bold shadow border border-[#5186cd]/20">
+            <div className="inline-flex items-center gap-2 px-6 py-2 mb-8 rounded-full bg-white text-[#1a56ad] font-bold shadow border border-[#5186cd]/20">
               🤝 A Global Community of Learners & Mentors
             </div>
 
             <h1 className="text-4xl md:text-6xl font-extrabold mb-4 text-[#1f2937]">
-              Find Your <span className="text-[#5186cd]">Perfect Trainer</span>
+              Find Your <span className="text-[#1a56ad]">Perfect Trainer</span>
             </h1>
 
             <p className="text-xl md:text-2xl font-medium max-w-3xl mx-auto text-gray-700">

@@ -499,9 +499,9 @@ export default function AboutPage() {
           <div className="flex justify-center mb-4"></div>
 
           {/* HEADING */}
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
+          <h2 className="text-4xl md:text-6xl font-extrabold  mb-8 text-[#1f2937]">
             Policy <span className="text-gray-600">&</span>{" "}
-            <span className="text-[#276dc9]">Refund</span>
+            <span className="text-[#1a56ad]">Refund</span>
           </h2>
 
           {/* SUBTEXT */}
@@ -550,8 +550,9 @@ export default function AboutPage() {
   <div className="max-w-7xl mx-auto text-center">
     
     {/* HEADING */}
-    <h2 className="text-4xl md:text-5xl font-extrabold mb-6 text-[#1f2937]">
-      Terms & <span className="text-[#276dc9]">Conditions</span>
+    <h2 className="text-4xl md:text-6xl font-extrabold mb-8 text-[#1f2937]">
+      Terms <span className="text-gray-600">&</span>{" "}
+        <span className="text-[#1a56ad]">Conditions</span>
     </h2>
 
     {/* SUBTEXT */}
@@ -646,7 +647,7 @@ export default function AboutPage() {
           </div> */}
 
           {/* HEADING */}
-          <h2 className="text-4xl md:text-5xl font-extrabold mb-4 text-[#0b5ed7]">
+          <h2 className="text-4xl md:text-5xl font-extrabold mb-4 text-[#1a56ad]">
             Support
           </h2>
 

@@ -290,7 +290,7 @@
       //       transition={{ duration: 0.6 }}
       //       className="text-center mb-16"
       //     >
-      //       <span className="text-[#5186cd] font-semibold tracking-wider text-sm uppercase block mb-2">Why Choose Us</span>
+      //       <span className="text-[#1a56ad] font-semibold tracking-wider text-sm uppercase block mb-2">Why Choose Us</span>
       //       <h2 className="text-4xl font-bold text-[#111827] mb-4 ">The Premium Learning Experience</h2>
       //       <p className="text-gray-500 max-w-2xl mx-auto">We've designed our courses to deliver real results through proven methodologies and practical application.</p>
       //     </motion.div>
@@ -326,7 +326,7 @@
 //             viewport={{ once: true }}
 //             className="text-center mb-12"
 //           >
-//             <span className="text-[#5186cd] font-semibold tracking-wider text-sm uppercase block mb-2">FAQ</span>
+//             <span className="text-[#1a56ad] font-semibold tracking-wider text-sm uppercase block mb-2">FAQ</span>
 //             <h2 className="text-4xl font-bold text-[#111827] mb-4 ">Frequently Asked Questions</h2>
 //             <p className="text-gray-500">Have questions? We've got answers.</p>
 //           </motion.div>

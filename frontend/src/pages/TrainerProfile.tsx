@@ -515,7 +515,7 @@ const TrainerProfile: React.FC = () => {
                 {reviews && reviews.length > 0 && (
                   <div className="bg-white rounded-[1.5rem] p-5 sm:p-6 shadow-sm border border-slate-100 flex flex-col items-center text-center">
                     <div className="flex items-center justify-center gap-2 sm:gap-3 mb-2">
-                      <Quote className="text-[#5186cd] fill-[#e9f1fb] rotate-180 w-6 h-6 sm:w-8 sm:h-8" />
+                      <Quote className="text-[#1a56ad] fill-[#e9f1fb] rotate-180 w-6 h-6 sm:w-8 sm:h-8" />
                       <h2 className="text-xl sm:text-2xl font-bold text-slate-800">Student Testimonials</h2>
                     </div>
                     <p className="text-slate-500 mb-4 sm:mb-6 text-xs sm:text-sm px-2">What our students say about their learning experience</p>

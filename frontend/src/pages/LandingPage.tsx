@@ -545,26 +545,30 @@ export default function LandingPageAlt() {
 
   const steps = [
     {
-      ind: "01",
+      ind: "1",
       icon: Users,
+      iconColor: "text-[#8B2CF5] fill-[#8B2CF5]",
       title: "Find your trainer",
       desc: "Smart filters: language, accent, price, availability and student ratings.",
     },
     {
-      ind: "02",
+      ind: "2",
       icon: BookOpen,
+      iconColor: "text-[#F29D38]", 
       title: "Book a session",
       desc: "One-click booking, calendar and secure payments.",
     },
     {
-      ind: "03",
+      ind: "3",
       icon: Play,
+      iconColor: "text-[#009300] fill-[#009300]", 
       title: "Practice & improve",
       desc: "Live lessons and tailored homework.",
     },
     {
-      ind: "04",
+      ind: "4",
       icon: Award,
+      iconColor: "text-[#DB944B]", 
       title: "Track progress",
       desc: "Personal dashboard, streaks, and certificates.",
     },
@@ -814,10 +818,10 @@ export default function LandingPageAlt() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-3xl md:text-5xl font-extrabold text-[#5186cd] tracking-tight"
+            className="text-3xl md:text-5xl font-extrabold text-[#1a56ad] tracking-tight"
           >
             Languages That Open Doors
-            <span className="block text-[#5186cd] mt-2 md:mt-1 text-2xl md:text-5xl">
+            <span className="block text-[#1a56ad] mt-2 md:mt-1 text-2xl md:text-5xl">
               Speak to the World with Confidence
             </span>
           </motion.h2> */}
@@ -990,7 +994,7 @@ export default function LandingPageAlt() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
             viewport={{ once: true }}
-            className="text-5xl md:text-5xl tracking-tight font-extrabold text-[#5186cd]"
+            className="text-5xl md:text-5xl tracking-tight font-extrabold text-[#1a56ad]"
           >
             Subjects You Can Explore
           </motion.h2> */}
@@ -1136,7 +1140,7 @@ export default function LandingPageAlt() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
             viewport={{ once: true }}
-            className="text-5xl md:text-5xl  tracking-tight font-extrabold text-[#5186cd]"
+            className="text-5xl md:text-5xl  tracking-tight font-extrabold text-[#1a56ad]"
           >
             Beyond Academics, Your Passion Awaits
           </motion.h2> */}
@@ -1330,7 +1334,7 @@ export default function LandingPageAlt() {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7 }}
       viewport={{ once: true }}
-      className="text-4xl md:text-5xl tracking-tight font-extrabold text-[#5186cd]"
+      className="text-4xl md:text-5xl tracking-tight font-extrabold text-[#1a56ad]"
     >
       Learn Languages, Subjects, and Skills for Your Future
     </motion.h2>
@@ -1408,7 +1412,7 @@ export default function LandingPageAlt() {
 
           {/* HEADING */}
           <div className="text-center">
-            <h3 className="text-4xl lg:text-5xl font-extrabold text-[#5186cd]">
+            <h3 className="text-4xl lg:text-5xl font-extrabold text-[#1a56ad]">
               Why Learners love LearniLM🌍World
             </h3>
 
@@ -1488,7 +1492,7 @@ export default function LandingPageAlt() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl  text-[#5186cd] font-extrabold text-center"
+            className="text-4xl md:text-5xl  text-[#1a56ad] font-extrabold text-center"
           >
             Highlights of LearniLM 🌎 World
           </motion.h2>
@@ -1586,40 +1590,48 @@ export default function LandingPageAlt() {
       </section>
 
       {/* How it works section */}
-      <section className="py-1" aria-labelledby="how-it-works">
+      <section className="py-10"aria-labelledby="how-it-works">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center mb-12">
+          <div className="text-center mb-20">
             <h2
               id="how-it-works"
-              className="text-4xl font-extrabold md:text-4xl  text-[#5186cd]"
+              className="text-5xl font-extrabold md:text-5xl  text-[#1a56ad]"
             >
               How it works — in 4 simple steps
             </h2>
-            <p className="mt-3 text-[#2D274B] text-lg font-bold max-w-2xl mx-auto">
+            <p className="mt-5 text-[#2D274B] text-xl font-medium max-w-2xl mx-auto">
               Designed to get you speaking fast: pick, book, practice and track.
             </p>
           </div>
-
-          <div className="grid px-3 lg:grid-cols-4 md:grid-cols-2 gap-6">
+          {/* Responsive grid: columns and larger gaps */}
+          <div className="grid px-3 lg:grid-cols-4 md:grid-cols-2 gap-x-10 gap-y-16">
             {steps.map((s, i) => (
               <motion.div
                 key={i}
                 whileHover={{ y: -6 }}
-                className="bg-gradient-to-b from-[#eff5fc] to-white rounded-3xl px-6 relative py-12 border-2 border-sky-800 shadow hover:shadow-xl transition overflow-hidden"
+                className="bg-white rounded-2xl px-6 relative py-10 border-2  border-[#024AAC]/50 shadow-[3px_6px_20px_8px_rgba(100,150,220,0.3)] hover:shadow-[0_0_28px_rgba(100,150,220,0.5)] transition mt-10 overflow-visible"
+                // "bg-gradient-to-b from-[#eff5fc] to-white rounded-3xl px-6 relative py-12 border-2 border-sky-800 shadow hover:shadow-xl transition overflow-hidden"
                 role="article"
               >
-                <div className="absolute  w-28 h-28 -top-9 -left-9 ">
+                <div className="absolute -top-8 -left-8 w-20 h-20 rounded-full bg-[#A3B8E4] text-white text-2xl flex items-center justify-center font-bold shadow-[0_6px_16px_rgba(80,130,210,0.4)] tracking-[0.3em]">
+
+                {s.ind}
+
+                </div>
+                {/* <div className="absolute  w-28 h-28 -top-9 -left-9 ">
                   <div className=" w-28  h-28 rounded-full bg-[#5186cd] text-white text-4xl flex items-center justify-center font-bold   border-black border-2 ">
                     <span className="translate-x-3 translate-y-3">{s.ind}</span>
                   </div>
-                </div>
+                </div> */}
                 <div className="w-14 h-14 mx-auto rounded-lg  flex items-center justify-center mb-4 text-center">
-                  <s.icon className="text-[#5186cd] size-12" aria-hidden />
+                  <s.icon className={`size-14 ${s.iconColor}`} aria-hidden />
                 </div>
-                <h3 className="font-semibold text-lg flex justify-center items-center text-center">
+                <h3 className="font-semibold text-lg flex justify-center items-center text-center text-gray-900">
+                {/* <h3 className="font-semibold text-lg flex justify-center items-center text-center"> */}
                   {s.title}
                 </h3>
-                <p className="text-sm text-[#4B437C] mt-2 flex justify-center items-center text-center">
+                <p className="text-sm text-gray-800 mt-2 flex justify-center items-center text-center">
+                {/* <p className="text-sm text-[#4B437C] mt-2 flex justify-center items-center text-center"> */}
                   {s.desc}
                 </p>
               </motion.div>
@@ -1635,7 +1647,7 @@ export default function LandingPageAlt() {
 
           <h3 id="faq-heading" className="text-4xl text-center font-extrabold">
             <span>Frequently Asked</span>
-            <span className="text-[#5186cd]"> Questions</span>
+            <span className="text-[#1a56ad]"> Questions</span>
           </h3>
 
           <p className="mt-4 text-center text-gray-600">
@@ -1725,7 +1737,7 @@ export default function LandingPageAlt() {
       {/* CTA  bg-gradient-to-r from-[#9787F3]/10 to-[#f97316]/8*/}
       {/* <section className="py-12 ">
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <h4 className="text-4xl font-extrabold text-[#5186cd] ">Master Your Skills, Confidently</h4>
+          <h4 className="text-4xl font-extrabold text-[#1a56ad] ">Master Your Skills, Confidently</h4>
           {/* <p className="text-[#2D274B] text-xl font-bold mt-2">Sign up to Claim Your Free Trial Session. Get a Personalized 7-Day Learning Path After Your First Session.</p>
           2D274B */}{" "}
       {/*

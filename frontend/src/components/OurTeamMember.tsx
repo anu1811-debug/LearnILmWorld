@@ -46,7 +46,7 @@ const OurTeamMember = () => {
     <section className="py-20 px-2">
       <div className="max-w-[1400px] mx-auto">
         {/* Header */}
-        <h2 className="text-5xl font-extrabold text-center text-blue-800 mb-16">
+        <h2 className="text-5xl font-extrabold text-center text-[#1a56ad] mb-16">
           Meet Our Team
         </h2>
 

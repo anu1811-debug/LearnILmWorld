@@ -105,13 +105,13 @@ const FiltersPanel: React.FC<Props> = ({ learningType, filters, setFilters, nati
                     <SlidersHorizontal size={18} className="text-white " />
 
                     </div>
-                    <span className="font-bold text-[#5186cd] text-lg">Quick Filters ✨</span>
+                    <span className="font-bold text-[#1a56ad] text-lg">Quick Filters ✨</span>
                 </div>
 
                 {/* Clear All */}
                 <button
                     onClick={clearFilters}
-                    className="px-5 py-2 bg-white rounded-full hover:bg-[#fef5e4] text-[#5186cd] text-sm font-bold transition border border-[#5186cd]/20 shadow-sm"
+                    className="px-5 py-2 bg-white rounded-full hover:bg-[#fef5e4] text-[#1a56ad] text-sm font-bold transition border border-[#5186cd]/20 shadow-sm"
                 >
                     Clear All
                 </button>
@@ -124,7 +124,7 @@ const FiltersPanel: React.FC<Props> = ({ learningType, filters, setFilters, nati
                 {/*changed CBE56A */}
                 {learningType === 'language' && (
                     <div className="relative p-4 rounded-2xl bg-white border border-[#5186cd]/20 shadow-sm">
-                        <label className="text-sm font-bold text-[#5186cd] flex items-center"><Dot className='text-blue-600 w-7 h-7 -mt-1 '/>All Languages</label>
+                        <label className="text-sm font-bold text-[#1a56ad] flex items-center"><Dot className='text-blue-600 w-7 h-7 -mt-1 '/>All Languages</label>
                         <button onClick={() =>
                             setFilters((p: any) => ({
                                 ...p,
@@ -155,7 +155,7 @@ const FiltersPanel: React.FC<Props> = ({ learningType, filters, setFilters, nati
 
                 {learningType === 'subject' && (
                     <div className="relative p-4 rounded-2xl bg-white border border-[#5186cd]/20 shadow-sm">
-                        <label className="text-sm font-bold text-[#5186cd] flex items-center"><Dot className='text-blue-600 w-7 h-7 -mt-1 '/>All Subjects</label>
+                        <label className="text-sm font-bold text-[#1a56ad] flex items-center"><Dot className='text-blue-600 w-7 h-7 -mt-1 '/>All Subjects</label>
 
                         <button
                             onClick={() =>
@@ -195,7 +195,7 @@ const FiltersPanel: React.FC<Props> = ({ learningType, filters, setFilters, nati
 
                 {learningType === 'hobby' && (
                     <div className="relative p-4 rounded-2xl bg-white border border-[#5186cd]/20 shadow-sm">
-                        <label className="text-sm font-bold text-[#5186cd] flex items-center"><Dot className='text-blue-600 w-7 h-7 -mt-1 '/>All Hobbies</label>
+                        <label className="text-sm font-bold text-[#1a56ad] flex items-center"><Dot className='text-blue-600 w-7 h-7 -mt-1 '/>All Hobbies</label>
 
                         <button
                             onClick={() =>

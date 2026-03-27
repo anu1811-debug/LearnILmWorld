@@ -10,7 +10,7 @@ const SearchBar: React.FC<Props> = React.memo(({ value, onChange }) => {
     return (
         <div className="w-full max-w-4xl">
             <div className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#5186cd] h-5 w-5" />
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#1a56ad] h-5 w-5" />
 
                 <input
                     type="text"

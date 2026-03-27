@@ -27,7 +27,7 @@ const GermanBlog = () => {
 
                             <h1 className="text-4xl md:text-5xl font-extrabold text-[#1f2937] leading-tight mb-4">
                                 Teach German Language Online
-                                <span className="block text-[#5186cd] mt-2">
+                                <span className="block text-[#1a56ad] mt-2">
                                     Join LearniLM🌎World as a German Instructor
                                 </span>
                             </h1>
@@ -186,7 +186,7 @@ const GermanBlog = () => {
 
 
                             <div className="mt-16">
-                                <Link to="/blog" className="text-[#5186cd] font-semibold hover:underline">
+                                <Link to="/blog" className="text-[#1a56ad] font-semibold hover:underline">
                                     View all blogs →
                                 </Link>
                             </div>

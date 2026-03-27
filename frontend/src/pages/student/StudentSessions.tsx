@@ -41,7 +41,7 @@ const StudentSessions: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64 text-[#5186cd] font-medium">
+      <div className="flex items-center justify-center h-64 text-[#1a56ad] font-medium">
         Loading your sessions...
       </div>
     )
@@ -54,7 +54,7 @@ const StudentSessions: React.FC = () => {
       {bookings.length === 0 ? (
         <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center text-gray-500">
           Abhi tak koi class book nahi ki hai. 
-          <Link to="/main" className="text-[#5186cd] font-bold ml-2 hover:underline">
+          <Link to="/main" className="text-[#1a56ad] font-bold ml-2 hover:underline">
             Browse Trainers
           </Link>
         </div>
@@ -75,7 +75,7 @@ const StudentSessions: React.FC = () => {
 
                 {/* 1. Trainer Name */}
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-[#f0f5fb] text-[#5186cd] flex items-center justify-center shrink-0">
+                  <div className="w-12 h-12 rounded-full bg-[#f0f5fb] text-[#1a56ad] flex items-center justify-center shrink-0">
                     <User size={24} strokeWidth={2} />
                   </div>
                   <div>
@@ -99,11 +99,11 @@ const StudentSessions: React.FC = () => {
                 {/* 3. Time Details */}
                 <div className="flex flex-col gap-1 bg-gray-50 px-4 py-2.5 rounded-xl border border-gray-100 min-w-[160px]">
                   <div className="flex items-center gap-2 text-gray-700">
-                    <Calendar size={14} className="text-[#5186cd]" />
+                    <Calendar size={14} className="text-[#1a56ad]" />
                     <span className="text-sm font-bold">{sessionDate}</span>
                   </div>
                   <div className="flex items-center gap-2 text-gray-600">
-                    <Clock size={14} className="text-[#5186cd]" />
+                    <Clock size={14} className="text-[#1a56ad]" />
                     <span className="text-[13px] font-medium">
                       {sessionTime}
                     </span>

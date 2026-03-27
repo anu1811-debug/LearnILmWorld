@@ -178,7 +178,7 @@ export default function Careers() {
                         <Briefcase size={40} className="mx-auto mb-4 text-[#1a56ad]" />
                     </motion.div>
 
-                    {/* <h2 className="text-4xl font-serif font-bold text-[#5186cd]">
+                    {/* <h2 className="text-4xl font-serif font-bold text-[#1a56ad]">
             Careers at LearniLM🌎World
           </h2> */}
                     <div className="flex flex-wrap text-center justify-center items-center gap-x-4 gap-y-2 mb-8">
@@ -327,7 +327,7 @@ export default function Careers() {
                                     </div>
                                     <button
                                         onClick={() => setSelectedJob(job)}
-                                        className="border-2 border-[#5186cd] text-[#5186cd] px-6 py-2 rounded-lg font-semibold hover:bg-blue-50 transition-colors whitespace-nowrap"
+                                        className="border-2 border-[#5186cd] text-[#1a56ad] px-6 py-2 rounded-lg font-semibold hover:bg-blue-50 transition-colors whitespace-nowrap"
                                     >
                                         View Details
                                     </button>

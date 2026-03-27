@@ -75,14 +75,14 @@ const StepRole: React.FC<Props> = ({
           <GraduationCap
             size={40}
             className={`mb-2 ${formData.role === "student"
-              ? "text-[#5186cd]"
+              ? "text-[#1a56ad]"
               : "text-gray-500"
               }`}
           />
 
           <span
             className={`font-semibold text-sm sm:text-base ${formData.role === "student"
-              ? "text-[#5186cd]"
+              ? "text-[#1a56ad]"
               : "text-gray-800"
               }`}
           >
@@ -109,14 +109,14 @@ const StepRole: React.FC<Props> = ({
           <Users
             size={40}
             className={`mb-2 ${formData.role === "trainer"
-              ? "text-[#5186cd]"
+              ? "text-[#1a56ad]"
               : "text-gray-500"
               }`}
           />
 
           <span
             className={`font-semibold text-sm sm:text-base ${formData.role === "trainer"
-              ? "text-[#5186cd]"
+              ? "text-[#1a56ad]"
               : "text-gray-800"
               }`}
           >

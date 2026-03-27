@@ -104,10 +104,19 @@ const BookingPage = () => {
         return;
       }
 
+      // student nationalityCode
+      const nationalityCode = await axios.get(`${API_BASE_URL}/api/users/profile/${user?.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      .then(res => res.data.profile.nationalityCode)
+      .catch(() => 'USD');
+      
       // 1. Create order on the backend
       const orderResponse = await axios.post(`${API_BASE_URL}/api/payments/create-razorpay-order`, {
-        amount: finalPrice*90,
-        currency: 'INR' 
+        amount: nationalityCode === 'IN' ? finalPrice*95 : finalPrice,
+        currency: nationalityCode === 'IN' ? 'INR' : 'USD' 
       });
       
       const { id: order_id, currency, amount } = orderResponse.data;

@@ -21,6 +21,11 @@ import {
   ChevronDown,
   UserCircle2,
   GraduationCap,
+  Mail,
+  List,
+  MessageSquare,
+  User,
+  MailCheckIcon
 } from "lucide-react";
 // Facebook, Twitter, Instagram, Linkedin, removed ffrom above
 // import image1 from '../assets/about_initial.png';
@@ -66,8 +71,8 @@ export default function AboutPage() {
     },
     {
       icon: Calendar,
-      title: "Cancellation & Scheduling", 
-      text: "Learners can cancel or reschedule sessions from their dashboard ass per the platform's cancellation policy. Late cancellations may not qualify for refund",
+      title: "Payment Policy", // Title matches the photo (likely meant to be 'Cancellations')
+      text: "Learners can cancel or reschedule sessions from their dashboard ass per the platform's cancellation policy. late cancellations may not qualify for refund",
     },
     {
       icon: UserX,
@@ -77,7 +82,7 @@ export default function AboutPage() {
     {
       icon: XCircle,
       title: "Non- Refundable Cases",
-      text: "Refund are not applicable for completed sessions, partial attendance or misuse of the platform. Any suspicious activity may lead to account review.",
+      text: "Refund are not applicable for completed sessions, partial attendance, or misuse of the platform. Any suspicious activity may lead to account review.",
     },
     {
       icon: LifeBuoy,
@@ -129,7 +134,7 @@ export default function AboutPage() {
     {
       title: "Lifelong Learning",
       description:
-        "We invest in our team's growth as much as our students, with dedicated budgets for development",
+        "We invest in our team's growht as much as our students, with dedicated budgets for development",
       icon: GraduationCap,
     },
   ];
@@ -749,21 +754,28 @@ export default function AboutPage() {
                 <motion.div
                   initial={{ scale: 0.85, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  className="bg-gradient-to-b from-[#254999] via-[#5a7bb0] to-[#b5c5db] text-[#1f2937] rounded-3xl p-8 w-[90%] max-w-lg relative shadow-xl"
+                  className="bg-gradient-to-b from-[#b7cef5] via-[#e6f0ff] to-[#82a3dd] text-[#1f2937] rounded-3xl p-8 w-[90%] max-w-lg relative shadow-xl"
                 >
                   {/* Close */}
                   <button
                     onClick={() => setShowFeedback(false)}
                     className="absolute top-4 right-4 text-3xl font-bold text-white"
                   >
-                    ×
+                    x
                   </button>
 
-                  <h3 className="text-3xl font-extrabold mb-6 text-center text-white">
+                  <h3 className="text-3xl font-extrabold mb-2 text-center text-[#2d5ca6]">
                     We Value Your Feedback 🌟
                   </h3>
+                  <p className="text-center text-gray-700 text-sm mb-6">
+                    Transparency and fairness are at the heart of our policies,<br/>We ensure a smooth learning experience for learners and trainers.
+                  </p>
 
-                  <form onSubmit={handleFeedbackSubmit} className="space-y-4">
+                  <form onSubmit={handleFeedbackSubmit} className="space-y-5">
+
+                  {/* Name */}
+                    <div className="flex items-center bg-white rounded-2xl shadow-[0_10px_30px_rgba(80,120,200,0.4)]  px-4 py-3">
+                    <User className="text-blue-400 mr-3" size={25} />
                     <input
                       type="text"
                       placeholder="Your Name"
@@ -774,10 +786,14 @@ export default function AboutPage() {
                           name: e.target.value,
                         })
                       }
-                      className="w-full px-4 py-3 rounded-3xl bg-white border border-[#5186cd]/30 focus:outline-none focus:ring-2 focus:ring-[#5186cd]"
+                      className="w-full outline-none bg-transparent"
                       required
                     />
+                    </div>
 
+                    {/* Email */}
+                    <div className="flex items-center bg-white rounded-2xl shadow-[0_10px_30px_rgba(80,120,200,0.4)] px-4 py-3">
+                      <Mail className="text-blue-400 mr-3" size={25}/>
                     <input
                       type="email"
                       placeholder="Your Email"
@@ -788,10 +804,14 @@ export default function AboutPage() {
                           email: e.target.value,
                         })
                       }
-                      className="w-full px-4 py-3 rounded-3xl bg-white border border-[#5186cd]/30 focus:outline-none focus:ring-2 focus:ring-[#5186cd]"
+                      className="w-full outline-none bg-transparent"
                       required
                     />
-
+                    </div>
+                    
+                    {/* category */}
+                    <div className="flex items-center bg-white rounded-2xl shadow-[0_10px_30px_rgba(80,120,200,0.4)]  px-4 py-3">
+                      <List className="text-blue-400 mr-3" size={25}/>
                     <select
                       value={feedbackData.category}
                       onChange={(e) =>
@@ -800,7 +820,7 @@ export default function AboutPage() {
                           category: e.target.value,
                         })
                       }
-                      className="w-full px-4 py-3 rounded-3xl bg-white border border-[#5186cd]/30 focus:outline-none focus:ring-2 focus:ring-[#5186cd] cursor-pointer"
+                      className="w-full outline-none bg-transparent cursor-pointer"
                       required
                     >
                       <option value="">Select a category</option>
@@ -808,7 +828,11 @@ export default function AboutPage() {
                       <option value="Feature Request">Feature Request</option>
                       <option value="General Feedback">General Feedback</option>
                     </select>
+                    </div>
 
+                    {/* Message */}
+                    <div className="bg-white rounded-2xl shadow-[0_10px_30px_rgba(80,120,200,0.4)]  px-4 py-3 flex">
+                      <MessageSquare className="text-blue-400 mr-3" size={25}/>
                     <textarea
                       placeholder="Your Message"
                       rows={4}
@@ -819,9 +843,10 @@ export default function AboutPage() {
                           message: e.target.value,
                         })
                       }
-                      className="w-full px-4 py-3 rounded-3xl bg-white border border-[#5186cd]/30 focus:outline-none focus:ring-2 focus:ring-[#5186cd] "
+                      className="w-full outline-none bg-transparent resize-none "
                       required
                     />
+                    </div>
 
                     <button
                       type="submit"

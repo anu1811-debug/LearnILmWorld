@@ -15,9 +15,9 @@ const ServiceCard: React.FC<{
   title,
   desc,
 }) => (
-    <div className="p-6 rounded-2xl bg-white/90 shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+    <div className="p-8  bg-white shadow-lg hover:shadow-xl hover:-translate-y-1 transition duration-300 flex flex-col items-center text-center gap-2" style={{ boxShadow: '4px 4px 12px rgba(0,0,0,0.12)' , borderRadius: '20px 2px 20px 2px'}}>
       {/* Icon Section */}
-      <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${bg}`}>
+      <div className="mb-2">
         {icon}
       </div>
 

@@ -49,10 +49,15 @@ const StudentSessions: React.FC = () => {
 
   if (loading) {
     return (
+<<<<<<< HEAD
       <div className="flex items-center justify-center h-64">
         <div className="loading-dots">
           <div></div><div></div><div></div><div></div>
         </div>
+=======
+      <div className="flex items-center justify-center h-64 text-[#1a56ad] font-medium">
+        Loading your sessions...
+>>>>>>> 15886944a3a4102cc88b9b9769edaac655798d12
       </div>
     )
   }
@@ -63,8 +68,13 @@ const StudentSessions: React.FC = () => {
 
       {bookings.length === 0 ? (
         <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center text-gray-500">
+<<<<<<< HEAD
           No Class is Booked yet. 
           <Link to="/main" className="text-[#5186cd] font-bold ml-2 hover:underline">
+=======
+          Abhi tak koi class book nahi ki hai. 
+          <Link to="/main" className="text-[#1a56ad] font-bold ml-2 hover:underline">
+>>>>>>> 15886944a3a4102cc88b9b9769edaac655798d12
             Browse Trainers
           </Link>
         </div>
